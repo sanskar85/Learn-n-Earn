@@ -19,17 +19,6 @@ const {
 	OfferLetterStatus,
 } = require('../../utils/Enums');
 
-const storage = multer.diskStorage({
-	destination: function (req, file, cb) {
-		cb(null, 'static/Private');
-	},
-	filename: (req, file, cb) => {
-		cb(null, req.filename + path.extname(file.originalname));
-	},
-});
-
-const upload = multer({ storage: storage }).single('file');
-
 exports.MyDashboard = async (req, res) => {
 	const date = new Date();
 	const start = new Date(date.getFullYear(), date.getMonth(), 1);

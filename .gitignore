@@ -10,7 +10,6 @@ node_modules/
 /server/static/uploads/*
 /server/static/offer-letters/*
 /server/static/Targets/*
-/server/static/Private/*
 
 # testing
 /coverage
