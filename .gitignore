@@ -8,11 +8,6 @@ node_modules/
 /.pnp
 .pnp.js
 
-; /server/static/**
-; !/server/static/assets
-; !/server/static/**/.gitkeep
-
-
 
 # testing
 /coverage
