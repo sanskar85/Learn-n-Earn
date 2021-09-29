@@ -10,7 +10,7 @@ node_modules/
 
 /server/static/**
 !/server/static/assets
-!/server/static/**/.gitkeep
+!.gitkeep
 
 
 
