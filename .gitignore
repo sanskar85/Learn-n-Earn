@@ -3,13 +3,18 @@
 # dependencies
 /node_modules
 node_modules/
+
 .vscode
 /.pnp
 .pnp.js
 
-/server/static/uploads/*
-/server/static/offer-letters/*
-/server/static/Targets/*
+/server/static/*
+!/server/static/assets
+!/server/static/offer-letters/.gitkeep
+!/server/static/uploads/.gitkeep
+# !/server/static/.keep
+
+
 
 # testing
 /coverage
