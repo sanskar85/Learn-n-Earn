@@ -1,0 +1,28 @@
+
+.terms-wrapper{
+    margin: auto;
+    width: 90%;
+    background-color: #fff;
+    padding: 2%;
+}
+
+.terms-wrapper span{
+    display: block;
+}
+
+.terms-wrapper button{
+    margin: 0 43%;
+}
+
+.terms-wrapper .row p{
+    margin: 0 auto;
+}
+
+.terms-wrapper .table{
+    display: flex;
+    flex-direction: row;
+}
+
+.terms-wrapper .table p{
+    margin: 0;
+}

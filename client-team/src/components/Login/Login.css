@@ -1,0 +1,113 @@
+.login-wrapper{
+    padding:3% 0;
+}
+
+
+.login-wrapper  .header{
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: 2.5rem;
+}
+.login-wrapper  .row{
+    margin:0;
+    padding: 0;
+    vertical-align: middle;
+}
+.login-wrapper  .row.justify-content-center{
+    height:50%;
+}
+
+.login-wrapper  .wrapper{
+    background-color: #404B69;
+    text-align: center;
+    border-radius: 20px;
+    padding: 2rem 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 50%;
+}
+
+.login-wrapper  input{
+    width: 90%;
+    margin: 0.5rem 0;
+    background-color: #fff ;
+    padding: 0.6rem;
+    border-radius: 0.7rem;
+    border: none;
+    outline: none;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.login-wrapper  img{
+    width: 125px !important;
+    display: block;
+    margin: 60px auto 30px;
+}
+
+.login-wrapper  button{
+    border-radius: 15px;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    width: clamp(50%, 2.5vw, 80%);
+    border: none;
+    outline: none;
+    font-size: 1.05rem;
+    font-weight: 500;
+    
+}
+.login-wrapper  .register{
+    border-radius: 15px;
+    padding: 0.5rem;
+    width: clamp(50%, 2.5vw, 80%);
+    border: none;
+    outline: none;
+    font-size: 1.05rem;
+    font-weight: 500;
+    background-color: #F05454;
+    color: #fff;
+    cursor: pointer;
+}
+
+.login-wrapper  ._or{
+    width: 2rem;
+    height: 2rem;
+    text-align: center;
+    display: flex;
+    background-color: #fff;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 1rem auto;
+    border-radius: 100%;
+}
+
+.login-wrapper  .link{
+    text-decoration: none;
+    color: #fff;
+    cursor: pointer;
+}
+
+.login-wrapper  .link:hover{
+    color: #fff;
+}
+
+.login-wrapper  ._hr{
+    margin: 1rem  auto 0.2rem;
+    border-top: 1px solid white;
+    background-color: #fff;
+    width: 70%;
+}
+.login-wrapper  .error{
+    color: #ff0000;
+    letter-spacing: 0.5px;
+}
+.login-wrapper  .message{
+    color: rgb(0, 255, 0);
+    letter-spacing: 0.5px;
+}

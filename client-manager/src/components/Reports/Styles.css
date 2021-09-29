@@ -1,0 +1,45 @@
+
+.report-wrapper {
+  margin: 1rem 2%;
+}
+.report-wrapper h4 {
+  font-weight: 600;
+  padding: 0 1rem;
+}
+
+.report-wrapper .details-wrapper {
+  border-radius: 0 0 10px 10px;
+  padding: 0 0.5rem 0.5rem;
+  height: 80vh;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.report-wrapper .details > span {
+  text-align: center;
+}
+.report-wrapper .details {
+  padding: 0.5rem;
+  cursor: pointer;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+}
+.report-wrapper .details:hover {
+  background-color: hsl(0, 0%, 95%);
+}
+.report-wrapper .extra-details {
+  padding: 1rem 2rem;
+}
+.report-wrapper > .header {
+  background-color: white;
+  margin-left: 0;
+  margin-right: 0;
+  border: 1px solid black;
+  border-radius: 10px 10px 0 0;
+  font-weight: 500;
+}
+.report-wrapper > .header > span {
+  text-align: center;
+}

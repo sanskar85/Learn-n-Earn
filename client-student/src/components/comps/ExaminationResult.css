@@ -1,0 +1,76 @@
+.examination-result-wrapper{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.examination-result-wrapper h3{
+    font-weight: 500;
+    margin: 0;
+}
+
+.examination-result-wrapper p{
+    margin: 0;
+    margin-bottom: 50px; 
+    font-weight: 100; 
+    font-size: 0.9rem;
+}
+
+.examination-result-wrapper .status{
+    padding: 15px 10%;
+    background-color: #D9FFEA ;
+    width: max-content;
+    margin: 50px auto;
+    border-radius: 7px;
+    color: #06C15C;
+}
+
+.examination-result-wrapper .content{
+    border-radius: 7px;
+    box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.192) ;
+    margin: auto;
+    width: 50%;
+    padding: 2rem;
+    text-align: center;
+}
+
+.examination-result-wrapper .pass{
+    border-radius: 10px;
+    background-color: #D9FFEA;
+    color: #06C15C;
+    width: max-content;
+    margin: 10px auto 30px;
+    padding: 3%;
+    width: 40%;
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+}
+
+.examination-result-wrapper .content p{
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.examination-result-wrapper a{
+    color: hsl(236, 100%, 60%);
+    text-decoration: none;
+    width: fit-content;
+    margin: 15px auto;
+}
+
+.examination-result-wrapper a:hover{
+    color: hsl(236, 100%, 20%);
+    text-decoration: none;
+}
+
+@media (max-width:992px) {
+    .examination-result-wrapper .content{
+        border-radius: 7px;
+        box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.192) ;
+        margin: auto;
+        width: 80%;
+        padding: 2rem;
+        text-align: center;
+    }
+    
+}

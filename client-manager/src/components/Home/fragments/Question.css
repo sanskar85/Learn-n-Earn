@@ -1,0 +1,80 @@
+ h4 {
+     font-weight: 600;
+ }
+
+ .question-wrapper {
+     display: flex;
+     justify-content: center;
+ }
+
+ .question-wrapper form {
+     border: 0.5px solid hsl(0, 0%, 90%);
+     width: 66%;
+     padding: 1.5% 3%;
+     border-radius: 15px;
+ }
+
+ .question-wrapper form .details-wrapper {
+     margin: 1rem 0;
+     display: inline-block;
+ }
+
+ .question-wrapper form .right {
+     float: right!important;
+ }
+
+ .question-wrapper span {
+     display: block;
+     margin-bottom: 0.25rem;
+ }
+
+ .question-wrapper select {
+     background-color: #DBE3FF;
+     padding: 0.5rem;
+     border-radius: 10px;
+     width: 15em;
+     border: none;
+     outline: none;
+ }
+
+ .question-wrapper textarea {
+     border-radius: 10px;
+     background-color: hsl(0, 0%, 92%);
+     border: none;
+     outline: none;
+     padding: 0.5rem 1rem;
+     width: 100%;
+     resize: none;
+ }
+
+ .question-wrapper .options {
+     display: flex;
+     margin: 1rem;
+ }
+
+ .question-wrapper input {
+     margin-left: 1rem;
+     background-color: #dddddd;
+     padding: 2% 3%;
+     border-radius: 10px;
+     border: none;
+     outline: none;
+ }
+
+ .question-wrapper .options span {
+     padding: 1%;
+ }
+
+ .question-wrapper .answer input {
+     margin: 1rem 0;
+ }
+
+ .question-wrapper .submit-btn {
+     border: none;
+     outline: none;
+     border-radius: 8px;
+     padding: 0.5rem 1.5rem;
+     background-color: #DBE3FF;
+     font-size: 1.2rem;
+     font-weight: 500;
+ }

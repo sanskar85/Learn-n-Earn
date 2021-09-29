@@ -1,0 +1,28 @@
+.report {
+    padding: 2%;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+}
+
+.report .header {
+    margin-bottom: 2rem;
+}
+
+.report .row {
+    margin-top: 2rem;
+}
+
+.report .col-3 div {
+    background-color: #DBE3FF;
+    border-radius: 10px;
+    text-align: center;
+    padding: 2rem 3%;
+    transition: 0.2s;
+}
+
+.report .col-3 div:hover {
+    color: #fff;
+    background-color: #5CA1F1;
+    transform: scale(1.025);
+    transition: 0.2s;
+}

@@ -1,0 +1,73 @@
+.profile-wrapper{
+    padding: 1rem 2rem;
+}
+.profile-wrapper > div{
+    padding: 0.5rem 0;
+}
+.profile-wrapper .edit{
+    display: flex;
+    flex-direction: column;
+    margin-left: 5rem;
+    justify-content: flex-end;
+}
+
+
+.profile-wrapper img{
+    border-radius: 100%;
+    height: 200px;
+    width: 200px;
+}
+
+
+.profile-wrapper .edit button{
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: none;
+    background-color: #F05454;
+    color: #fff;
+    padding: 0.8rem 1.5rem;
+}
+.profile-wrapper .detail{
+    margin-top: 1rem;
+}
+.profile-wrapper label{
+    display: inline-flex;
+    height: 40px;
+    align-items: center;
+    
+}
+.profile-wrapper input{
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background-color: #EBEBEC;
+    outline: none;
+    padding: 2% 10px;
+    width: 80%;
+}
+
+.profile-wrapper button,.profile-wrapper .file-label{
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background-color: #F05454;
+    color: #fff;
+    padding: 5px 20px;
+    margin-top: 20px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1.1rem;
+    
+}
+
+
+.profile-wrapper p{
+    margin: 0;
+}
+
+.profile-wrapper hr{
+    width: 100%;
+    margin-top: 20px;
+    border-top: 1px solid rgba(0,0,0,0.5);
+}

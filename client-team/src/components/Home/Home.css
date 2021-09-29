@@ -1,0 +1,118 @@
+.home-wrapper {
+    margin: 5rem 2% 5rem calc(2% + 60px);
+}
+
+.bottom-alert-bar {
+    position: fixed;
+    bottom: -40px;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    z-index: 99;
+    background-color: black;
+    color: white;
+    padding-left: 60px;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.bottom-alert-bar.show {
+    transition: all 0.2s;
+    transform: translateY(-40px);
+}
+
+.loading-div {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 9999;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.loading-div .loading {
+    position: fixed;
+    width: 200px;
+    height: 200px;
+    top: calc(50vh - 100px);
+    left: calc(50vw - 100px);
+}
+
+.interview-response-wrapper>div {
+    font-family: 'Montserrat', sans-serif;
+    padding: 3%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.116);
+}
+
+.interview-response-wrapper .header {
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.interview-response-wrapper p, .interview-response-wrapper .row {
+    margin: 0;
+}
+
+.interview-response-wrapper label, .interview-response-wrapper select, .interview-response-wrapper input {
+    display: block;
+}
+
+.interview-response-wrapper label {
+    margin: 1rem 0 0.25rem;
+}
+
+.interview-response-wrapper select, .interview-response-wrapper input, .interview-response-wrapper textarea {
+    background-color: #FFD8D8;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    padding: 0.5rem 1rem;
+    width: 50%;
+    resize: none;
+}
+
+.interview-response-wrapper textarea {
+    height: 150px;
+    width: 80%;
+}
+
+.interview-response-wrapper .submit-btn {
+    padding: 0.5rem 2rem;
+    background-color: #F05454;
+    color: white;
+    margin: 1rem auto;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+}
+
+.rating>div {
+    border: 0.5px solid black;
+    text-align: center;
+    padding: 0.5rem;
+    font-size: 1.4rem;
+}
+
+.rating>div:hover {
+    background-color: rgba(0, 0, 0, 0.096);
+    cursor: pointer;
+}
+
+.rating .active {
+    background-color: #FF8787;
+    color: #fff;
+}
+
+.rating .active:hover {
+    background-color: hsl(0, 100%, 66%);
+    color: #fff;
+}

@@ -1,0 +1,114 @@
+.profile-wrapper {
+  padding: 3% 0;
+  height: 100%;
+  width: 100%;
+  background-color: hsl(0, 0%, 96%);
+}
+.profile-wrapper .logo-wrapper{
+    text-align: center;
+}
+.profile-wrapper .logo {
+  height: 55px;
+}
+
+.profile-wrapper .background {
+  margin: 70px 5%;
+  border-top: 2px solid rgba(255, 255, 255, 0);
+  border-radius: 50px;
+  background-color: #F05454;
+  box-shadow: 0px 0px 15px rgb(0 0 0 / 50%);
+}
+.profile-wrapper .row {
+  padding: 0;
+  margin: 0;
+}
+
+.profile-wrapper .column {
+  margin-top: 10px;
+}
+.profile-wrapper .label {
+  display: block;
+  font-size: 1.1rem;
+  padding: 0 10px;
+  margin-bottom: 0;
+}
+.profile-wrapper .input {
+  background-color: #FFD8D8;
+  border-radius: 10px;
+  width: 50%;
+  margin: 5px 0;
+  padding: 10px;
+  border: none;
+  outline: none;
+}
+.profile-wrapper .input-selector-options{
+  font-size: 0.9rem;
+}
+.profile-wrapper .input::-webkit-outer-spin-button,
+.profile-wrapper .input::-webkit-inner-spin-button{
+  -webkit-appearance: none;
+  margin: 0;
+}
+.profile-wrapper .input[type=number] {
+  -moz-appearance: textfield;
+}
+.profile-wrapper .file-label{
+  display: inline-block;
+  background-color: #F05454;
+  border-radius: 15px;
+  padding: 7px 12px ;
+  color: white;
+}
+
+
+.profile-wrapper form {
+  margin: 20px 0;
+  background-color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 5% 2%;
+}
+
+
+.profile-wrapper .submit-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 30px 0 0;
+}
+
+.profile-wrapper .submit-btn {
+  background-color: #30475E;
+  color: hsl(0, 0%, 100%);
+  font-size: 1.2rem;
+  font-weight: 500;
+  border: none;
+  height: auto;
+  width: auto;
+  border-radius: 10px;
+  padding: 1rem 2rem;
+  outline: none;
+}
+.profile-wrapper .error{
+  color: rgb(255, 0, 0);
+  display: block;
+  font-size: 0.9rem;
+  letter-spacing: 0.7px;
+  font-weight: 500;
+  margin-top: 10px;
+  text-align: center;
+}
+.profile-wrapper .message{
+  color: rgb(0, 255, 0);
+  display: block;
+  font-size: 0.9rem;
+  letter-spacing: 0.7px;
+  font-weight: 500;
+  margin-top: 10px;
+  text-align: center;
+}
+@media (max-width: 992px) {
+  .register-wrapper .input {
+    width: 100%;
+  }
+}

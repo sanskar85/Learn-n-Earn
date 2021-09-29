@@ -1,0 +1,199 @@
+.row {
+    padding: 0;
+    margin: 0;
+  }
+  .student-dashboard-wrapper{
+    padding-top: 2%;
+  }
+  .student-dashboard-wrapper > div:last-child {
+    margin-left: 5%;
+    margin-top: 2%;
+  }
+  .student-dashboard-wrapper .sup-text {
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+  
+  .card {
+    margin: 20px 10px;
+    padding: 20px 10px;
+    background-color: white;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 hsl(0, 0%, 55%);
+    font-size: 0.9rem;
+  }
+  .student-dashboard-wrapper > div:first-child .sup-text {
+    text-align: center;
+  }
+  .student-dashboard-wrapper .notice p {
+    margin: 7px 0 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .student-dashboard-wrapper .card p > span {
+    width: 80%;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+  .student-dashboard-wrapper .contact-us {
+    background-color: #eaf7ff;
+  }
+  .student-dashboard-wrapper .contact-us .sup-text {
+    color: #0a5584;
+  }
+  .student-dashboard-wrapper .contact-us img {
+    height: 1.5rem;
+  }
+  .student-dashboard-wrapper a,
+  .student-dashboard-wrapper a:hover {
+    text-decoration: none;
+    color: initial;
+  }
+  .student-dashboard-wrapper .ask-wrapper {
+    margin: 10px 5px 0;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 5px;
+  }
+  .student-dashboard-wrapper textarea {
+    border: none;
+    resize: none;
+    width: 100%;
+    height: 7rem;
+    outline: 0;
+  }
+  .student-dashboard-wrapper .ask-btn {
+    float: right !important;
+    border-radius: 20px;
+    border: none;
+    background-color: #76caff;
+    color: white;
+    font-size: 0.9rem;
+    padding: 7px 12px;
+    border: none;
+    outline: none;
+  }
+  
+  .student-dashboard-wrapper .status-wrapper {
+    padding: 1rem 2rem;
+    flex-direction: row;
+    align-items: center;
+  }
+  .student-dashboard-wrapper .status-wrapper > div:nth-of-type(2) {
+    border-left: 1px solid hsl(0, 0%, 55%);
+  }
+  .hr_horizontal {
+    width: 50%;
+    height: 1px;
+    margin: 15px 0;
+    border-top: 1px solid #000;
+  }
+  .student-dashboard-wrapper .status-wrapper p {
+    display: flex;
+    align-items: center;
+    font-weight: 400;
+    font-size: 0.8rem;
+  }
+  .student-dashboard-wrapper .status-wrapper img {
+    margin-right: 5px;
+  }
+  
+  .submit-btn {
+    width: 80px;
+    border-radius: 50%;
+    height: 80px;
+    border: none;
+    outline: none;
+    margin: 10px auto;
+    background-color: #4ae290;
+    color: white;
+    font-weight: 600;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+  }
+  .joined-wrapper {
+    height: 6rem;
+    padding: 0;
+    flex-direction: row;
+    align-items: center;
+    overflow: hidden;
+  }
+  .joined {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 500;
+    height: 6rem;
+    border-left: 0.5px solid hsl(0, 0%, 65%);
+    cursor: pointer;
+  }
+  @media (max-width: 992px) {
+    .student-dashboard-wrapper {
+      flex-direction: column-reverse;
+      padding: 5% 10px;
+    }
+    .student-dashboard-wrapper > div {
+      margin: 0 auto;
+    }
+    .student-dashboard-wrapper .status-wrapper {
+      padding: 20px 10px;
+    }
+    .student-dashboard-wrapper .status-wrapper hr {
+      width: 80%;
+      height: 4px;
+    }
+    .student-dashboard-wrapper > div:last-child {
+      margin: 5% auto;
+    }
+    .student-dashboard-wrapper .status-wrapper > div:nth-of-type(2) {
+      border-top: 1px solid hsl(0, 0%, 55%);
+      border-left: none;
+    }
+    .joined-wrapper {
+      height: 140px;
+    }
+    .joined {
+      height: 50px;
+      border-top: 0.5px solid hsl(0, 0%, 65%);
+      border-left: none;
+    }
+  }
+/*.................................. Exam Now.................................  */
+.exam-now-wrapper {
+    backdrop-filter: blur(15px);
+    background-color: rgba(0, 0, 0, 0.24);
+    height: 100vh;
+    width: 100vw;
+    z-index: 999;
+    position: absolute;
+  }
+  .exam-now-card {
+    position: absolute;
+    top: 25%;
+    left: 30%;
+    width: 40%;
+    height: 50%;
+    margin: -6em -40% 0;
+    display: block;
+    background-image: linear-gradient(#83cfff, #1f6998);
+    border-radius: 15px;
+    color: #fff;
+    text-align: center;
+    margin: auto;
+  }
+  .exam-now-start-btn {
+    outline: none;
+    border: none;
+    background-color: #3eec8e;
+    color: #fff;
+    border-radius: 15px;
+    font-size: 1.4em;
+    font-weight: 100;
+    padding: 1% 7%;
+    margin: 50px auto 50px;
+  }
+  

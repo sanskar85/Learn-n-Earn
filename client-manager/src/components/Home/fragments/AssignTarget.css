@@ -1,0 +1,14 @@
+.file-upload-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.file-upload-wrapper .file-upload-label {
+    background-color: #5CA1F1;
+    border-radius: 7px;
+    padding: 0.5rem 1rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #fff;
+}

@@ -1,0 +1,59 @@
+.nav_bar {
+  position: fixed;
+  left: 0;
+  top: 60px;
+  width: 60px;
+  z-index: 99;
+  height: calc(100vh - 60px);
+  background-color: #000;
+  padding: 30px 11px 90px;
+  overflow: hidden;
+  transition: width 0.2s;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.nav-hover:hover {
+  width: 200px;
+}
+.nav_bar > .menu-item {
+  margin: 1rem 0;
+  padding: 7px;
+  display: flex;
+  align-items: center;
+  color: white;
+  opacity: 0.7;
+}
+.nav_bar > .menu-item * {
+  pointer-events: none;
+}
+.nav_bar > .menu-item > span {
+  font-weight: 500;
+  position: absolute;
+  width: 180px;
+  margin-left: 42px;
+}
+.nav_bar > .menu-item:hover {
+    opacity: 1;
+}
+
+.nav_bar > .menu-item.nav-active {
+  background-color: white;
+  border-radius: 7px;
+  opacity: 1;
+}
+.nav_bar > .menu-item.nav-active > img{  
+    -webkit-filter: none;  
+            filter: none;
+}
+.nav_bar > .menu-item.nav-active > span {
+  color: black !important;
+}
+
+.nav_bar img {
+  width: 24px;
+  margin-right: 20px;
+  -webkit-filter: brightness(0) invert(1);
+          filter: brightness(0) invert(1);
+}
