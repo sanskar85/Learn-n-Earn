@@ -12,7 +12,6 @@ node_modules/
 !/server/static/assets
 !/server/static/offer-letters/.gitkeep
 !/server/static/uploads/.gitkeep
-# !/server/static/.keep
 
 
 
