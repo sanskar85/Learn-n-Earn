@@ -8,10 +8,9 @@ node_modules/
 /.pnp
 .pnp.js
 
-/server/static/*
+/server/static/**
 !/server/static/assets
-!/server/static/offer-letters/.gitkeep
-!/server/static/uploads/.gitkeep
+!/server/static/**/.gitkeep
 
 
 
