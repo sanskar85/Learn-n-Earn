@@ -58,7 +58,7 @@ export default function Dashboard({ setTitle, history }) {
 					setExamDetails(data.exam);
 					setInterViewDetails(data.interview);
 				} else {
-					window.location.reload();
+					alert('Cannot load your details. Please contact administrator');
 				}
 			}
 		}

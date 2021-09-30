@@ -272,7 +272,7 @@ exports.Student = async (req, res) => {
 			},
 			{ $addFields: { offerletter: { $arrayElemAt: ['$offerletter', 0] } } },
 			{ $addFields: { offer_letter: '$offerletter.status' } },
-			{ $sort: { createdAt: 1 } },
+			{ $sort: { createdAt: -1 } },
 			{ $project: project },
 		]);
 
@@ -296,7 +296,7 @@ exports.Student = async (req, res) => {
 			{ $addFields: { email: '$details.email' } },
 			{ $match: { name: { $eq: null } } },
 			{ $addFields: { registration_date: '$details.createdAt' } },
-			{ $sort: { createdAt: 1 } },
+			{ $sort: { createdAt: -1 } },
 			{ $project: project },
 		]);
 
@@ -316,7 +316,7 @@ exports.Student = async (req, res) => {
 			{ $addFields: { mobile: '$details.mobile' } },
 			{ $addFields: { email: '$details.email' } },
 			{ $addFields: { registration_date: '$details.createdAt' } },
-			{ $sort: { createdAt: 1 } },
+			{ $sort: { createdAt: -1 } },
 			{ $project: project },
 		]);
 
@@ -517,7 +517,7 @@ exports.Examination_Details = async (req, res) => {
 					status: { $in: [ExaminationStatus.PASS, ExaminationStatus.FAIL] },
 				},
 			},
-			{ $sort: { createdAt: 1 } },
+			{ $sort: { createdAt: -1 } },
 			{ $project: project },
 		]);
 
@@ -537,7 +537,7 @@ exports.Examination_Details = async (req, res) => {
 			{ $addFields: { student_id: '$_id' } },
 			{ $match: { referred_by: { $eq: req.user._id } } },
 			{ $match: { status: { $eq: CandidateStatus.ELIGIBLE } } },
-			{ $sort: { createdAt: 1 } },
+			{ $sort: { createdAt: -1 } },
 			{ $project: project },
 		]);
 
@@ -557,7 +557,7 @@ exports.Examination_Details = async (req, res) => {
 			{ $addFields: { student_id: '$_id' } },
 			{ $match: { referred_by: { $eq: req.user._id } } },
 			{ $match: { status: { $eq: CandidateStatus.NOT_RESPONDING_EXAM } } },
-			{ $sort: { createdAt: 1 } },
+			{ $sort: { createdAt: -1 } },
 			{ $project: project },
 		]);
 
@@ -726,7 +726,7 @@ exports.InterviewDetails = async (req, res) => {
 			{ $addFields: { candidate_status: '$details.status' } },
 			{ $match: { candidate_status: { $ne: CandidateStatus.NOT_RESPONDING_INTERVIEW } } },
 			{ $match: { 'details.referred_by': { $eq: req.user._id } } },
-			{ $sort: { createdAt: 1 } },
+			{ $sort: { createdAt: -1 } },
 			{ $project: project },
 		]);
 
@@ -745,7 +745,7 @@ exports.InterviewDetails = async (req, res) => {
 			{ $addFields: { mobile: '$candidate.mobile' } },
 			{ $addFields: { email: '$candidate.email' } },
 			{ $addFields: { registration_date: '$createdAt' } },
-			{ $sort: { createdAt: 1 } },
+			{ $sort: { createdAt: -1 } },
 			{ $project: project },
 		]);
 
@@ -903,7 +903,7 @@ exports.OfferLetter = async (req, res) => {
 			{ $addFields: { email: '$user.email' } },
 			{ $match: { 'details.referred_by': { $eq: req.user._id } } },
 			{ $match: { status: { $eq: OfferLetterStatus.NOT_ISSUED } } },
-			{ $sort: { createdAt: 1 } },
+			{ $sort: { createdAt: -1 } },
 			{ $project: project },
 		]);
 
@@ -1310,7 +1310,7 @@ exports.AdmissionDetails = async (req, res) => {
 					},
 				},
 			},
-			{ $sort: { createdAt: 1 } },
+			{ $sort: { createdAt: -1 } },
 			{ $project: project },
 		]);
 		res.status(200).json({

@@ -20,7 +20,7 @@ addMinutes = function (minutes) {
 exports.MyDashboard = async (req, res) => {
 	const details = req.userDetails;
 	try {
-		const notices = await Notice.find({ candidate: req.userDetails });
+		const notices = await Notice.find({ candidate: req.userDetails }).sort({ createdAt: -1 });
 
 		const _examination = await Examination.findOne({
 			candidate: req.userDetails._id,

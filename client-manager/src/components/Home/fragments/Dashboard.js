@@ -197,7 +197,7 @@ const Dashboard = ({ setLoading, showAlert }) => {
 
 							<div style={{ backgroundColor: '#97E0FF' }}>
 								<div className='data-wrapper'>
-									<span>Students to Join {offer_letter_report.total > 50 && <FlameIcon />}</span>
+									<span>Candidates to Join {offer_letter_report.total > 50 && <FlameIcon />}</span>
 									<span>{joining_report.total}</span>
 								</div>
 							</div>

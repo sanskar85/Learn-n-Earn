@@ -68,7 +68,7 @@ const Dashboard = ({ setLoading, showAlert }) => {
 
 						<div style={{ backgroundColor: '#CDE38E' }}>
 							<div className='data-wrapper'>
-								<span>Total Registered Student</span>
+								<span>Total Registered Candidates</span>
 								<span>{exam_report.total}</span>
 							</div>
 						</div>
@@ -198,7 +198,7 @@ const Dashboard = ({ setLoading, showAlert }) => {
 					<div className='stats'>
 						<div className='header justify-content-center'>
 							<img src={STUDENT} alt='' />
-							<span>Student Corner</span>
+							<span>Candidates Corner</span>
 						</div>
 
 						<div style={{ backgroundColor: '#B6D8FF' }}>

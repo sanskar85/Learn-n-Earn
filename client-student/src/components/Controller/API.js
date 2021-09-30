@@ -114,7 +114,7 @@ export const MyDashboard = async () => {
 		const { data } = await axiosInstance.get(`/candidate/my-dashboard`);
 		return data;
 	} catch (error) {
-		return error.response.data;
+		return false;
 	}
 };
 

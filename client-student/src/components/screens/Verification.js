@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import pic from '../assets/verification.svg';
 import refresh from '../assets/refresh.png';
 import { VerificationAPI, VerifyUserAPI } from '../Controller/API';
-import { LogoutIcon } from '../assets/Images';
 
 const Verification = ({ setTitle, history }) => {
 	const [header, setHeader] = useState('email');

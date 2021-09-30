@@ -118,7 +118,16 @@ export const Students = async () => {
 		const { data } = await axiosInstance.get(`/manager/students`);
 		return data;
 	} catch (err) {
-		return err.response.data;
+		return false;
+	}
+};
+
+export const SaveCandidateDetails = async (details) => {
+	try {
+		const { data } = await axiosInstance.put(`/manager/update-student-details`, { details });
+		return data;
+	} catch (err) {
+		return false;
 	}
 };
 

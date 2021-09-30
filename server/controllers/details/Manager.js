@@ -8,10 +8,6 @@ const Examination = require('../../models/exam/Examination');
 const Interview = require('../../models/exam/Interview');
 const Question = require('../../models/exam/Question');
 const OfferLetter = require('../../models/exam/OfferLetter');
-var mongoose = require('mongoose');
-const multer = require('multer');
-var path = require('path');
-
 const {
 	CandidateStatus,
 	InterviewStatus,
@@ -215,8 +211,10 @@ exports.Students = async (req, res) => {
 		pwd: 1,
 		qualification: 1,
 		state: 1,
+		status: 1,
 		weight: 1,
 		work_experience: 1,
+		exam_attempt_remaining: 1,
 		y_o_p: 1,
 		mobile: 1,
 		email: 1,
@@ -281,12 +279,58 @@ exports.Students = async (req, res) => {
 				},
 			},
 			{ $addFields: { team: { $arrayElemAt: ['$team', 0] } } },
-			{ $sort: { createdAt: 1 } },
+			{ $sort: { createdAt: -1 } },
 			{ $project: project },
 		]);
 		res.status(200).json({
 			success: true,
 			students,
+		});
+	} catch (err) {
+		return res.status(500).json({
+			success: false,
+			message: 'Server Error',
+		});
+	}
+};
+
+exports.UpdateCandidatesDetail = async (req, res) => {
+	const { details } = req.body;
+	try {
+		if (!details) {
+			res.status(400).json({
+				success: false,
+				message: 'Invalid Candidate Id',
+			});
+		}
+		const candidate = await CandidateDetails.findById(details._id);
+		if (!candidate) {
+			res.status(400).json({
+				success: false,
+				message: 'Invalid Candidate Id',
+			});
+		}
+		candidate.name = details.name;
+		candidate.fname = details.fname;
+		candidate.gender = details.gender;
+		candidate.aadhaar = details.aadhaar;
+		candidate.qualification = details.qualification;
+		candidate.diploma = details.diploma;
+		candidate.y_o_p = details.y_o_p;
+		candidate.cgpa = details.cgpa;
+		candidate.backlog = details.backlog;
+		candidate.college = details.college;
+		candidate.height = details.height;
+		candidate.weight = details.weight;
+		candidate.plant_worked = details.plant_worked;
+		candidate.pwd = details.pwd;
+		candidate.work_experience = details.work_experience;
+		candidate.status = details.status;
+		candidate.exam_attempt_remaining = details.exam_attempt_remaining;
+		await candidate.save();
+		return res.status(201).json({
+			success: true,
+			message: 'Candidate details updated',
 		});
 	} catch (err) {
 		return res.status(500).json({

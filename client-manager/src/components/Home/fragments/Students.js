@@ -8,6 +8,7 @@ import {
 	Teams as MyTeams,
 	FetchImage,
 	UpdateCandidatesTeam,
+	SaveCandidateDetails,
 } from '../../controllers/API';
 
 const states = [
@@ -49,6 +50,77 @@ const states = [
 	'Uttarakhand',
 	'West Bengal',
 ];
+const qualifications = [
+	'',
+	'10th Pass',
+	'12th Pass(Arts)',
+	'12th Pass(Science)',
+	'12th Pass(Commerce)',
+	'Pursuing 12th',
+	'Graduation-Arts-Persuing',
+	'Graduation-Arts-Completed',
+	'Graduation-Commerce-Persuing',
+	'Graduation-Commerce-Completed',
+	'Graduation-Science-Pursuing',
+	'Graduation-Science-Completed',
+	'Any Other Graduation(Which od not in above)',
+	'ITI-Fitter/Tuner/Machinist Completed',
+	'Pursuing ITI-Fitter/Tuner/Machinist',
+	'ITI -Electronic Mechanic Completed',
+	'Pursuing ITI -Electronic Mechanic',
+	'ITI-Electrician Completed',
+	'Pursuing ITI-Electrician',
+	'ITI-Automotive Manufacturing',
+	'ITI-Certificate Cource in Machinist Teels Room',
+	'ITI-Diesel Mechanic',
+	'ITI-Draftsmen(Mechanic)',
+	'ITI-General Mechanic',
+	'ITI-Infirmation & Communication Techonology System Maintenance',
+	'ITI-Instument Mechanic',
+	'ITI-Maintenence Mechanic(Chamical Plant)',
+	'ITI-Marine Fitter',
+	'ITI-Mechanic Machine Tools maintenence',
+	'ITI-Mechanic Motor Vehical',
+	'ITI-Mechanic Radio & Television',
+	'ITI-Mechanic (Refrigeration & Air Conditioning',
+	'ITI-Painter General',
+	'ITI-Techinician Mechatronics',
+	'ITI-Medical Electronics',
+	'ITI-Tool & Die Maker (Press Tools, Jigs & Fixtures)',
+	'Any Other ITI(Which is not on above)',
+	'Pursuing ITI - Any Other Trade',
+	'Diploma in Mechatronics',
+	'Diploma in Tools & Die Making',
+	'Diploma in Mechanical completed',
+	'Any Other Diploma Pursuing(Which is not in above)',
+	'Any Other Diploma Completed (Which is not in above) ',
+	'B.E./B.Tech - Pursuing',
+	'B.E./B.Tech - Completed',
+];
+const plant_worked = [
+	'Passenger Vehicle',
+	'Commercial Vehicle',
+	'Not Worked in Tata Motor',
+	'Worked Some Other Tata Motors Plant',
+];
+const CandidateStatus = [
+	'Documents Not Verified',
+	'Eligible for Exam',
+	'Not Eligible for Exam',
+	'Failed in Exam',
+	'Not Responding for Exam',
+	'Eligible for Interview',
+	'Not Responding for Interview',
+	'Eligible for Offer Letter',
+	'Rejected in Interview',
+	'Admitted to an Company',
+	'Not Responding for Admission',
+];
+const options = {
+	year: 'numeric',
+	month: '2-digit',
+	day: '2-digit',
+};
 
 const Students = ({ setLoading, showAlert }) => {
 	var today = currDate();
@@ -169,7 +241,7 @@ const Students = ({ setLoading, showAlert }) => {
 					</div>
 				)}
 				<div className='row justify-content-between'>
-					<h4>Student Management</h4>
+					<h4>Candidates Management</h4>
 					<img
 						src={filterOpen ? FILTER_FILLED : FILTER_OUTLINED}
 						onClick={(e) => {
@@ -249,6 +321,8 @@ const Students = ({ setLoading, showAlert }) => {
 					filter={filter}
 					updateSelected={updateSelected}
 					selected={selected}
+					setLoading={setLoading}
+					showAlert={showAlert}
 				/>
 
 				<button
@@ -267,7 +341,7 @@ const Students = ({ setLoading, showAlert }) => {
 	);
 };
 
-const StudentsTable = ({ data, filter, selected, updateSelected }) => {
+const StudentsTable = ({ data, filter, selected, updateSelected, setLoading, showAlert }) => {
 	const [registered, setRegistered] = useState([]);
 	useEffect(() => {
 		const filtered = data.filter((candidate) => {
@@ -332,9 +406,11 @@ const StudentsTable = ({ data, filter, selected, updateSelected }) => {
 					return (
 						<StudentCard
 							key={candidate}
-							candidate={candidate}
+							details={candidate}
 							selected={selected}
 							updateSelected={updateSelected}
+							setLoading={setLoading}
+							showAlert={showAlert}
 						/>
 					);
 				})}
@@ -343,13 +419,65 @@ const StudentsTable = ({ data, filter, selected, updateSelected }) => {
 	);
 };
 
-const StudentCard = ({ candidate, selected, updateSelected }) => {
-	const [expanded, setExpanded] = useState(false);
-	var options = {
-		year: 'numeric',
-		month: '2-digit',
-		day: '2-digit',
+const StudentCard = ({ details, selected, updateSelected, setLoading, showAlert }) => {
+	const [candidate, setCandidate] = useState(details);
+	const [expandedType, setExpandedType] = useState(false);
+	const changeHandler = (e) => {
+		const checked = e.target.checked;
+		if (checked) {
+			updateSelected((prev) => {
+				if (prev.includes(candidate._id)) {
+					return prev;
+				}
+				return [...prev, candidate._id];
+			});
+		} else {
+			updateSelected((prev) => {
+				return prev.filter((element) => element !== candidate._id);
+			});
+		}
 	};
+	return (
+		<>
+			<div className='row details'>
+				<span className='col-3' onClick={(e) => setExpandedType('details')}>
+					{candidate.name}
+				</span>
+				<span className='col-3' onClick={(e) => setExpandedType('details')}>
+					{candidate.mobile}
+				</span>
+				<span className='col-3' onClick={(e) => setExpandedType('details')}>
+					{candidate.team ? candidate.team.name : ''}
+				</span>
+				<span className='col-2' onClick={(e) => setExpandedType('details')}>
+					{new Date(candidate.registration_date).toLocaleDateString('en-GB', options)}
+				</span>
+				<span className='col-1'>
+					<input
+						type='checkbox'
+						checked={selected.includes(candidate._id)}
+						onChange={changeHandler}
+					/>
+				</span>
+			</div>
+
+			{expandedType === 'details' && (
+				<Details candidate={candidate} setExpandedType={setExpandedType} />
+			)}
+			{expandedType === 'edit' && (
+				<EditDetails
+					candidate={candidate}
+					setExpandedType={setExpandedType}
+					setLoading={setLoading}
+					showAlert={showAlert}
+					setCandidate={setCandidate}
+				/>
+			)}
+		</>
+	);
+};
+
+const Details = ({ candidate, setExpandedType }) => {
 	const processExam = () => {
 		if (candidate.examination) {
 			if (candidate.examination.includes('Pass')) return 'Pass';
@@ -381,143 +509,404 @@ const StudentCard = ({ candidate, selected, updateSelected }) => {
 			return 'NA';
 		}
 	};
-
-	const changeHandler = (e) => {
-		const checked = e.target.checked;
-		if (checked) {
-			updateSelected((prev) => {
-				if (prev.includes(candidate._id)) {
-					return prev;
-				}
-				return [...prev, candidate._id];
-			});
-		} else {
-			updateSelected((prev) => {
-				return prev.filter((element) => element !== candidate._id);
-			});
-		}
-	};
 	return (
 		<>
-			<div className='row details'>
-				<span className='col-3' onClick={setExpanded}>
-					{candidate.name}
-				</span>
-				<span className='col-3' onClick={setExpanded}>
-					{candidate.mobile}
-				</span>
-				<span className='col-3' onClick={setExpanded}>
-					{candidate.team ? candidate.team.name : ''}
-				</span>
-				<span className='col-2' onClick={setExpanded}>
-					{new Date(candidate.registration_date).toLocaleDateString('en-GB', options)}
-				</span>
-				<span className='col-1'>
-					<input
-						type='checkbox'
-						checked={selected.includes(candidate._id)}
-						onChange={changeHandler}
+			<div className='popup-wrapper'>
+				<div className='extra-details'>
+					<CloseIcon
+						onClick={(e) => {
+							setExpandedType(null);
+						}}
 					/>
-				</span>
-			</div>
-
-			{expanded && (
-				<>
-					<div className='popup-wrapper'>
-						<div className='extra-details'>
-							<CloseIcon
-								onClick={(e) => {
-									setExpanded(false);
-								}}
-							/>
-							<div className='row justify-content-between ' style={{ marginTop: '2.5rem' }}>
-								<div className='col-7 candidate-details'>
-									<div>
-										Name : <span>{candidate.name}</span>
-									</div>
-									<div>
-										Mobile No. : <span>{candidate.mobile}</span>
-									</div>
-									<div>
-										Email : <span>{candidate.email}</span>
-									</div>
-									<div>
-										Gender : <span>{candidate.gender}</span>
-									</div>
-									<div>
-										DOB :{' '}
-										<span>{new Date(candidate.DOB).toLocaleDateString('en-GB', options)}</span>
-									</div>
-									<div>
-										Aadhaar no. : <span>{candidate.aadhaar}</span>
-									</div>
-									<div>
-										Father's Name : <span>{candidate.fname}</span>
-									</div>
-									<div>
-										District : <span>{candidate.district}</span>
-									</div>
-									<div>
-										State : <span>{candidate.state}</span>
-									</div>
-									<div>
-										Pincode : <span>{candidate.pincode}</span>
-									</div>
-									<div>
-										Height : <span>{candidate.height}</span>
-									</div>
-									<div>
-										Weight : <span>{candidate.weight}</span>
-									</div>
-									<div>
-										Qualification : <span>{candidate.qualification}</span>
-									</div>
-									<div>
-										College : <span>{candidate.college}</span>
-									</div>
-									<div>
-										Year Of Passing : <span>{candidate.y_o_p}</span>
-									</div>
-									<div>
-										CGPA : <span>{candidate.cgpa}</span>
-									</div>
-									<div>
-										Diploma : <span>{candidate.diploma}</span>
-									</div>
-									<div>
-										Backlog : <span>{candidate.backlog}</span>
-									</div>
-									<div>
-										How you come to know about this opportunity? :{' '}
-										<span>{candidate.opportunity}</span>
-									</div>
-									<div>
-										Which Plant You Have Worked In Tata Motors-Pune :{' '}
-										<span>{candidate.plant_worked}</span>
-									</div>
-									<div>
-										Work Experience : <span>{candidate.work_experience}</span>
-									</div>
-									<div>
-										Exam : <span>{processExam()}</span>
-									</div>
-									<div>
-										Interview : <span>{processInterview()}</span>
-									</div>
-									<div>
-										Offer Letter : <span>{processOfferLetter()}</span>
-									</div>
-								</div>
-								<div className='col-5 images'>
-									<img src={FetchImage(candidate.photo)} alt='' />
-									<img src={FetchImage(candidate.aadhaar_photo)} alt='' />
-								</div>
+					<div className='row justify-content-between ' style={{ marginTop: '2.5rem' }}>
+						<div className='col-7 candidate-details'>
+							<div>
+								Name : <span>{candidate.name}</span>
+							</div>
+							<div>
+								Mobile No. : <span>{candidate.mobile}</span>
+							</div>
+							<div>
+								Email : <span>{candidate.email}</span>
+							</div>
+							<div>
+								Gender : <span>{candidate.gender}</span>
+							</div>
+							<div>
+								DOB :<span>{new Date(candidate.DOB).toLocaleDateString('en-GB', options)}</span>
+							</div>
+							<div>
+								Aadhaar no. : <span>{candidate.aadhaar}</span>
+							</div>
+							<div>
+								Father's Name : <span>{candidate.fname}</span>
+							</div>
+							<div>
+								District : <span>{candidate.district}</span>
+							</div>
+							<div>
+								State : <span>{candidate.state}</span>
+							</div>
+							<div>
+								Pincode : <span>{candidate.pincode}</span>
+							</div>
+							<div>
+								Height : <span>{candidate.height}</span>
+							</div>
+							<div>
+								Weight : <span>{candidate.weight}</span>
+							</div>
+							<div>
+								Qualification : <span>{candidate.qualification}</span>
+							</div>
+							<div>
+								College : <span>{candidate.college}</span>
+							</div>
+							<div>
+								Year Of Passing : <span>{candidate.y_o_p}</span>
+							</div>
+							<div>
+								CGPA : <span>{candidate.cgpa}</span>
+							</div>
+							<div>
+								Diploma : <span>{candidate.diploma}</span>
+							</div>
+							<div>
+								Backlog : <span>{candidate.backlog}</span>
+							</div>
+							<div>
+								How you come to know about this opportunity? : <span>{candidate.opportunity}</span>
+							</div>
+							<div>
+								Which Plant You Have Worked In Tata Motors-Pune :{' '}
+								<span>{candidate.plant_worked}</span>
+							</div>
+							<div>
+								Work Experience : <span>{candidate.work_experience}</span>
+							</div>
+							<div>
+								Exam : <span>{processExam()}</span>
+							</div>
+							<div>
+								Interview : <span>{processInterview()}</span>
+							</div>
+							<div>
+								Offer Letter : <span>{processOfferLetter()}</span>
 							</div>
 						</div>
+						<div className='col-5 images'>
+							<img src={FetchImage(candidate.photo)} alt='' />
+							<img src={FetchImage(candidate.aadhaar_photo)} alt='' />
+							<button
+								className='btn btn-outline-primary'
+								onClick={(e) => {
+									setExpandedType('edit');
+								}}
+							>
+								EDIT
+							</button>
+						</div>
 					</div>
-				</>
-			)}
+				</div>
+			</div>
 		</>
+	);
+};
+
+const EditDetails = ({ candidate, setCandidate, setExpandedType, setLoading, showAlert }) => {
+	const [details, setDetails] = useState({
+		name: '',
+		fname: '',
+		gender: '',
+		aadhaar: '',
+		qualification: '',
+		diploma: '',
+		y_o_p: '',
+		cgpa: '',
+		backlog: '',
+		college: '',
+		height: '',
+		weight: '',
+		plant_worked: '',
+		pwd: '',
+		work_experience: '',
+		status: '',
+		exam_attempt_remaining: '',
+	});
+	useEffect(() => {
+		setDetails((prev) => {
+			return {
+				...prev,
+				...candidate,
+			};
+		});
+	}, [candidate]);
+
+	const SCROLLINGDIV = {
+		border: 'none',
+		overflowY: 'scroll',
+		overflowX: 'hidden',
+		height: '75vh',
+		margin: '0.125rem 0 0',
+		padding: '0.5rem 0.5rem 0',
+		borderRadius: '7px',
+		borderBottom: 'none',
+	};
+	const ROW = {
+		display: 'flex',
+		alignItems: 'center',
+		alignContent: 'space-between',
+		marginTop: '0.5rem',
+	};
+	const LABEL = {
+		width: '20%',
+		fontWeight: '500',
+	};
+	const INPUT = {
+		width: '75%',
+		background: '#DBE3FF',
+		borderRadius: '7px',
+		border: 'none',
+		outline: 'none',
+		padding: '0.25rem 0.5rem',
+	};
+	const BUTTON_STYLE = {
+		width: '30%',
+		background: '#5CA1F1',
+		color: '#FFFFFF',
+		fontWeight: '500',
+		borderRadius: '7px',
+		border: 'none',
+		outline: 'none',
+		padding: '0.25rem 0.5rem',
+	};
+
+	const onChangeListener = (e) => {
+		console.log(details);
+		setDetails((prev) => {
+			return {
+				...prev,
+				[e.target.name]: e.target.value,
+			};
+		});
+	};
+	const submitHandler = async (e) => {
+		e.preventDefault();
+		setLoading(true);
+		const data = await SaveCandidateDetails(details);
+		if (data && data.success) {
+			setCandidate((prev) => {
+				return { ...prev, ...details };
+			});
+			setExpandedType(null);
+		} else {
+			showAlert('Unable to save candidate details.');
+		}
+		setLoading(false);
+	};
+	return (
+		<div className='popup-wrapper'>
+			<form className='extra-details' style={{ padding: '1rem 2rem' }} onSubmit={submitHandler}>
+				<span style={{ fontWeight: '600', fontSize: '1.2rem', marginLeft: '40%' }}>
+					Candidate Details
+				</span>
+				<CloseIcon onClick={(e) => setExpandedType(null)} />
+				<div style={SCROLLINGDIV}>
+					<div style={ROW}>
+						<span style={LABEL}>Candidate Name</span>
+						<input
+							type='text'
+							style={INPUT}
+							name='name'
+							value={details.name}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Father's Name</span>
+						<input
+							type='text'
+							style={INPUT}
+							name='fname'
+							value={details.fname}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Gender</span>
+						<select
+							style={{ ...INPUT, width: '30%' }}
+							name='gender'
+							value={details.gender}
+							onChange={onChangeListener}
+						>
+							<option>Male</option>
+							<option>Female</option>
+							<option>Others</option>
+						</select>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Aadhaar Number</span>
+						<input
+							type='Number'
+							style={INPUT}
+							name='aadhaar'
+							value={details.aadhaar}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Qualification</span>
+						<select
+							style={INPUT}
+							name='qualification'
+							value={details.qualification}
+							onChange={onChangeListener}
+						>
+							{qualifications.map((q) => (
+								<option key={q}>{q}</option>
+							))}
+						</select>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>College</span>
+						<input
+							type='text'
+							style={INPUT}
+							name='college'
+							value={details.college}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>CGPA</span>
+						<input
+							type='number'
+							style={{ ...INPUT, width: '30%' }}
+							name='cgpa'
+							value={details.cgpa}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Year of Passing</span>
+						<input
+							type='number'
+							style={{ ...INPUT, width: '30%' }}
+							name='y_o_p'
+							value={details.y_o_p}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Diploma</span>
+						<input
+							type='text'
+							style={{ ...INPUT, width: '30%' }}
+							name='diploma'
+							value={details.diploma}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Backlog</span>
+						<input
+							type='text'
+							style={{ ...INPUT, width: '30%' }}
+							name='backlog'
+							value={details.backlog}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Plant Worked</span>
+						<select
+							type='text'
+							style={INPUT}
+							name='plant_worked'
+							value={details.plant_worked}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						>
+							{plant_worked.map((plant) => (
+								<option key={plant}>{plant}</option>
+							))}
+						</select>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Work Experience</span>
+						<input
+							type='text'
+							style={INPUT}
+							name='work_experience'
+							value={details.work_experience}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>PWD</span>
+						<input
+							type='text'
+							style={INPUT}
+							name='pwd'
+							value={details.pwd}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Remaining Exam Attempts</span>
+						<input
+							type='Number'
+							style={{ ...INPUT, width: '10%' }}
+							name='exam_attempt_remaining'
+							value={details.exam_attempt_remaining}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Candidate Status</span>
+						<select
+							type='text'
+							style={{ ...INPUT, width: '30%' }}
+							name='status'
+							value={details.status}
+							onChange={onChangeListener}
+						>
+							{CandidateStatus.map((status) => (
+								<option key={status}>{status}</option>
+							))}
+						</select>
+					</div>
+
+					<div style={{ ...ROW, justifyContent: 'center', margin: '2rem 0' }}>
+						<button style={BUTTON_STYLE}>Save Candidate Details</button>
+					</div>
+				</div>
+			</form>
+		</div>
 	);
 };
 

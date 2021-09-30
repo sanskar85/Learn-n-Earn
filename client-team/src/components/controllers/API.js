@@ -111,6 +111,14 @@ export const MyDashboard = async () => {
 	}
 };
 
+export const Sources = async () => {
+	try {
+		const { data } = await axiosInstance.get(`/candidate/sources`);
+		return data;
+	} catch (error) {
+		return false;
+	}
+};
 export const Students = async () => {
 	try {
 		const { data } = await axiosInstance.get(`/team/students`);
@@ -236,7 +244,7 @@ export const IssueLetter = async (offer_id, details) => {
 			offer_id: offer_id,
 			details: details,
 		});
-		
+
 		return data.success;
 	} catch (err) {
 		return false;

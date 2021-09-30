@@ -6,6 +6,7 @@ const {
 	Teams,
 	UpdateTeam,
 	Students,
+	UpdateCandidatesDetail,
 	UpdateCandidatesTeam,
 	FetchProfile,
 	UpdateProfile,
@@ -31,6 +32,8 @@ router.route('/teams').all(verifyManager).get(Teams);
 router.route('/teams').all(verifyManager).put(UpdateTeam);
 
 router.route('/students').all(verifyManager).get(Students);
+
+router.route('/update-student-details').all(verifyManager).put(UpdateCandidatesDetail);
 
 router.route('/update-candidates-team').all(verifyManager).put(UpdateCandidatesTeam);
 
