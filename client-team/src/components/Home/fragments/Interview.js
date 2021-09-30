@@ -83,13 +83,14 @@ const Interview = ({ showAlert, setLoading }) => {
 			if (data && data.success) {
 				setInterviewData(data.interview_details);
 				setNotResponding(data.not_responding);
+				setLoading(false);
 			} else {
-				console.log(data);
+				setLoading(false);
+				showAlert('Unable to fetch data');
 			}
-			setLoading(false);
 		}
 		fetchData();
-	}, [setLoading]);
+	}, [setLoading, showAlert]);
 
 	return (
 		<>
@@ -196,7 +197,6 @@ const Eligible = ({ data, filter, showAlert, setLoading }) => {
 			if (filter.status !== 'Status' && candidate.status !== filter.status) {
 				return false;
 			}
-			console.log(new Date(candidate.scheduled_time) + '   ' + new Date(filter.from_date));
 			if (new Date(candidate.scheduled_time) < new Date(filter.from_date)) {
 				return false;
 			}

@@ -86,13 +86,14 @@ const Examination = ({ showAlert, setLoading }) => {
 				setAttended(data.attended);
 				setNotAttended(data.not_attended);
 				setNotResponding(data.not_responding);
+				setLoading(false);
 			} else {
-				console.log(data);
+				setLoading(false);
+				showAlert('Unable to fetch data');
 			}
-			setLoading(false);
 		}
 		fetchData();
-	}, [setLoading]);
+	}, [setLoading, showAlert]);
 	return (
 		<>
 			<div className='student-wrapper'>

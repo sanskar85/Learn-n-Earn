@@ -78,7 +78,8 @@ const Question = ({ showAlert, setLoading }) => {
 				answer: 'A',
 			};
 		});
-		document.getElementById('image_upload').value = '';
+		const imageDOM = document.getElementById('image_upload');
+		if (imageDOM) imageDOM.value = '';
 	};
 
 	return (

@@ -37,7 +37,7 @@ module.exports.QuestionSubject = {
 	ENGLISH: 'English',
 	GK: 'General Knowledge',
 	TECHNICAL_REASONING: 'Technical Reasoning',
-	CODING_APTITUDE: 'Coding & Aptitude',
+	CODING_APTITUDE: 'Coding and Aptitude',
 };
 module.exports.OfferLetterStatus = {
 	ISSUED: 'Offer Letter Issued',

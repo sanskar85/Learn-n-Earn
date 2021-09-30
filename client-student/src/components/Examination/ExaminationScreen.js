@@ -90,13 +90,11 @@ const ExaminationScreen = ({ history, setTitle }) => {
 		};
 		async function fetchData() {
 			const data = await StartExam();
-			if (!data.success) {
+			if (!data || !data.success) {
 				if (data.error) alert(data.error.message);
-				// history.push("/logout");
 			} else {
 				setQuestions(JSON.parse(data.questions));
 				setUserDetails(data.user);
-				console.log(data);
 			}
 		}
 		fetchData();

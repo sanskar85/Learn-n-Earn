@@ -142,7 +142,8 @@ export default function Dashboard({ setTitle, history }) {
 							clickHandler={clickHandler}
 						/>
 					)}
-					{user.status === CandidateStatus.ADMITTED && (
+					{(user.status === CandidateStatus.OFFER_LETTER ||
+						user.status === CandidateStatus.ADMITTED) && (
 						<>
 							<Details
 								heading='Download your Offer Letter'

@@ -81,7 +81,6 @@ const Students = ({ setLoading, showAlert }) => {
 	const setFilter = (e) => {
 		const name = e.target.name;
 		const value = e.target.value;
-		console.log(name + '  ' + value);
 		_setFilter((prev) => {
 			return {
 				...prev,
@@ -261,7 +260,7 @@ const Students = ({ setLoading, showAlert }) => {
 						else showAlert('No Candidate Selected ');
 					}}
 				>
-					Assign To Other
+					Assign To Other Team
 				</button>
 			</div>
 		</>
@@ -321,9 +320,7 @@ const StudentsTable = ({ data, filter, selected, updateSelected }) => {
 					className='col-1'
 					style={{ cursor: 'pointer' }}
 					onClick={(e) => {
-						console.log(e.target);
 						const ids = registered.map((e) => e._id);
-						console.log(ids);
 						updateSelected(ids);
 					}}
 				>

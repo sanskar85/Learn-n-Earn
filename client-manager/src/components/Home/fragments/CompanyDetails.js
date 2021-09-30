@@ -92,7 +92,6 @@ const EditCompany = ({
 		practical_4: '',
 	});
 	useEffect(() => {
-		console.log(editingCompany);
 		if (editingCompany !== 'new') {
 			setDetails((prev) => {
 				return {

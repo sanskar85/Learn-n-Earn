@@ -89,13 +89,14 @@ const Students = ({ setLoading, showAlert }) => {
 				setCandidates(data.candidates);
 				setNotVerified(data.not_verified);
 				setProfileNotComplete(data.profile_not_completed);
+				setLoading(false);
 			} else {
-				console.log(data);
+				setLoading(false);
+				showAlert('Unable to fetch data');
 			}
-			setLoading(false);
 		}
 		fetchData();
-	}, [setLoading]);
+	}, [setLoading, showAlert]);
 	return (
 		<>
 			<div className='student-wrapper'>

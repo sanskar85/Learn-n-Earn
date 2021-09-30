@@ -8,7 +8,7 @@ import EXAM from '../../assets/exam-report.svg';
 import INTERVIEW from '../../assets/interview-report.svg';
 import OFFERLETTER from '../../assets/offerletter.svg';
 import { ArrowUp, FlameIcon } from '../../assets/Images';
-const Dashboard = ({ setLoading }) => {
+const Dashboard = ({ setLoading, showAlert }) => {
 	const [call_target, setCallTarget] = useState(0);
 	const [student_corner, setStudentCorner] = useState({
 		interested: 0,
@@ -48,13 +48,14 @@ const Dashboard = ({ setLoading }) => {
 				setExamReport(data.exam_report);
 				setInterviewReport(data.interview_report);
 				setOfferLetterReport(data.offer_letter_report);
+				setLoading(false);
 			} else {
-				console.log(data);
+				setLoading(false);
+				showAlert('Unable to fetch data');
 			}
-			setLoading(false);
 		}
 		fetchData();
-	}, [setLoading]);
+	}, [setLoading, showAlert]);
 	return (
 		<>
 			<div className='row justify-content-center'>

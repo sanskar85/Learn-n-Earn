@@ -8,7 +8,7 @@ import EXAM from '../../assets/exam-report.svg';
 import INTERVIEW from '../../assets/interview-report.svg';
 import OFFERLETTER from '../../assets/offerletter.svg';
 import { FlameIcon } from '../../assets/Images';
-const Dashboard = ({ setLoading }) => {
+const Dashboard = ({ setLoading, showAlert }) => {
 	const [header, setHeaderData] = useState({
 		registration: 0,
 		exam: 0,
@@ -61,13 +61,14 @@ const Dashboard = ({ setLoading }) => {
 				setInterviewReport(data.interview_report);
 				setOfferLetterReport(data.offer_letter);
 				setCallTarget(data.call_target);
+				setLoading(false);
 			} else {
-				console.log(data);
+				setLoading(false);
+				showAlert('Unable to fetch data');
 			}
-			setLoading(false);
 		}
 		fetchData();
-	}, [setLoading]);
+	}, [setLoading, showAlert]);
 	return (
 		<>
 			<div className='dashboard-wrapper'>

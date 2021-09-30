@@ -835,14 +835,13 @@ exports.CreateInterviewResponse = async (req, res) => {
 		);
 		candidateDetails.income = details.income;
 		await candidateDetails.save();
-
 		if (details.result === 'Pass') {
 			await SendSMS(
 				`Dear candidate, you have successfully passed the interview. Please wait for the further process of Admission, our team will contact you. Regards Learn n Earn Team`,
-				candidateDetails.candiate.mobile
+				candidateDetails.candidate.mobile
 			);
 
-			await SendEmail(candidateDetails.candiate.email, 'Learn n Earn', InterviewCompleted());
+			await SendEmail(candidateDetails.candidate.email, 'Learn n Earn', InterviewCompleted());
 
 			await Notice.create({
 				candidate: candidateDetails,
@@ -1024,7 +1023,7 @@ exports.CreateOfferLetter = async (req, res) => {
 		doc.rect(330, 550, 235, 200).stroke();
 
 		doc
-			.fontSize(12)
+			.fontSize(11)
 			.font('Times-Bold')
 			.text(company.rope_in_1, 30, 580, {
 				width: 300,
@@ -1045,10 +1044,12 @@ exports.CreateOfferLetter = async (req, res) => {
 			})
 			.font('Times-Italic')
 			.fillColor('blue')
+			.fontSize(10)
 			.text(`Google Location - ${company.rope_in_location}`, 30, 640, {
 				width: 300,
 				align: 'center',
 			})
+			.fontSize(11)
 			.font('Times-Roman')
 			.fillColor('black')
 			.text('for any assistance', 30, 665, {
@@ -1065,7 +1066,7 @@ exports.CreateOfferLetter = async (req, res) => {
 			});
 
 		doc
-			.fontSize(12)
+			.fontSize(11)
 			.font('Times-Bold')
 			.text(company.practical_1, 330, 580, {
 				width: 235,
@@ -1105,6 +1106,7 @@ exports.CreateOfferLetter = async (req, res) => {
 				right: 0,
 			},
 		});
+		doc.font('Times-Roman').fontSize(12);
 		doc.text(
 			`Please note at the time of admission, you must give a declaration that you will complete admission in any Bachelor course at IGNOU/or at any distance education University, at your cost, failing which you will not be considered for continuing the program.`,
 			30,
@@ -1289,10 +1291,11 @@ exports.AdmissionDetails = async (req, res) => {
 			{ $addFields: { user: { $arrayElemAt: ['$user', 0] } } },
 			{ $addFields: { mobile: '$user.mobile' } },
 			{ $addFields: { email: '$user.email' } },
+			{ $addFields: { team: '$details.referred_by' } },
 			{
 				$lookup: {
 					from: Team.collection.name,
-					localField: 'user.referred_by',
+					localField: 'team',
 					foreignField: '_id',
 					as: 'team',
 				},
@@ -1310,7 +1313,6 @@ exports.AdmissionDetails = async (req, res) => {
 			{ $sort: { createdAt: 1 } },
 			{ $project: project },
 		]);
-
 		res.status(200).json({
 			success: true,
 			offer_details,
@@ -1377,7 +1379,6 @@ exports.Targets = async (req, res) => {
 
 exports.UpdateTarget = async (req, res) => {
 	const { target_id, details } = req.body;
-	console.log(req.body);
 	try {
 		if (target_id) {
 			const target = await Target.findById(target_id);

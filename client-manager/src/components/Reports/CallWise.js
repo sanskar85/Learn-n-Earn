@@ -25,8 +25,8 @@ const CallWise = () => {
 				<div className='row header'>
 					<span className='col-3'>Team Name</span>
 					<span className='col-1'></span>
-					<span className='col-2'>Total Target</span>
-					<span className='col-2'>Achieved</span>
+					<span className='col-2'>Numbers to Call</span>
+					<span className='col-2'>Total Called</span>
 					<span className='col-2'>Interested</span>
 					<span className='col-2'>Convinced</span>
 				</div>

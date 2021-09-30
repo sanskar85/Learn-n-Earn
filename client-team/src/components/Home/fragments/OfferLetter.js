@@ -60,7 +60,6 @@ const OfferLetter = ({ showAlert, setLoading }) => {
 	const setFilter = (e) => {
 		const name = e.target.name;
 		const value = e.target.value;
-		console.log(name + '  ' + value);
 		_setFilter((prev) => {
 			return {
 				...prev,
@@ -93,13 +92,14 @@ const OfferLetter = ({ showAlert, setLoading }) => {
 			const data = await OfferLetter_Details();
 			if (data && data.success) {
 				setDetails(data.offer_details);
+				setLoading(false);
 			} else {
-				console.log(data);
+				setLoading(false);
+				showAlert('Unable to fetch data');
 			}
-			setLoading(false);
 		}
 		fetchData();
-	}, [setLoading]);
+	}, [setLoading, showAlert]);
 	return (
 		<>
 			<div className='student-wrapper'>

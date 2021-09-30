@@ -405,7 +405,6 @@ exports.UpdateProfileImage = async (req, res) => {
 };
 
 exports.CreateQuestion = async (req, res) => {
-	console.log(req.body);
 	const { section, type, imagePath, question, options, answer } = req.body;
 
 	const option = [options.a, options.b, options.c, options.d];
@@ -428,7 +427,6 @@ exports.CreateQuestion = async (req, res) => {
 				answer: answer,
 			});
 		}
-		console.log(c);
 
 		res.status(201).json({
 			success: true,
@@ -520,7 +518,6 @@ exports.ExamWiseReport = async (req, res) => {
 			{ $project: project },
 		]);
 
-		console.log(teams);
 		for (const team of teams) {
 			const candidates = team.candidates;
 			const examinations = team.examinations;
@@ -567,6 +564,7 @@ exports.InterviewWiseReport = async (req, res) => {
 		_id: 0,
 		name: 1,
 		'interviews.status': 1,
+		'candidates.status': 1,
 	};
 	try {
 		const teams = await Team.aggregate([
@@ -591,10 +589,12 @@ exports.InterviewWiseReport = async (req, res) => {
 
 		for (const team of teams) {
 			const interviews = team.interviews;
+			const candidates = team.candidates;
 			let scheduled = 0;
 			let not_scheduled = 0;
 			let pass = 0;
 			let fail = 0;
+			let not_responding = 0;
 			interviews.forEach((interview) => {
 				if (interview.status === InterviewStatus.PASS) {
 					pass++;
@@ -609,11 +609,18 @@ exports.InterviewWiseReport = async (req, res) => {
 					not_scheduled++;
 				}
 			});
+			candidates.forEach((candidate) => {
+				if (candidate.status === CandidateStatus.NOT_RESPONDING_INTERVIEW) {
+					not_responding++;
+				}
+			});
 			team.interviews = undefined;
+			team.candidates = undefined;
 			team.scheduled = scheduled;
 			team.not_scheduled = not_scheduled;
 			team.pass = pass;
 			team.fail = fail;
+			team.not_responding = not_responding;
 		}
 
 		res.status(200).json({
@@ -634,6 +641,7 @@ exports.AdmissionWiseReport = async (req, res) => {
 		_id: 0,
 		name: 1,
 		'offer_letters.status': 1,
+		'candidates.status': 1,
 	};
 	try {
 		const teams = await Team.aggregate([
@@ -658,13 +666,11 @@ exports.AdmissionWiseReport = async (req, res) => {
 
 		for (const team of teams) {
 			const offer_letters = team.offer_letters;
+			const candidates = team.candidates;
 			let issued = 0;
 			let not_issued = 0;
 			let joined = 0;
-			let after_covid = 0;
-			let joining_soon = 0;
-			let held_by_parents = 0;
-			let ticket_confirm = 0;
+			let not_responding = 0;
 			offer_letters.forEach((offer_letter) => {
 				if (offer_letter.status === OfferLetterStatus.ISSUED) {
 					issued++;
@@ -675,27 +681,18 @@ exports.AdmissionWiseReport = async (req, res) => {
 				if (offer_letter.status === OfferLetterStatus.JOINED) {
 					joined++;
 				}
-				if (offer_letter.status === OfferLetterStatus.AFTER_COVID) {
-					after_covid++;
-				}
-				if (offer_letter.status === OfferLetterStatus.JOINING_SOON) {
-					joining_soon++;
-				}
-				if (offer_letter.status === OfferLetterStatus.HELD_BY_PARENTS) {
-					held_by_parents++;
-				}
-				if (offer_letter.status === OfferLetterStatus.TICKET_CONFIRM) {
-					ticket_confirm++;
+			});
+			candidates.forEach((candidate) => {
+				if (candidate.status === CandidateStatus.NOT_RESPONDING_ADMISSION) {
+					not_responding++;
 				}
 			});
 			team.offer_letters = undefined;
+			team.candidates = undefined;
 			team.issued = issued;
 			team.not_issued = not_issued;
 			team.joined = joined;
-			team.after_covid = after_covid;
-			team.joining_soon = joining_soon;
-			team.held_by_parents = held_by_parents;
-			team.ticket_confirm = ticket_confirm;
+			team.not_responding = not_responding;
 		}
 
 		res.status(200).json({
@@ -801,7 +798,6 @@ exports.IndustryWiseReport = async (req, res) => {
 	for (const e of industries) {
 		industry[e.company_name] = [];
 	}
-	console.log(industry);
 
 	try {
 		const industry_wise_report = await CandidateDetails.aggregate([

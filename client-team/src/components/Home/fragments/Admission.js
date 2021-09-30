@@ -105,13 +105,14 @@ const Admission = ({ setLoading, showAlert }) => {
 			const data = await Admission_Details();
 			if (data) {
 				setDetails(data.offer_details);
+				setLoading(false);
 			} else {
-				console.log(data);
+				setLoading(false);
+				showAlert('Unable to fetch data');
 			}
-			setLoading(false);
 		}
 		fetchData();
-	}, [setLoading]);
+	}, [setLoading, showAlert]);
 
 	const csv_header = [
 		{ label: 'Name', key: 'name' },
@@ -214,9 +215,9 @@ const Admission = ({ setLoading, showAlert }) => {
 				)}
 
 				<div className='row header'>
-					<span className='col-3'>Team</span>
-					<span className='col-3'>Name</span>
-					<span className='col-3'>Phone</span>
+					<span className='col-2'>Team</span>
+					<span className='col-2'>Name</span>
+					<span className='col-2'>Phone</span>
 					<span className='col-2'>Industry</span>
 					<span className='col-2'>Status</span>
 					<span className='col-2'>Reporting Date</span>

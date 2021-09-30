@@ -55,13 +55,14 @@ const Teams = ({ setLoading, showAlert }) => {
 			const data = await MyTeams();
 			if (data && data.success) {
 				setTeams(data.teams);
+				setLoading(false);
 			} else {
-				console.log(data);
+				setLoading(false);
+				showAlert('Unable to fetch data');
 			}
-			setLoading(false);
 		}
 		fetchData();
-	}, [setLoading]);
+	}, [setLoading, showAlert]);
 	return (
 		<>
 			<div className='student-wrapper'>
