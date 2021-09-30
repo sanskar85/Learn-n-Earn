@@ -66,9 +66,11 @@ app.get('/images/:imageID', (req, res) => {
 	res.sendFile(__dirname + '/static/uploads/' + req.params.imageID);
 });
 
-const server = app.listen(9000, () => console.log(`Server running on port 9000 `));
+const server = app.listen(9000, () =>
+	console.log(`Server running at ${new Date().toLocaleDateString()} on port 9000 `)
+);
 
 process.on('unhandledRejection', (err, promise) => {
-	console.log(`Logged Error: ${err.message}`);
+	console.log(`Logged Error at ${new Date().toLocaleDateString()}: ${err.message}`);
 	server.close(() => process.exit(1));
 });

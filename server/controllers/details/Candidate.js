@@ -30,7 +30,8 @@ exports.MyDashboard = async (req, res) => {
 			marks: '',
 		};
 		if (_examination) {
-			exam.report = _examination.marks_obtained >= 24 ? 'PASS' : 'FAIL';
+			exam.report =
+				_examination.marks_obtained >= Number(process.env.PASSING_MARKS) ? 'PASS' : 'FAIL';
 			exam.marks = `${_examination.marks_obtained || 0} / ${process.env.TOTAL_QUESTIONS}`;
 		}
 
