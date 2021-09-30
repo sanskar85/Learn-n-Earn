@@ -66,9 +66,20 @@ app.get('/images/:imageID', (req, res) => {
 	res.sendFile(__dirname + '/static/uploads/' + req.params.imageID);
 });
 
-const server = app.listen(9000, () => console.log(`Server running at ${new Date()} on port 9000 `));
+const server = app.listen(9000, () =>
+	console.log(`Server running at ${getIndianTime()} on port 9000 `)
+);
 
 process.on('unhandledRejection', (err, promise) => {
-	console.log(`Logged Error at ${new Date()}: ${err.message}`);
+	console.log(`Logged Error at ${getIndianTime()}: ${err.message}`);
 	server.close(() => process.exit(1));
 });
+
+const getIndianTime = () => {
+	d = new Date();
+
+	utc = d.getTime() + d.getTimezoneOffset() * 60000;
+
+	nd = new Date(utc + 3600000 * +5.5);
+	return nd.toLocaleString('en-GB');
+};
