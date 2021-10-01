@@ -2,8 +2,9 @@ import EXCEL from '../../assets/excel.svg';
 const ExportButton = ({ clickHandler, margin }) => {
 	return (
 		<>
-			<div style={{ display: 'flex', alignItems: 'center' }} onClick={clickHandler}>
+			<div style={{ display: 'flex', alignItems: 'center' }}>
 				<button
+					onClick={clickHandler}
 					style={{
 						background: '#88E78C',
 						color: '#000',

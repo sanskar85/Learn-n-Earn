@@ -14,7 +14,6 @@ function App() {
 				<LoginRoute exact path='/login' component={Login} setTitle={setTitle} />
 				<DashboardRoute exact path='/' component={Home} setTitle={setTitle} />
 				<Routes exact path='/reports/:report' component={Reports} setTitle={setTitle} />
-				<Routes exact path='/company/:id' component={Reports} setTitle={setTitle} />
 				<Route render={() => <Redirect to={`/`} />} />
 			</Switch>
 		</Router>

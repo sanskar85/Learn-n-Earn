@@ -247,7 +247,7 @@ exports.submitTest = async (req, res) => {
 			});
 		}
 
-		let marks = 0;
+		let marks = process.env.MODE !== 'development' ? 0 : 40;
 		answers = JSON.parse(answers);
 		for (const answer of answers) {
 			const question = await Question.findById(answer.id).select('answer');

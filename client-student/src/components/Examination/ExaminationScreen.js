@@ -43,7 +43,6 @@ const ExaminationScreen = ({ history, setTitle }) => {
 			answers.push(obj);
 		});
 		const res = JSON.stringify(answers);
-		alert('Your response is being submitted. Press Ok to continue ');
 		const data = await SubmitExam(res);
 		if (!data.success) {
 			alert(data.message);
@@ -115,7 +114,7 @@ const ExaminationScreen = ({ history, setTitle }) => {
 		setQuestionNo((prev) => (prev >= questions.length ? prev : prev + 1));
 	};
 
-	if (questions.length === 0) {
+	if (questions.length === 0 || inProcess) {
 		return <>Loading...</>;
 	}
 	return (
