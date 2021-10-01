@@ -36,9 +36,9 @@ const Teams = ({ setLoading, showAlert }) => {
 		setLoading(true);
 		const data = await RegisterTeam(details);
 		if (data && data.success) {
-			showAlert('Manager Registered');
+			showAlert('Team Registered');
 		} else {
-			showAlert('Manager Not Registered. Please try again later');
+			showAlert('Team Not Registered. Please try again later');
 		}
 		setLoading(false);
 		setDetails({
