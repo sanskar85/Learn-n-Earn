@@ -81,9 +81,9 @@ const InterviewResponse = ({ setTitle }) => {
 		}
 		setLoading(true);
 		const data = await CreateInterviewResponse(interview_id, details);
-		window.close();
 		if (data) {
 			setLoading(false);
+			window.close();
 		} else {
 			setLoading(false);
 			alert('Error Saving Response. Please try again later.');

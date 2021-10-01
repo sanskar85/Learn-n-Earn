@@ -17,6 +17,7 @@ const InterviewSchema = new mongoose.Schema(
 			enum: Object.values(InterviewStatus),
 			default: InterviewStatus.NOT_SCHEDULED,
 		},
+		source: { type: String },
 		interview_mode: { type: String },
 		documents_verified: { type: String },
 		candidate_need: { type: String },
@@ -33,20 +34,21 @@ const InterviewSchema = new mongoose.Schema(
 );
 
 InterviewSchema.pre('save', async function (next) {
-	if (!this.industry) {
+	if (!this.result) {
 		next();
 	}
 	const candidate = await CandidateDetails.findById(this.candidate);
-
 	if (this.result === 'Pass') {
 		this.status = InterviewStatus.PASS;
 		this.meeting_link = undefined;
 		candidate.status = CandidateStatus.OFFER_LETTER;
-	} else if (this.result === 'Fail') {
+	}
+	if (this.result === 'Fail') {
 		this.status = InterviewStatus.FAIL;
 		this.meeting_link = undefined;
 		candidate.status = CandidateStatus.REJECTED;
-	} else if (this.result === 'Re-schedule Interview') {
+	}
+	if (this.result === 'Re-schedule Interview') {
 		this.status = InterviewStatus.NOT_SCHEDULED;
 		this.meeting_link = undefined;
 		this.scheduled_time = undefined;
