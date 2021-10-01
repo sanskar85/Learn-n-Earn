@@ -4,7 +4,12 @@ import FILTER_FILLED from '../../assets/filter-filled.svg';
 import { CloseIcon } from '../../assets/Images';
 import { useState, useEffect } from 'react';
 import $ from 'jquery';
-import { Students as MyStudents, FetchImage, UpdateStudentStatus } from '../../controllers/API';
+import {
+	Students as MyStudents,
+	FetchImage,
+	UpdateStudentStatus,
+	SaveCandidateDetails,
+} from '../../controllers/API';
 import { CSVLink } from 'react-csv';
 import ExportButton from './ExportButton';
 const states = [
@@ -45,6 +50,60 @@ const states = [
 	'Uttar Pradesh',
 	'Uttarakhand',
 	'West Bengal',
+];
+
+const qualifications = [
+	'',
+	'10th Pass',
+	'12th Pass(Arts)',
+	'12th Pass(Science)',
+	'12th Pass(Commerce)',
+	'Pursuing 12th',
+	'Graduation-Arts-Persuing',
+	'Graduation-Arts-Completed',
+	'Graduation-Commerce-Persuing',
+	'Graduation-Commerce-Completed',
+	'Graduation-Science-Pursuing',
+	'Graduation-Science-Completed',
+	'Any Other Graduation(Which od not in above)',
+	'ITI-Fitter/Tuner/Machinist Completed',
+	'Pursuing ITI-Fitter/Tuner/Machinist',
+	'ITI -Electronic Mechanic Completed',
+	'Pursuing ITI -Electronic Mechanic',
+	'ITI-Electrician Completed',
+	'Pursuing ITI-Electrician',
+	'ITI-Automotive Manufacturing',
+	'ITI-Certificate Cource in Machinist Teels Room',
+	'ITI-Diesel Mechanic',
+	'ITI-Draftsmen(Mechanic)',
+	'ITI-General Mechanic',
+	'ITI-Infirmation & Communication Techonology System Maintenance',
+	'ITI-Instument Mechanic',
+	'ITI-Maintenence Mechanic(Chamical Plant)',
+	'ITI-Marine Fitter',
+	'ITI-Mechanic Machine Tools maintenence',
+	'ITI-Mechanic Motor Vehical',
+	'ITI-Mechanic Radio & Television',
+	'ITI-Mechanic (Refrigeration & Air Conditioning',
+	'ITI-Painter General',
+	'ITI-Techinician Mechatronics',
+	'ITI-Medical Electronics',
+	'ITI-Tool & Die Maker (Press Tools, Jigs & Fixtures)',
+	'Any Other ITI(Which is not on above)',
+	'Pursuing ITI - Any Other Trade',
+	'Diploma in Mechatronics',
+	'Diploma in Tools & Die Making',
+	'Diploma in Mechanical completed',
+	'Any Other Diploma Pursuing(Which is not in above)',
+	'Any Other Diploma Completed (Which is not in above) ',
+	'B.E./B.Tech - Pursuing',
+	'B.E./B.Tech - Completed',
+];
+const plant_worked = [
+	'Passenger Vehicle',
+	'Commercial Vehicle',
+	'Not Worked in Tata Motor',
+	'Worked Some Other Tata Motors Plant',
 ];
 
 const Students = ({ setLoading, showAlert }) => {
@@ -101,7 +160,7 @@ const Students = ({ setLoading, showAlert }) => {
 		<>
 			<div className='student-wrapper'>
 				<div className='row justify-content-between'>
-					<h4>Student Management</h4>
+					<h4>Candidates Management</h4>
 					<img
 						src={filterOpen ? FILTER_FILLED : FILTER_OUTLINED}
 						onClick={(e) => {
@@ -193,9 +252,6 @@ const Students = ({ setLoading, showAlert }) => {
 					<span className='active ' onClick={column_selector} id='candidates'>
 						All Candidates
 					</span>
-					<span onClick={column_selector} id='profile_not_completed'>
-						Profile Not Completed Candidates
-					</span>
 					<span onClick={column_selector} id='not_verified'>
 						Not Verified Candidates
 					</span>
@@ -203,7 +259,14 @@ const Students = ({ setLoading, showAlert }) => {
 						Interested Candidates
 					</span>
 				</div>
-				{header === 'candidates' && <Candidates data={candidates} filter={filter} />}
+				{header === 'candidates' && (
+					<Candidates
+						data={candidates}
+						filter={filter}
+						setLoading={setLoading}
+						showAlert={showAlert}
+					/>
+				)}
 				{header === 'interested' && <Interested data={interested} filter={filter} />}
 				{header === 'profile_not_completed' && (
 					<ProfileNotCompleted
@@ -226,7 +289,7 @@ const Students = ({ setLoading, showAlert }) => {
 	);
 };
 
-const Candidates = ({ data, filter }) => {
+const Candidates = ({ data, filter, setLoading, showAlert }) => {
 	const [candidates, setCandidates] = useState([]);
 	useEffect(() => {
 		const filtered = data.filter((candidate) => {
@@ -252,21 +315,21 @@ const Candidates = ({ data, filter }) => {
 
 	const csv_header = [
 		{ label: 'Name', key: 'name' },
-		{ label: 'Email ID', key: 'email' },
-		{ label: 'Mobile Number', key: 'mobile' },
-		{ label: 'D O B', key: 'DOB' },
-		{ label: 'Registration Date', key: 'registration_date' },
-		{ label: 'Aadhaar Number', key: 'aadhaar' },
-		{ label: 'Father Name', key: 'fname' },
 		{ label: 'Gender', key: 'fname' },
+		{ label: 'Father Name', key: 'fname' },
+		{ label: 'D O B', key: 'DOB' },
+		{ label: 'Mobile Number', key: 'mobile' },
+		{ label: 'Aadhaar Number', key: 'aadhaar' },
+		{ label: 'Email ID', key: 'email' },
 		{ label: 'District', key: 'district' },
 		{ label: 'State', key: 'state' },
 		{ label: 'Pincode', key: 'pincode' },
-		{ label: 'Qualification', key: 'qualification' },
+		{ label: 'Highest Qualification', key: 'qualification' },
+		{ label: 'Year of Passing', key: 'y_o_p' },
+		{ label: 'Registration Date', key: 'registration_date' },
 		{ label: 'College', key: 'college' },
 		{ label: 'CGPA', key: 'cgpa' },
 		{ label: 'Diploma', key: 'diploma' },
-		{ label: 'Year of Passing', key: 'y_o_p' },
 		{ label: 'Any Backlog ?', key: 'backlog' },
 		{ label: 'Height', key: 'height' },
 		{ label: 'Weight', key: 'weight' },
@@ -291,7 +354,14 @@ const Candidates = ({ data, filter }) => {
 			</div>
 			<div className='details-wrapper'>
 				{candidates.map((candidate) => {
-					return <CandidateCard key={candidate} candidate={candidate} />;
+					return (
+						<CandidateCard
+							key={candidate.mobile}
+							details={candidate}
+							setLoading={setLoading}
+							showAlert={showAlert}
+						/>
+					);
 				})}
 			</div>
 
@@ -302,13 +372,9 @@ const Candidates = ({ data, filter }) => {
 	);
 };
 
-const CandidateCard = ({ candidate }) => {
-	const [expanded, setExpanded] = useState(false);
-	var options = {
-		year: 'numeric',
-		month: '2-digit',
-		day: '2-digit',
-	};
+const CandidateCard = ({ details, setLoading, showAlert }) => {
+	const [candidate, setCandidate] = useState(details);
+	const [expandedType, setExpandedType] = useState(null);
 	const style = (status) => {
 		return {
 			color: status === 'Pass' ? '#4AE290' : status === 'Fail' ? '#E03347' : '#9C29E4',
@@ -347,7 +413,7 @@ const CandidateCard = ({ candidate }) => {
 			<div
 				className='row details'
 				onClick={(e) => {
-					setExpanded(true);
+					setExpandedType('details');
 				}}
 			>
 				<span className='col-2'>{candidate.name}</span>
@@ -366,96 +432,424 @@ const CandidateCard = ({ candidate }) => {
 				</span>
 			</div>
 
-			{expanded && (
-				<>
-					<div className='popup-wrapper'>
-						<div className='extra-details'>
-							<CloseIcon
-								onClick={(e) => {
-									setExpanded(false);
-								}}
-							/>
-							<div className='row justify-content-between ' style={{ marginTop: '2.5rem' }}>
-								<div className='col-7 candidate-details'>
-									<div>
-										Name : <span>{candidate.name}</span>
-									</div>
-									<div>
-										Mobile No. : <span>{candidate.mobile}</span>
-									</div>
-									<div>
-										Email : <span>{candidate.email}</span>
-									</div>
-									<div>
-										Gender : <span>{candidate.gender}</span>
-									</div>
-									<div>
-										DOB :<span>{new Date(candidate.DOB).toLocaleDateString('en-GB', options)}</span>
-									</div>
-									<div>
-										Age (as on date) :<span>{calculateAge(candidate.DOB)}</span>
-									</div>
-									<div>
-										Aadhaar no. : <span>{candidate.aadhaar}</span>
-									</div>
-									<div>
-										Father's Name : <span>{candidate.fname}</span>
-									</div>
-									<div>
-										District : <span>{candidate.district}</span>
-									</div>
-									<div>
-										State : <span>{candidate.state}</span>
-									</div>
-									<div>
-										Pincode : <span>{candidate.pincode}</span>
-									</div>
-									<div>
-										Height : <span>{candidate.height}</span>
-									</div>
-									<div>
-										Weight : <span>{candidate.weight}</span>
-									</div>
-									<div>
-										Qualification : <span>{candidate.qualification}</span>
-									</div>
-									<div>
-										College : <span>{candidate.college}</span>
-									</div>
-									<div>
-										Year Of Passing : <span>{candidate.y_o_p}</span>
-									</div>
-									<div>
-										CGPA : <span>{candidate.cgpa}</span>
-									</div>
-									<div>
-										Diploma : <span>{candidate.diploma}</span>
-									</div>
-									<div>
-										Backlog : <span>{candidate.backlog}</span>
-									</div>
-									<div>
-										How you come to know about this opportunity? :{' '}
-										<span>{candidate.opportunity}</span>
-									</div>
-									<div>
-										Which Plant You Have Worked In Tata Motors-Pune :{' '}
-										<span>{candidate.plant_worked}</span>
-									</div>
-									<div>
-										Work Experience : <span>{candidate.work_experience}</span>
-									</div>
-								</div>
-								<div className='col-5 images'>
-									<img src={FetchImage(candidate.photo)} alt='' />
-									<img src={FetchImage(candidate.aadhaar_photo)} alt='' />
-								</div>
-							</div>
-						</div>
-					</div>
-				</>
+			{expandedType === 'details' && (
+				<Details candidate={candidate} setExpandedType={setExpandedType} />
+			)}
+			{expandedType === 'edit' && (
+				<EditDetails
+					candidate={candidate}
+					setExpandedType={setExpandedType}
+					setLoading={setLoading}
+					showAlert={showAlert}
+					setCandidate={setCandidate}
+				/>
 			)}
 		</>
+	);
+};
+
+const Details = ({ candidate, setExpandedType }) => {
+	const processExam = () => {
+		if (candidate.examination) {
+			if (candidate.examination.includes('Pass')) return 'Pass';
+			if (candidate.examination.includes('Fail')) return 'Fail';
+			return 'Pending';
+		}
+		return 'NA';
+	};
+
+	const processInterview = () => {
+		const exam = processExam(candidate);
+		if (exam === 'Pass') {
+			return candidate.interview;
+		} else if (exam === 'Fail') {
+			return 'Fail';
+		} else {
+			return 'NA';
+		}
+	};
+
+	const processOfferLetter = () => {
+		const interview = processInterview(candidate);
+		if (interview === 'Pass') {
+			if (candidate.offer_letter) return candidate.offer_letter;
+			else return 'Pending';
+		} else if (interview === 'Fail') {
+			return 'NA';
+		} else {
+			return 'NA';
+		}
+	};
+	return (
+		<>
+			<div className='popup-wrapper'>
+				<div className='extra-details'>
+					<CloseIcon
+						onClick={(e) => {
+							setExpandedType(null);
+						}}
+					/>
+					<div className='row justify-content-between ' style={{ marginTop: '2.5rem' }}>
+						<div className='col-7 candidate-details'>
+							<div>
+								Name : <span>{candidate.name}</span>
+							</div>
+							<div>
+								Mobile No. : <span>{candidate.mobile}</span>
+							</div>
+							<div>
+								Email : <span>{candidate.email}</span>
+							</div>
+							<div>
+								Gender : <span>{candidate.gender}</span>
+							</div>
+							<div>
+								DOB :<span>{new Date(candidate.DOB).toLocaleDateString('en-GB', options)}</span>
+							</div>
+							<div>
+								Aadhaar no. : <span>{candidate.aadhaar}</span>
+							</div>
+							<div>
+								Father's Name : <span>{candidate.fname}</span>
+							</div>
+							<div>
+								District : <span>{candidate.district}</span>
+							</div>
+							<div>
+								State : <span>{candidate.state}</span>
+							</div>
+							<div>
+								Pincode : <span>{candidate.pincode}</span>
+							</div>
+							<div>
+								Height : <span>{candidate.height}</span>
+							</div>
+							<div>
+								Weight : <span>{candidate.weight}</span>
+							</div>
+							<div>
+								Qualification : <span>{candidate.qualification}</span>
+							</div>
+							<div>
+								College : <span>{candidate.college}</span>
+							</div>
+							<div>
+								Year Of Passing : <span>{candidate.y_o_p}</span>
+							</div>
+							<div>
+								CGPA : <span>{candidate.cgpa}</span>
+							</div>
+							<div>
+								Diploma : <span>{candidate.diploma}</span>
+							</div>
+							<div>
+								Backlog : <span>{candidate.backlog}</span>
+							</div>
+							<div>
+								How you come to know about this opportunity? : <span>{candidate.opportunity}</span>
+							</div>
+							<div>
+								Which Plant You Have Worked In Tata Motors-Pune :{' '}
+								<span>{candidate.plant_worked}</span>
+							</div>
+							<div>
+								Work Experience : <span>{candidate.work_experience}</span>
+							</div>
+							<div>
+								Exam : <span>{processExam()}</span>
+							</div>
+							<div>
+								Interview : <span>{processInterview()}</span>
+							</div>
+							<div>
+								Offer Letter : <span>{processOfferLetter()}</span>
+							</div>
+						</div>
+						<div className='col-5 images'>
+							<img src={FetchImage(candidate.photo)} alt='' />
+							<img src={FetchImage(candidate.aadhaar_photo)} alt='' />
+							<button
+								className='btn btn-outline-primary'
+								onClick={(e) => {
+									setExpandedType('edit');
+								}}
+							>
+								EDIT
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</>
+	);
+};
+
+const EditDetails = ({ candidate, setCandidate, setExpandedType, setLoading, showAlert }) => {
+	const [details, setDetails] = useState({
+		name: '',
+		fname: '',
+		gender: '',
+		aadhaar: '',
+		qualification: '',
+		diploma: '',
+		y_o_p: '',
+		cgpa: '',
+		backlog: '',
+		college: '',
+		height: '',
+		weight: '',
+		plant_worked: '',
+		pwd: '',
+		work_experience: '',
+	});
+	useEffect(() => {
+		setDetails((prev) => {
+			return {
+				...prev,
+				...candidate,
+			};
+		});
+	}, [candidate]);
+
+	const SCROLLINGDIV = {
+		border: 'none',
+		overflowY: 'scroll',
+		overflowX: 'hidden',
+		height: '75vh',
+		margin: '0.125rem 0 0',
+		padding: '0.5rem 0.5rem 0',
+		borderRadius: '7px',
+		borderBottom: 'none',
+	};
+	const ROW = {
+		display: 'flex',
+		alignItems: 'center',
+		alignContent: 'space-between',
+		marginTop: '0.5rem',
+	};
+	const LABEL = {
+		width: '20%',
+		fontWeight: '500',
+	};
+	const INPUT = {
+		width: '75%',
+		background: '#DBE3FF',
+		borderRadius: '7px',
+		border: 'none',
+		outline: 'none',
+		padding: '0.25rem 0.5rem',
+	};
+	const BUTTON_STYLE = {
+		width: '30%',
+		background: '#5CA1F1',
+		color: '#FFFFFF',
+		fontWeight: '500',
+		borderRadius: '7px',
+		border: 'none',
+		outline: 'none',
+		padding: '0.25rem 0.5rem',
+	};
+
+	const onChangeListener = (e) => {
+		console.log(details);
+		setDetails((prev) => {
+			return {
+				...prev,
+				[e.target.name]: e.target.value,
+			};
+		});
+	};
+	const submitHandler = async (e) => {
+		e.preventDefault();
+		setLoading(true);
+		const data = await SaveCandidateDetails(details);
+		if (data && data.success) {
+			setCandidate((prev) => {
+				return { ...prev, ...details };
+			});
+			setExpandedType(null);
+		} else {
+			showAlert('Unable to save candidate details.');
+		}
+		setLoading(false);
+	};
+	return (
+		<div className='popup-wrapper'>
+			<form className='extra-details' style={{ padding: '1rem 2rem' }} onSubmit={submitHandler}>
+				<span style={{ fontWeight: '600', fontSize: '1.2rem', marginLeft: '40%' }}>
+					Candidate Details
+				</span>
+				<CloseIcon onClick={(e) => setExpandedType(null)} />
+				<div style={SCROLLINGDIV}>
+					<div style={ROW}>
+						<span style={LABEL}>Candidate Name</span>
+						<input
+							type='text'
+							style={INPUT}
+							name='name'
+							value={details.name}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Father's Name</span>
+						<input
+							type='text'
+							style={INPUT}
+							name='fname'
+							value={details.fname}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Gender</span>
+						<select
+							style={{ ...INPUT, width: '30%' }}
+							name='gender'
+							value={details.gender}
+							onChange={onChangeListener}
+						>
+							<option>Male</option>
+							<option>Female</option>
+							<option>Others</option>
+						</select>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Aadhaar Number</span>
+						<input
+							type='Number'
+							style={INPUT}
+							name='aadhaar'
+							value={details.aadhaar}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Qualification</span>
+						<select
+							style={INPUT}
+							name='qualification'
+							value={details.qualification}
+							onChange={onChangeListener}
+						>
+							{qualifications.map((q) => (
+								<option key={q}>{q}</option>
+							))}
+						</select>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>College</span>
+						<input
+							type='text'
+							style={INPUT}
+							name='college'
+							value={details.college}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>CGPA</span>
+						<input
+							type='number'
+							style={{ ...INPUT, width: '30%' }}
+							name='cgpa'
+							value={details.cgpa}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Year of Passing</span>
+						<input
+							type='number'
+							style={{ ...INPUT, width: '30%' }}
+							name='y_o_p'
+							value={details.y_o_p}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Diploma</span>
+						<input
+							type='text'
+							style={{ ...INPUT, width: '30%' }}
+							name='diploma'
+							value={details.diploma}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Backlog</span>
+						<input
+							type='text'
+							style={{ ...INPUT, width: '30%' }}
+							name='backlog'
+							value={details.backlog}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Plant Worked</span>
+						<select
+							type='text'
+							style={INPUT}
+							name='plant_worked'
+							value={details.plant_worked}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						>
+							{plant_worked.map((plant) => (
+								<option key={plant}>{plant}</option>
+							))}
+						</select>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Work Experience</span>
+						<input
+							type='text'
+							style={INPUT}
+							name='work_experience'
+							value={details.work_experience}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>PWD</span>
+						<input
+							type='text'
+							style={INPUT}
+							name='pwd'
+							value={details.pwd}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+
+					<div style={{ ...ROW, justifyContent: 'center', margin: '2rem 0' }}>
+						<button style={BUTTON_STYLE}>Save Candidate Details</button>
+					</div>
+				</div>
+			</form>
+		</div>
 	);
 };
 
@@ -505,8 +899,8 @@ const Interested = ({ data, filter }) => {
 				<span className='col-3'>Date</span>
 			</div>
 			<div className='details-wrapper'>
-				{intrested.map((candidate) => {
-					return <InterestedCard key={candidate} candidate={candidate} />;
+				{intrested.map((candidate, index) => {
+					return <InterestedCard key={index} candidate={candidate} />;
 				})}
 			</div>
 			<CSVLink data={intrested} headers={csv_header} filename={'interested-candidates.csv'}>
@@ -567,7 +961,7 @@ const ProfileNotCompleted = ({ data, filter }) => {
 			</div>
 			<div className='details-wrapper'>
 				{candidates.map((candidate) => {
-					return <ProfileCard key={candidate} candidate={candidate} />;
+					return <ProfileCard key={candidate.mobile} candidate={candidate} />;
 				})}
 			</div>
 		</>
@@ -895,6 +1289,11 @@ const calculateAge = (date) => {
 	return ageString;
 };
 
+const options = {
+	year: 'numeric',
+	month: '2-digit',
+	day: '2-digit',
+};
 function currDate() {
 	var today = new Date();
 	var dd = today.getDate();

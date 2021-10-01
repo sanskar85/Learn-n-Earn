@@ -26,14 +26,15 @@ const Verification = ({ setTitle, history }) => {
 	const resendOTP = async (e) => {
 		setLoading(true);
 		const data = await VerificationAPI();
-		if (!data || !data.success) return history.push('/login');
-		else {
+		if (data && data.success) {
 			if (data.message === 'OTP Sent') {
 				setError('');
 				setMessage('OTP Sent');
 			} else if (data.message === 'User Already Verified') {
 				history.push('/');
 			}
+		} else {
+			return history.push('/login');
 		}
 		setLoading(false);
 	};

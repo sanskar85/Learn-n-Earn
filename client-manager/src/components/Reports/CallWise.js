@@ -32,7 +32,7 @@ const CallWise = () => {
 				</div>
 				<div className='details-wrapper'>
 					{call_data.map((element) => {
-						return <CallCard key={element} data={element} />;
+						return <CallCard key={element.name} data={element} />;
 					})}
 				</div>
 			</div>

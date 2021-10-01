@@ -4,7 +4,8 @@ const router = express.Router();
 const {
 	MyDashboard,
 	Student,
-	UpdateStudent,
+	UpdateStudentStatus,
+	UpdateCandidatesDetail,
 	StudentNotRespondingExam,
 	StudentNotRespondingInterview,
 	StudentNotRespondingAdmission,
@@ -20,6 +21,7 @@ const {
 	CreateInterviewResponse,
 	OfferLetter,
 	CreateOfferLetter,
+	DownloadOfferLetter,
 	AdmissionAllowed,
 	AdmissionDetails,
 	SaveAdmissionDetails,
@@ -31,7 +33,9 @@ router.route('/my-dashboard').all(verifyTeam).get(MyDashboard);
 
 router.route('/students').all(verifyTeam).get(Student);
 
-router.route('/students').all(verifyTeam).put(UpdateStudent);
+router.route('/students').all(verifyTeam).put(UpdateStudentStatus);
+
+router.route('/update-student-details').all(verifyTeam).put(UpdateCandidatesDetail);
 
 router.route('/students-exam-not-responding').all(verifyTeam).put(StudentNotRespondingExam);
 
@@ -68,6 +72,8 @@ router.route('/create-interview-response').all(verifyTeam).post(CreateInterviewR
 router.route('/offer-letter-details').all(verifyTeam).get(OfferLetter);
 
 router.route('/issue-offer-letter').all(verifyTeam).post(CreateOfferLetter);
+
+router.route('/download-offer-letter/:id').all(verifyTeam).get(DownloadOfferLetter);
 
 router.route('/admission-allowded').all(verifyTeam).get(AdmissionAllowed);
 

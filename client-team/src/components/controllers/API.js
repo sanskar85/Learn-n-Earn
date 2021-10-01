@@ -128,6 +128,15 @@ export const Students = async () => {
 	}
 };
 
+export const SaveCandidateDetails = async (details) => {
+	try {
+		const { data } = await axiosInstance.put(`/team/update-student-details`, { details });
+		return data;
+	} catch (err) {
+		return false;
+	}
+};
+
 export const UpdateStudentStatus = async (id, status) => {
 	try {
 		const { data } = await axiosInstance.put(`/team/students`, { id, status });
@@ -247,6 +256,26 @@ export const IssueLetter = async (offer_id, details) => {
 
 		return data.success;
 	} catch (err) {
+		return false;
+	}
+};
+
+export const DownloadOfferLetter = async (id) => {
+	try {
+		const response = await axiosInstance.get(`/team/download-offer-letter/${id}`, {
+			responseType: 'blob',
+		});
+
+		const fileURL = window.URL.createObjectURL(new Blob([response.data]));
+		const fileLink = document.createElement('a');
+		fileLink.href = fileURL;
+		fileLink.setAttribute('download', `Offer-Letter.${response.data.type.split('/')[1]}`);
+		document.body.appendChild(fileLink);
+		fileLink.click();
+		fileLink.remove();
+		return true;
+	} catch (error) {
+		console.log(error);
 		return false;
 	}
 };

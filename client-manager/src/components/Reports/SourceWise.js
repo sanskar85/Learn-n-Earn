@@ -54,7 +54,7 @@ const SourceWise = () => {
 				<div className='row header'>
 					<span className='col-3'>Source</span>
 					<span className='col-2'></span>
-					<span className='col-2'>No of Students</span>
+					<span className='col-2'>No of Candidates</span>
 				</div>
 				<div className='details-wrapper'>
 					{_sources.map((element) => {

@@ -1,6 +1,12 @@
 import './Reports.css';
+import ExportButton from './ExportButton';
 
-const Reports = () => {
+const Reports = ({ setLoading }) => {
+	const GenerateReport = (e) => {
+		setLoading(true);
+
+		setLoading(false);
+	};
 	return (
 		<div className='report'>
 			<h4>Report Panel</h4>
@@ -35,7 +41,9 @@ const Reports = () => {
 						<span style={{ display: 'block' }}>Admission Report</span>
 					</div>
 				</div>
-				<div className='col-3'></div>
+				<div className='col-3' onClick={GenerateReport}>
+					{/* <ExportButton margin='0 auto' /> */}
+				</div>
 			</div>
 			<div className='row justify-content-around'>
 				<div className='col-3'>

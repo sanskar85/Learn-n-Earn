@@ -8,7 +8,11 @@ const Examination = require('../../models/exam/Examination');
 const Interview = require('../../models/exam/Interview');
 const Notice = require('../../models/exam/Notice');
 const OfferLetter = require('../../models/exam/OfferLetter');
-const { OfferTemplate, ExamNotification } = require('../../utils/EmailTemplates');
+const {
+	OfferTemplate,
+	ExamNotification,
+	InterviewNotification,
+} = require('../../utils/EmailTemplates');
 const { SendEmail, SendSMS } = require('../../utils/Messaging');
 const { InterviewCompleted } = require('../../utils/EmailTemplates');
 const {
@@ -78,9 +82,13 @@ exports.MyDashboard = async (req, res) => {
 
 	let unique = [];
 	try {
-		const target = await Target.countDocuments({
+		const pending = await Target.countDocuments({
 			$and: [{ team: req.user }, { response: { $exists: false } }],
 		});
+		const achieved = await Target.countDocuments({
+			$and: [{ team: req.user }, { response: { $exists: true } }],
+		});
+
 		const students = await CandidateDetails.find({
 			referred_by: req.user,
 		});
@@ -141,7 +149,10 @@ exports.MyDashboard = async (req, res) => {
 		for (const x of offer) {
 			if (x.status === OfferLetterStatus.NOT_ISSUED) not_issued++;
 		}
-
+		const target = {
+			achieved,
+			pending,
+		};
 		const student_corner = {
 			registered: students.length,
 			interested: interested,
@@ -335,7 +346,7 @@ exports.Student = async (req, res) => {
 	}
 };
 
-exports.UpdateStudent = async (req, res) => {
+exports.UpdateStudentStatus = async (req, res) => {
 	const { id, status } = req.body;
 	if (!id || !status)
 		return res.status(400).json({ success: false, message: 'Missing Credentials' });
@@ -354,6 +365,50 @@ exports.UpdateStudent = async (req, res) => {
 		res.status(201).json({
 			success: true,
 			message: 'Status Updated',
+		});
+	} catch (err) {
+		return res.status(500).json({
+			success: false,
+			message: 'Server Error',
+		});
+	}
+};
+
+exports.UpdateCandidatesDetail = async (req, res) => {
+	const { details } = req.body;
+	try {
+		if (!details) {
+			res.status(400).json({
+				success: false,
+				message: 'Invalid Candidate Id',
+			});
+		}
+		const candidate = await CandidateDetails.findById(details._id);
+		if (!candidate) {
+			res.status(400).json({
+				success: false,
+				message: 'Invalid Candidate Id',
+			});
+		}
+		candidate.name = details.name;
+		candidate.fname = details.fname;
+		candidate.gender = details.gender;
+		candidate.aadhaar = details.aadhaar;
+		candidate.qualification = details.qualification;
+		candidate.diploma = details.diploma;
+		candidate.y_o_p = details.y_o_p;
+		candidate.cgpa = details.cgpa;
+		candidate.backlog = details.backlog;
+		candidate.college = details.college;
+		candidate.height = details.height;
+		candidate.weight = details.weight;
+		candidate.plant_worked = details.plant_worked;
+		candidate.pwd = details.pwd;
+		candidate.work_experience = details.work_experience;
+		await candidate.save();
+		return res.status(201).json({
+			success: true,
+			message: 'Candidate details updated',
 		});
 	} catch (err) {
 		return res.status(500).json({
@@ -402,7 +457,7 @@ exports.StudentNotRespondingInterview = async (req, res) => {
 		}
 		if (candidate.status === CandidateStatus.INTERVIEW) {
 			candidate.status = CandidateStatus.NOT_RESPONDING_INTERVIEW;
-			const interview = await Interview.findOne({ candidate: candidate });
+			const interview = await Interview.findOne({ candidate });
 			if (interview) {
 				interview.scheduled_time = undefined;
 				interview.meeting_link = undefined;
@@ -646,7 +701,7 @@ exports.UpdateProfileImage = async (req, res) => {
 exports.NotifyCandidate = async (req, res) => {
 	const { id, methods } = req.body;
 	try {
-		const candidate = await CandidateDetails.findById(id).populate('candidate');
+		const candidate = await CandidateDetails.findOne({ _id: id }).populate('candidate');
 
 		if (methods.includes('sms')) {
 			await SendSMS(
@@ -789,10 +844,23 @@ exports.CreateMeeting = async (req, res) => {
 		interview.industry = undefined;
 		interview.remarks = undefined;
 
-		const candidate = await CandidateDetails.findById(interview.candidate);
+		const candidate = await CandidateDetails.findById(interview.candidate).populate('candidate');
 		candidate.status = CandidateStatus.INTERVIEW;
 		await candidate.save();
 		await interview.save();
+		await SendSMS(
+			`Dear candidate kindly attend interview on schedule date. Regards Learn n Earn Team.`,
+			candidate.candidate.mobile
+		);
+		await SendEmail(
+			candidate.candidate.email,
+			'Interview Remainder - Learn n Earn',
+			InterviewNotification()
+		);
+		await Notice.create({
+			candidate: candidate,
+			message: `Dear candidate kindly attend interview on schedule date.`,
+		});
 		res.status(200).json({
 			success: true,
 			message: 'Interview Scheduled',
@@ -816,7 +884,6 @@ exports.CreateInterviewResponse = async (req, res) => {
 				message: 'Interview Id  Not Found',
 			});
 		}
-		interview.source = details.source;
 		interview.interview_mode = details.interview_mode;
 		interview.documents_verified = details.documents_verified;
 		interview.candidate_need = details.candidate_need;
@@ -1204,6 +1271,38 @@ exports.CreateOfferLetter = async (req, res) => {
 	}
 };
 
+exports.DownloadOfferLetter = async (req, res) => {
+	const id = req.params.id;
+	console.log(id);
+	try {
+		const offer = await OfferLetter.findOne({ candidate: id });
+		if (!offer || !offer.application_id) {
+			return res.status(404).json({
+				success: false,
+				message: 'Offer letter not generated yet',
+			});
+		}
+		try {
+			const fileName = 'Offer-Letter.pdf';
+			const fileURL = __basedir + '/static/offer-letters/' + offer.application_id + '.pdf';
+			const stream = fs.createReadStream(fileURL);
+			res.set({
+				'Content-Disposition': `attachment; filename='${fileName}'`,
+				'Content-Type': 'application/pdf',
+			});
+			stream.pipe(res);
+		} catch (e) {
+			console.error(e);
+			res.status(500).end();
+		}
+	} catch (err) {
+		return res.status(500).json({
+			success: false,
+			message: 'Server Error',
+		});
+	}
+};
+
 exports.AdmissionAllowed = async (req, res) => {
 	return res.status(200).json({
 		success: true,
@@ -1214,6 +1313,7 @@ exports.AdmissionAllowed = async (req, res) => {
 exports.AdmissionDetails = async (req, res) => {
 	const project = {
 		_id: 0,
+		candidate_id: 1,
 		offer_id: 1,
 		aadhaar: 1,
 		aadhaar_photo: 1,
@@ -1262,6 +1362,7 @@ exports.AdmissionDetails = async (req, res) => {
 			},
 			{ $addFields: { details: { $arrayElemAt: ['$details', 0] } } },
 			{ $addFields: { name: '$details.name' } },
+			{ $addFields: { candidate_id: '$details._id' } },
 			{ $addFields: { gender: '$details.gender' } },
 			{ $addFields: { DOB: '$details.DOB' } },
 			{ $addFields: { aadhaar: '$details.aadhaar' } },
@@ -1329,7 +1430,7 @@ exports.AdmissionDetails = async (req, res) => {
 exports.SaveAdmissionDetails = async (req, res) => {
 	const { offer_id, details } = req.body;
 	try {
-		const offer = await OfferLetter.findById(offer_id);
+		const offer = await OfferLetter.findOne({ _id: offer_id });
 		if (!offer) {
 			return res.status(400).json({
 				success: false,
@@ -1339,12 +1440,11 @@ exports.SaveAdmissionDetails = async (req, res) => {
 		offer.status = details.status;
 		offer.remarks = details.remarks;
 		await offer.save();
+		const candidate = await CandidateDetails.findById(offer.candidate);
 		if (details.status === 'Not Responding') {
-			const details = await CandidateDetails.findById(offer.candidate);
-			details.status = CandidateStatus.NOT_RESPONDING_ADMISSION;
-			await details.save();
+			candidate.status = CandidateStatus.NOT_RESPONDING_ADMISSION;
+			await candidate.save();
 		}
-
 		res.status(200).json({
 			success: true,
 			message: 'Response Saved',

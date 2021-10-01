@@ -39,7 +39,7 @@ export default function HorizontalNavBar({ setSelectedMenu }) {
 				</div>
 				<div className='menu-item' onClick={clickHandler}>
 					<img src={STUDENT} alt='' className='icon' />
-					<span>Students</span>
+					<span>Candidates</span>
 				</div>
 				<div className='menu-item' onClick={clickHandler}>
 					<img src={EXAM} alt='' className='icon' />

@@ -17,7 +17,6 @@ const InterviewSchema = new mongoose.Schema(
 			enum: Object.values(InterviewStatus),
 			default: InterviewStatus.NOT_SCHEDULED,
 		},
-		source: { type: String },
 		interview_mode: { type: String },
 		documents_verified: { type: String },
 		candidate_need: { type: String },

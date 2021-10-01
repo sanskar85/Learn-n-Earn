@@ -3,6 +3,8 @@ import FILTER_OUTLINED from '../../assets/filter-outlined.svg';
 import FILTER_FILLED from '../../assets/filter-filled.svg';
 import { CloseIcon } from '../../assets/Images';
 import { useState, useEffect } from 'react';
+import { CSVLink } from 'react-csv';
+import ExportButton from './ExportButton';
 import {
 	Students as MyStudents,
 	Teams as MyTeams,
@@ -132,6 +134,7 @@ const Students = ({ setLoading, showAlert }) => {
 	const [isAssignmentDialogVisble, showAssignmentDialog] = useState(false);
 	const [filter, _setFilter] = useState({
 		mobile: '',
+		team: '',
 		state: '🌐 All States',
 		from_date: '2021-01-01',
 		to_date: today,
@@ -192,7 +195,6 @@ const Students = ({ setLoading, showAlert }) => {
 	return (
 		<>
 			<div className='student-wrapper'>
-				{/* Reassign Team to candidates */}
 				{isAssignmentDialogVisble && (
 					<div className='popup-wrapper'>
 						<div className='popup-wrapper'>
@@ -313,6 +315,15 @@ const Students = ({ setLoading, showAlert }) => {
 								<option>Joined</option>
 							</select>
 						</div>
+						<div className='col-3'>
+							<input
+								type='text'
+								placeholder='🔍 Search Team'
+								name='team'
+								value={filter.team}
+								onChange={setFilter}
+							/>
+						</div>
 					</div>
 				)}
 
@@ -342,13 +353,20 @@ const Students = ({ setLoading, showAlert }) => {
 };
 
 const StudentsTable = ({ data, filter, selected, updateSelected, setLoading, showAlert }) => {
-	const [registered, setRegistered] = useState([]);
+	const [candidates, setCandidates] = useState([]);
 	useEffect(() => {
 		const filtered = data.filter((candidate) => {
 			const to_date = new Date(filter.to_date);
 			to_date.setHours(23, 59, 59, 0);
 
 			if (filter.mobile && !candidate.mobile.startsWith(filter.mobile)) {
+				return false;
+			}
+			if (
+				filter.team &&
+				candidate.team &&
+				!candidate.team.name.toLowerCase().startsWith(filter.team.toLowerCase())
+			) {
 				return false;
 			}
 			if (filter.state !== '🌐 All States' && candidate.state !== filter.state) {
@@ -380,21 +398,51 @@ const StudentsTable = ({ data, filter, selected, updateSelected, setLoading, sho
 			}
 			return true;
 		});
-		setRegistered(filtered);
+		setCandidates(filtered);
 	}, [data, filter]);
+
+	const csv_header = [
+		{ label: 'Name', key: 'name' },
+		{ label: 'Email ID', key: 'email' },
+		{ label: 'Mobile Number', key: 'mobile' },
+		{ label: 'D O B', key: 'DOB' },
+		{ label: 'Registration Date', key: 'registration_date' },
+		{ label: 'Aadhaar Number', key: 'aadhaar' },
+		{ label: 'Father Name', key: 'fname' },
+		{ label: 'Gender', key: 'gender' },
+		{ label: 'District', key: 'district' },
+		{ label: 'State', key: 'state' },
+		{ label: 'Pincode', key: 'pincode' },
+		{ label: 'Qualification', key: 'qualification' },
+		{ label: 'College', key: 'college' },
+		{ label: 'CGPA', key: 'cgpa' },
+		{ label: 'Diploma', key: 'diploma' },
+		{ label: 'Year of Passing', key: 'y_o_p' },
+		{ label: 'Any Backlog ?', key: 'backlog' },
+		{ label: 'Height', key: 'height' },
+		{ label: 'Weight', key: 'weight' },
+		{ label: 'Opportunity', key: 'opportunity' },
+		{ label: 'Worked in which Plant ?', key: 'plant_worked' },
+		{ label: 'PWD', key: 'pwd' },
+		{ label: 'Work Experience', key: 'work_experience' },
+		{ label: 'Examination', key: 'examination' },
+		{ label: 'Interview', key: 'interview' },
+		{ label: 'Offer Letter', key: 'offer_letter' },
+	];
 
 	return (
 		<>
 			<div className='row header'>
 				<span className='col-3'>Name</span>
-				<span className='col-3'>Phone</span>
-				<span className='col-3'>Team</span>
+				<span className='col-2'>Phone</span>
+				<span className='col-2'>State</span>
+				<span className='col-2'>Team</span>
 				<span className='col-2'>Registration Date</span>
 				<span
 					className='col-1'
 					style={{ cursor: 'pointer' }}
 					onClick={(e) => {
-						const ids = registered.map((e) => e._id);
+						const ids = candidates.map((e) => e._id);
 						updateSelected(ids);
 					}}
 				>
@@ -402,10 +450,10 @@ const StudentsTable = ({ data, filter, selected, updateSelected, setLoading, sho
 				</span>
 			</div>
 			<div className='details-wrapper'>
-				{registered.map((candidate) => {
+				{candidates.map((candidate) => {
 					return (
 						<StudentCard
-							key={candidate}
+							key={candidate._id}
 							details={candidate}
 							selected={selected}
 							updateSelected={updateSelected}
@@ -415,6 +463,9 @@ const StudentsTable = ({ data, filter, selected, updateSelected, setLoading, sho
 					);
 				})}
 			</div>
+			<CSVLink data={candidates} headers={csv_header} filename={'eligible-candidates.csv'}>
+				<ExportButton />
+			</CSVLink>
 		</>
 	);
 };
@@ -443,10 +494,13 @@ const StudentCard = ({ details, selected, updateSelected, setLoading, showAlert 
 				<span className='col-3' onClick={(e) => setExpandedType('details')}>
 					{candidate.name}
 				</span>
-				<span className='col-3' onClick={(e) => setExpandedType('details')}>
+				<span className='col-2' onClick={(e) => setExpandedType('details')}>
 					{candidate.mobile}
 				</span>
-				<span className='col-3' onClick={(e) => setExpandedType('details')}>
+				<span className='col-2' onClick={(e) => setExpandedType('details')}>
+					{candidate.state}
+				</span>
+				<span className='col-2' onClick={(e) => setExpandedType('details')}>
 					{candidate.team ? candidate.team.name : ''}
 				</span>
 				<span className='col-2' onClick={(e) => setExpandedType('details')}>
@@ -895,8 +949,8 @@ const EditDetails = ({ candidate, setCandidate, setExpandedType, setLoading, sho
 							value={details.status}
 							onChange={onChangeListener}
 						>
-							{CandidateStatus.map((status) => (
-								<option key={status}>{status}</option>
+							{CandidateStatus.map((status, index) => (
+								<option key={index}>{status}</option>
 							))}
 						</select>
 					</div>

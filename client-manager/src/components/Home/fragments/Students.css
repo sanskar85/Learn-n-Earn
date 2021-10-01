@@ -108,6 +108,7 @@ input[type="checkbox"] {
   border: 1px solid black;
   border-radius: 10px 10px 0 0;
   font-weight: 500;
+  font-size: 0.9rem;
 }
 
 .student-wrapper>.header>span {

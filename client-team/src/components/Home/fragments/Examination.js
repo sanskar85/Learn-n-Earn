@@ -215,7 +215,7 @@ const Attended = ({ data, filter }) => {
 			</div>
 			<div className='details-wrapper'>
 				{attended.map((candidate) => {
-					return <AttendedCard key={candidate} candidate={candidate} />;
+					return <AttendedCard key={candidate.mobile} candidate={candidate} />;
 				})}
 			</div>
 			<CSVLink data={attended} headers={csv_header} filename={'exam-attended-candidates.csv'}>
@@ -300,7 +300,7 @@ const Eligible = ({ data, filter, showAlert, setLoading }) => {
 				{eligible.map((candidate) => {
 					return (
 						<EligibleCard
-							key={candidate}
+							key={candidate.mobile}
 							candidate={candidate}
 							showAlert={showAlert}
 							setLoading={setLoading}
@@ -367,7 +367,13 @@ const EligibleCard = ({ candidate, showAlert, setLoading }) => {
 				<span className='col-3'>
 					{new Date(candidate.registration_date).toLocaleDateString('en-GB', options)}
 				</span>
-				<span className='col-2' style={style} onClick={(e) => {}}>
+				<span
+					className='col-2'
+					style={style}
+					onClick={(e) => {
+						showPopup(true);
+					}}
+				>
 					Send Message
 				</span>
 				<span
@@ -477,7 +483,9 @@ const NotResponding = ({ data, filter, showAlert }) => {
 			</div>
 			<div className='details-wrapper'>
 				{notResponding.map((candidate) => {
-					return <NotRespondingCard key={candidate} candidate={candidate} showAlert={showAlert} />;
+					return (
+						<NotRespondingCard key={candidate.mobile} candidate={candidate} showAlert={showAlert} />
+					);
 				})}
 			</div>
 			<CSVLink

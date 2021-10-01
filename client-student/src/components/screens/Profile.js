@@ -1,4 +1,4 @@
-import { UploadIcon, LogoIcon } from '../assets/Images';
+import { UploadIcon } from '../assets/Images';
 import { LabelledInput, LabelledSelectInput } from '../comps/Input';
 import '../comps/Profile.css';
 import { useState, useEffect } from 'react';
@@ -150,6 +150,12 @@ export default function Profile({ setTitle, history }) {
 				});
 			}
 		}
+		if (name === 'referral_mob' && !/[^a-zA-Z]/.test(value)) {
+			return;
+		}
+		if (name === 'aadhaar' && !/[^a-zA-Z]/.test(value)) {
+			return;
+		}
 		setdetails((prev) => {
 			return {
 				...prev,
@@ -211,7 +217,7 @@ export default function Profile({ setTitle, history }) {
 		if (!details.state) return setRequired('state');
 		if (!details.district) return setRequired('district');
 		if (!details.qualification) return setRequired('qualification');
-		if (!details.y_o_p) return setRequired('y_o_p');
+		if (!details.y_o_p || details.y_o_p.length !== 4) return setRequired('y_o_p');
 		if (!details.cgpa || Number(details.cgpa) > 10) return setRequired('cgpa');
 		if (!details.backlog) return setRequired('backlog');
 		if (!details.college) return setRequired('college');
@@ -255,12 +261,18 @@ export default function Profile({ setTitle, history }) {
 
 	return (
 		<div className='profile-wrapper'>
-			<div className='logo-wrapper'>
-				<LogoIcon className='logo' />
-			</div>
-
 			<div className='background'>
 				<form>
+					<div
+						style={{
+							display: 'flex',
+							justifyContent: 'center',
+							fontSize: '1.2rem',
+							fontWeight: 'bold',
+						}}
+					>
+						Please enter your details correctly.
+					</div>
 					<div className='row  justify-content-center'>
 						<div className='column col-lg-6 col-sm-8'>
 							<LabelledInput
@@ -590,7 +602,7 @@ export default function Profile({ setTitle, history }) {
 								labelClassName='label'
 								className='input'
 								name='pwd'
-								labelText='pwd'
+								labelText='Differently Abled ?'
 								required={required}
 								disabled={loading}
 								type='text'

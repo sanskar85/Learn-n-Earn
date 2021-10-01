@@ -1001,6 +1001,36 @@ exports.SourceWiseReport = async (req, res) => {
 	}
 };
 
+exports.ExcelExport = async (req, res) => {
+	try {
+		const offer = await OfferLetter.findOne({ candidate: req.userDetails });
+		if (!offer || !offer.application_id) {
+			return res.status(404).json({
+				success: false,
+				message: 'Offer letter not generated yet',
+			});
+		}
+		try {
+			const fileName = 'MIS_Report.pdf';
+			const fileURL = __basedir + '/static/offer-letters/' + offer.application_id + '.pdf';
+			const stream = fs.createReadStream(fileURL);
+			res.set({
+				'Content-Disposition': `attachment; filename='${fileName}'`,
+				'Content-Type': 'application/pdf',
+			});
+			stream.pipe(res);
+		} catch (e) {
+			console.error(e);
+			res.status(500).end();
+		}
+	} catch (err) {
+		return res.status(500).json({
+			success: false,
+			message: 'Server Error',
+		});
+	}
+};
+
 //---------------------------------------Company Detail---------------------------------------------------------
 exports.CompanyDetails = async (req, res) => {
 	try {

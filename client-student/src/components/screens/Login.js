@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../comps/Login.css';
-import logo from '../assets/unnamed 1.png';
+import IMAGE from '../assets/login_image.jpg';
 import { LoginAPI, RegisterAPI, ForgotPassword, ResetPassword } from '../Controller/API';
 
 export default function Login({ setTitle, history }) {
@@ -186,7 +186,36 @@ export default function Login({ setTitle, history }) {
 		<>
 			{type === 'login' && (
 				<div className='login-wrapper'>
-					<img src={logo} alt='logo' />
+					<div
+						className='row upper-header'
+						style={{ marginBottom: '2rem', justifyContent: 'center' }}
+					>
+						<span className='col-lg-5 col-sm-10' style={{ height: '255px', paddingRight: '0' }}>
+							<img src={IMAGE} alt='' />
+						</span>
+						<div className='col-lg-5 col-sm-10' style={{ height: '255px', paddingLeft: '0' }}>
+							<ul
+								style={{
+									backgroundColor: '#404B69',
+									color: '#FFF',
+									padding: '2rem',
+									width: '80%',
+									borderRadius: '0 10px 10px 0',
+								}}
+							>
+								<li>No. 1 Website For Fresher</li>
+								<li>No Registration charge</li>
+								<li>No Fee</li>
+								<li>Eligible Candidate</li>
+								<li>10th pass</li>
+								<li>12th pass</li>
+								<li>ITI</li>
+								<li>Diploma program</li>
+							</ul>
+						</div>
+
+						<div className='col-5' style={{ height: '70%' }}></div>
+					</div>
 					<div className='row justify-content-center'>
 						<form className='col-lg-4 col-10 wrapper' onSubmit={loginSubmit}>
 							<span className='header'>Candidate Login</span>
@@ -235,7 +264,36 @@ export default function Login({ setTitle, history }) {
 
 			{type === 'register' && (
 				<div className='login-wrapper'>
-					<img src={logo} alt='logo' />
+					<div
+						className='row upper-header'
+						style={{ marginBottom: '2rem', justifyContent: 'center' }}
+					>
+						<span className='col-lg-5 col-sm-10' style={{ height: '255px', paddingRight: '0' }}>
+							<img src={IMAGE} alt='' />
+						</span>
+						<div className='col-lg-5 col-sm-10' style={{ height: '255px', paddingLeft: '0' }}>
+							<ul
+								style={{
+									backgroundColor: '#404B69',
+									color: '#FFF',
+									padding: '2rem',
+									width: '80%',
+									borderRadius: '0 10px 10px 0',
+								}}
+							>
+								<li>No. 1 Website For Fresher</li>
+								<li>No Registration charge</li>
+								<li>No Fee</li>
+								<li>Eligible Candidate</li>
+								<li>10th pass</li>
+								<li>12th pass</li>
+								<li>ITI</li>
+								<li>Diploma program</li>
+							</ul>
+						</div>
+
+						<div className='col-5' style={{ height: '70%' }}></div>
+					</div>
 					<div className='row justify-content-center'>
 						<form className='col-lg-4 col-10 wrapper' onSubmit={registerSubmit}>
 							<span className='header'>Candidate Registration</span>
@@ -304,7 +362,36 @@ export default function Login({ setTitle, history }) {
 
 			{type === 'forgot-password' && (
 				<div className='login-wrapper'>
-					<img src={logo} alt='logo' />
+					<div
+						className='row upper-header'
+						style={{ marginBottom: '2rem', justifyContent: 'center' }}
+					>
+						<span className='col-lg-5 col-sm-10' style={{ height: '255px', paddingRight: '0' }}>
+							<img src={IMAGE} alt='' />
+						</span>
+						<div className='col-lg-5 col-sm-10' style={{ height: '255px', paddingLeft: '0' }}>
+							<ul
+								style={{
+									backgroundColor: '#404B69',
+									color: '#FFF',
+									padding: '2rem',
+									width: '80%',
+									borderRadius: '0 10px 10px 0',
+								}}
+							>
+								<li>No. 1 Website For Fresher</li>
+								<li>No Registration charge</li>
+								<li>No Fee</li>
+								<li>Eligible Candidate</li>
+								<li>10th pass</li>
+								<li>12th pass</li>
+								<li>ITI</li>
+								<li>Diploma program</li>
+							</ul>
+						</div>
+
+						<div className='col-5' style={{ height: '70%' }}></div>
+					</div>
 					<div className='row justify-content-center'>
 						<form
 							className='col-lg-4 col-10 wrapper'

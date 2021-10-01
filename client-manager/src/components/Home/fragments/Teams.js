@@ -74,7 +74,7 @@ const Teams = ({ setLoading, showAlert }) => {
 					<span className='col-2'>Name</span>
 					<span className='col-3'>Phone</span>
 					<span className='col-3'>Email</span>
-					<span className='col-2'>No of Students</span>
+					<span className='col-2'>Assigned Candidates</span>
 					<span className='col-2'>Admission Allowded</span>
 				</div>
 				<div className='details-wrapper'>

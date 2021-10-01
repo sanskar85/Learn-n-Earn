@@ -19,7 +19,6 @@ const InterviewResponse = ({ setTitle }) => {
 	const [loading, setLoading] = useState(false);
 	const [Industry, setIndustries] = useState([]);
 	const [details, setdetails] = useState({
-		source: '',
 		income: 0,
 		interview_mode: 'Meeting',
 		documents_verified: 'Yes',
@@ -68,7 +67,6 @@ const InterviewResponse = ({ setTitle }) => {
 	const submitHandler = async (e) => {
 		e.preventDefault();
 		if (
-			!details.source ||
 			!details.interview_mode ||
 			!details.documents_verified ||
 			!details.candidate_need ||
@@ -77,16 +75,15 @@ const InterviewResponse = ({ setTitle }) => {
 			!details.maths ||
 			!details.gk ||
 			!details.ignou ||
-			!details.result ||
-			!details.industry
+			!details.result
 		) {
 			return alert('Fields cannot be empty');
 		}
 		setLoading(true);
 		const data = await CreateInterviewResponse(interview_id, details);
+		window.close();
 		if (data) {
 			setLoading(false);
-			window.close();
 		} else {
 			setLoading(false);
 			alert('Error Saving Response. Please try again later.');
@@ -120,14 +117,6 @@ const InterviewResponse = ({ setTitle }) => {
 					<span className='header'>Interview form</span>
 					<div className='row justify-content-center'>
 						<div className='col-6'>
-							<label>Candidate Source</label>
-							<select name='source' value={details.source} onChange={changeListener}>
-								{CandidateSrc.map((item) => {
-									return <option>{item}</option>;
-								})}
-							</select>
-						</div>
-						<div className='col-6'>
 							<label>Mode of Interview</label>
 							<select
 								name='interview_mode'
@@ -138,8 +127,6 @@ const InterviewResponse = ({ setTitle }) => {
 								<option>Telephonic</option>
 							</select>
 						</div>
-					</div>
-					<div className='row '>
 						<div className='col-6'>
 							<label>Parent Monthly Amount</label>
 							<input

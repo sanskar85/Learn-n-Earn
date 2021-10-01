@@ -232,7 +232,7 @@ const Eligible = ({ data, filter, showAlert, setLoading }) => {
 				{candidates.map((details) => {
 					return (
 						<EligibleCard
-							key={details}
+							key={details.mobile}
 							details={details}
 							showAlert={showAlert}
 							setLoading={setLoading}
@@ -514,7 +514,7 @@ const NotResponding = ({ data, filter, showAlert, setLoading }) => {
 				{candidates.map((details) => {
 					return (
 						<NotRespondingCard
-							key={details}
+							key={details.mobile}
 							details={details}
 							showAlert={showAlert}
 							setLoading={setLoading}

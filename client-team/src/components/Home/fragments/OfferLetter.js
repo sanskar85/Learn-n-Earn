@@ -150,7 +150,7 @@ const OfferLetter = ({ showAlert, setLoading }) => {
 					{offer_letter_details.map((candidate) => {
 						return (
 							<OfferCard
-								key={candidate}
+								key={candidate.mobile}
 								candidate={candidate}
 								showAlert={showAlert}
 								setLoading={setLoading}

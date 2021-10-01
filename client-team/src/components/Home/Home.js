@@ -57,7 +57,7 @@ export default function Home({ setTitle, history }) {
 					</>
 				)}
 				{menu === 'Dashboard' && <Dashboard showAlert={setAlertMessage} setLoading={setLoading} />}
-				{menu === 'Students' && <Students showAlert={setAlertMessage} setLoading={setLoading} />}
+				{menu === 'Candidates' && <Students showAlert={setAlertMessage} setLoading={setLoading} />}
 				{menu === 'Call Response' && (
 					<CallResponse showAlert={setAlertMessage} setLoading={setLoading} />
 				)}

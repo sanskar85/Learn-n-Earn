@@ -163,8 +163,8 @@ const Table = ({ data }) => {
 			</div>
 
 			<div className='details-wrapper'>
-				{data.map((detail) => {
-					return <Card key={detail} detail={detail} />;
+				{data.map((detail, index) => {
+					return <Card key={index} detail={detail} />;
 				})}
 			</div>
 		</div>

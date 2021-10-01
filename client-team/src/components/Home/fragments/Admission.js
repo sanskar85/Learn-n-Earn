@@ -3,7 +3,12 @@ import FILTER_OUTLINED from '../../assets/filter-outlined.svg';
 import FILTER_FILLED from '../../assets/filter-filled.svg';
 import { CloseIcon } from '../../assets/Images';
 import { useState, useEffect } from 'react';
-import { Admission_Details, FetchImage, Save_Admission_Details } from '../../controllers/API';
+import {
+	Admission_Details,
+	FetchImage,
+	Save_Admission_Details,
+	DownloadOfferLetter,
+} from '../../controllers/API';
 import { CSVLink } from 'react-csv';
 import ExportButton from './ExportButton';
 
@@ -226,7 +231,7 @@ const Admission = ({ setLoading, showAlert }) => {
 					{offer_details.map((candidate) => {
 						return (
 							<AdmissionCard
-								key={candidate}
+								key={candidate.mobile}
 								candidate={candidate}
 								showAlert={showAlert}
 								setLoading={setLoading}
@@ -389,6 +394,14 @@ const AdmissionCard = ({ candidate, showAlert, setLoading }) => {
 								<div className='col-5 images'>
 									<img src={FetchImage(candidate.photo)} style={{ width: '35%' }} alt='' />
 									<img src={FetchImage(candidate.aadhaar_photo)} style={{ width: '75%' }} alt='' />
+									<button
+										className='btn btn-outline-primary mb-3'
+										onClick={(e) => {
+											DownloadOfferLetter(candidate.candidate_id);
+										}}
+									>
+										Download Offer-Letter
+									</button>
 									<form onSubmit={submitHandler} style={{ width: '90%' }} className='popup-from'>
 										<select
 											style={STYLE_SELECT}

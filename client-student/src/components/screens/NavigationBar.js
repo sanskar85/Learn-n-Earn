@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { LogoIcon, LogoutIcon, UserIcon } from '../assets/Images';
+import { LogoutIcon, UserIcon } from '../assets/Images';
 import '../comps/NavigationBar.css';
 import $ from 'jquery';
 
@@ -20,9 +20,7 @@ const NavigationBar = ({ name, history }) => {
 	}, []);
 	return (
 		<div className='navigation-wrapper justify-content-between'>
-			<span>
-				<LogoIcon className='logo' />
-			</span>
+			<span style={{ fontSize: '1.3rem', margin: 'auto 1rem' }}>Dashboard</span>
 			<div className='menu-wrapper'>
 				<span className='nav-menu' id='time'></span>
 				<span className='nav-menu'>

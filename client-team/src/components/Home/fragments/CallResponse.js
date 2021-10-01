@@ -158,7 +158,12 @@ const CallForm = ({ showAlert, setLoading }) => {
 				<div className='details-wrapper'>
 					{callTarget.map((details) => {
 						return (
-							<Card key={details} details={details} showAlert={showAlert} setLoading={setLoading} />
+							<Card
+								key={details._id}
+								details={details}
+								showAlert={showAlert}
+								setLoading={setLoading}
+							/>
 						);
 					})}
 				</div>

@@ -9,7 +9,10 @@ import INTERVIEW from '../../assets/interview-report.svg';
 import OFFERLETTER from '../../assets/offerletter.svg';
 import { ArrowUp, FlameIcon } from '../../assets/Images';
 const Dashboard = ({ setLoading, showAlert }) => {
-	const [call_target, setCallTarget] = useState(0);
+	const [call_target, setCallTarget] = useState({
+		achieved: 0,
+		pending: 0,
+	});
 	const [student_corner, setStudentCorner] = useState({
 		interested: 0,
 		registered: 0,
@@ -186,10 +189,16 @@ const Dashboard = ({ setLoading, showAlert }) => {
 							<img src={RING} alt='' />
 						</div>
 
+						<div style={{ backgroundColor: '#CDFFE4' }}>
+							<div className='data-wrapper'>
+								<span>Call Attended</span>
+								<span>{call_target.achieved}</span>
+							</div>
+						</div>
 						<div style={{ backgroundColor: '#B6D8FF' }}>
 							<div className='data-wrapper'>
 								<span>Pending Calls</span>
-								<span>{call_target}</span>
+								<span>{call_target.pending}</span>
 							</div>
 						</div>
 					</div>

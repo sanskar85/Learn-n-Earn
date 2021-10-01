@@ -52,10 +52,10 @@ export const DashboardRoute = ({ component: Component, setTitle, ...rest }) => {
 		async function fetchData() {
 			const data = await ProfileStatus();
 			if (isMounted) {
-				if (data) {
+				if (data && data.success) {
 					setData(data);
+					setLoading(false);
 				}
-				setLoading(false);
 			}
 		}
 		fetchData();

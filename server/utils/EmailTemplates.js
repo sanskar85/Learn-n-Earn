@@ -154,6 +154,27 @@ module.exports.ExamNotification = () => {
 `;
 };
 
+module.exports.InterviewNotification = () => {
+	return `
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <title>Offer Letter</title>
+            <meta name="description" content="">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            
+        </head>
+        <body >
+            <p>Dear candidate kindly attend interview on scheduled date. </p>
+            <footer>Regards Learn n Earn Team. </footer>
+            
+        </body>
+    </html>
+`;
+};
+
 module.exports.ExamCompleted = () => {
 	return `
     <!DOCTYPE html>
