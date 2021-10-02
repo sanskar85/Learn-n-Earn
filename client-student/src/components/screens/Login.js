@@ -186,36 +186,7 @@ export default function Login({ setTitle, history }) {
 		<>
 			{type === 'login' && (
 				<div className='login-wrapper'>
-					<div
-						className='row upper-header'
-						style={{ marginBottom: '2rem', justifyContent: 'center' }}
-					>
-						<span className='col-lg-5 col-sm-10' style={{ height: '255px', paddingRight: '0' }}>
-							<img src={IMAGE} alt='' />
-						</span>
-						<div className='col-lg-5 col-sm-10' style={{ height: '255px', paddingLeft: '0' }}>
-							<ul
-								style={{
-									backgroundColor: '#404B69',
-									color: '#FFF',
-									padding: '2rem',
-									width: '80%',
-									borderRadius: '0 10px 10px 0',
-								}}
-							>
-								<li>No. 1 Website For Fresher</li>
-								<li>No Registration charge</li>
-								<li>No Fee</li>
-								<li>Eligible Candidate</li>
-								<li>10th pass</li>
-								<li>12th pass</li>
-								<li>ITI</li>
-								<li>Diploma program</li>
-							</ul>
-						</div>
-
-						<div className='col-5' style={{ height: '70%' }}></div>
-					</div>
+					{HeaderDiv()}
 					<div className='row justify-content-center'>
 						<form className='col-lg-4 col-10 wrapper' onSubmit={loginSubmit}>
 							<span className='header'>Candidate Login</span>
@@ -264,36 +235,7 @@ export default function Login({ setTitle, history }) {
 
 			{type === 'register' && (
 				<div className='login-wrapper'>
-					<div
-						className='row upper-header'
-						style={{ marginBottom: '2rem', justifyContent: 'center' }}
-					>
-						<span className='col-lg-5 col-sm-10' style={{ height: '255px', paddingRight: '0' }}>
-							<img src={IMAGE} alt='' />
-						</span>
-						<div className='col-lg-5 col-sm-10' style={{ height: '255px', paddingLeft: '0' }}>
-							<ul
-								style={{
-									backgroundColor: '#404B69',
-									color: '#FFF',
-									padding: '2rem',
-									width: '80%',
-									borderRadius: '0 10px 10px 0',
-								}}
-							>
-								<li>No. 1 Website For Fresher</li>
-								<li>No Registration charge</li>
-								<li>No Fee</li>
-								<li>Eligible Candidate</li>
-								<li>10th pass</li>
-								<li>12th pass</li>
-								<li>ITI</li>
-								<li>Diploma program</li>
-							</ul>
-						</div>
-
-						<div className='col-5' style={{ height: '70%' }}></div>
-					</div>
+					{HeaderDiv()}
 					<div className='row justify-content-center'>
 						<form className='col-lg-4 col-10 wrapper' onSubmit={registerSubmit}>
 							<span className='header'>Candidate Registration</span>
@@ -362,36 +304,7 @@ export default function Login({ setTitle, history }) {
 
 			{type === 'forgot-password' && (
 				<div className='login-wrapper'>
-					<div
-						className='row upper-header'
-						style={{ marginBottom: '2rem', justifyContent: 'center' }}
-					>
-						<span className='col-lg-5 col-sm-10' style={{ height: '255px', paddingRight: '0' }}>
-							<img src={IMAGE} alt='' />
-						</span>
-						<div className='col-lg-5 col-sm-10' style={{ height: '255px', paddingLeft: '0' }}>
-							<ul
-								style={{
-									backgroundColor: '#404B69',
-									color: '#FFF',
-									padding: '2rem',
-									width: '80%',
-									borderRadius: '0 10px 10px 0',
-								}}
-							>
-								<li>No. 1 Website For Fresher</li>
-								<li>No Registration charge</li>
-								<li>No Fee</li>
-								<li>Eligible Candidate</li>
-								<li>10th pass</li>
-								<li>12th pass</li>
-								<li>ITI</li>
-								<li>Diploma program</li>
-							</ul>
-						</div>
-
-						<div className='col-5' style={{ height: '70%' }}></div>
-					</div>
+					{HeaderDiv()}
 					<div className='row justify-content-center'>
 						<form
 							className='col-lg-4 col-10 wrapper'
@@ -472,3 +385,34 @@ export default function Login({ setTitle, history }) {
 		</>
 	);
 }
+
+const HeaderDiv = () => {
+	return (
+		<div className='row upper-header' style={{ marginBottom: '2rem', justifyContent: 'center' }}>
+			<span className='col-lg-5 col-sm-10' style={{ height: '255px', paddingRight: '0' }}>
+				<img src={IMAGE} alt='' />
+			</span>
+			<div className='col-lg-5 col-sm-10' style={{ height: '255px', paddingLeft: '0' }}>
+				<ul
+					style={{
+						backgroundColor: '#404B69',
+						color: '#FFF',
+						padding: '3rem 1rem 0 3rem',
+						width: '80%',
+						borderRadius: '0 10px 10px 0',
+						height: '95%',
+					}}
+				>
+					<li>No. 1 Website For Fresher</li>
+					<li>No Fee / No Registration Charge</li>
+					<li>No Hidden Cost</li>
+					<li>Minimum Age to Register is 18</li>
+					<li>
+						For Any Assistance Email us to
+						<a href='mailto::info@factory-jobs.com'>info@factory-jobs.com</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	);
+};

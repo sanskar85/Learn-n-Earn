@@ -8,7 +8,12 @@ import CLOSE from './close.svg';
 export const LogoIcon = (props) => {
 	return (
 		<>
-			<img src={LOGO} alt='' className={props.className} />
+			<img
+				src={LOGO}
+				alt=''
+				className={props.className}
+				style={{ ...props.style, visibility: 'hidden' }}
+			/>
 		</>
 	);
 };

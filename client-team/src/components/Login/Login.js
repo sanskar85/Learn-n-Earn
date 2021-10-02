@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from "react";
-import "./Login.css";
-import logo from "../assets/logo.png";
-import { LoginAPI, ResetPassword, ForgotPassword } from "../controllers/API";
+import React, { useState, useEffect } from 'react';
+import './Login.css';
+import { LogoIcon } from '../assets/Images';
+import { LoginAPI, ResetPassword, ForgotPassword } from '../controllers/API';
 export default function Login({ setTitle, history }) {
-	const [type, setType] = useState("login");
-	const [loginCred, setloginCred] = useState({ username: "", password: "" });
+	const [type, setType] = useState('login');
+	const [loginCred, setloginCred] = useState({ username: '', password: '' });
 	const [forgotCred, setforgotCred] = useState({
-		username: "",
-		otp: "",
-		password: "",
+		username: '',
+		otp: '',
+		password: '',
 	});
-	const [error, setError] = useState("");
-	const [message, setMessage] = useState("");
+	const [error, setError] = useState('');
+	const [message, setMessage] = useState('');
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
-		setTitle("Login • Learn n Earn");
+		setTitle('Login • Learn n Earn');
 	}, [setTitle]);
 
 	const settype = (type) => {
-		if (type === "forgot-password") {
-			setMessage("");
+		if (type === 'forgot-password') {
+			setMessage('');
 		}
 		setType(type);
 	};
@@ -29,9 +29,9 @@ export default function Login({ setTitle, history }) {
 		setLoading(true);
 
 		if (!loginCred.username || !loginCred.password) {
-			setError("Fields cannot be empty");
+			setError('Fields cannot be empty');
 			setTimeout(() => {
-				setError("");
+				setError('');
 			}, 3000);
 			setLoading(false);
 			return;
@@ -39,61 +39,61 @@ export default function Login({ setTitle, history }) {
 
 		const data = await LoginAPI(loginCred);
 		if (!data || !data.success) {
-			setError(data.message || "Login Failed. Please try again later");
+			setError(data.message || 'Login Failed. Please try again later');
 			setTimeout(() => {
-				setError("");
+				setError('');
 			}, 3000);
 			setLoading(false);
 		} else {
 			setLoading(false);
-			history.push("/");
+			history.push('/');
 		}
 	};
 
 	const forgotSubmit = async (e) => {
 		e.preventDefault();
 		setLoading(true);
-		if (e.target.name === "proceed") {
+		if (e.target.name === 'proceed') {
 			if (!forgotCred.username) {
-				setError("Fields cannot be empty");
+				setError('Fields cannot be empty');
 				setTimeout(() => {
-					setError("");
+					setError('');
 				}, 3000);
 				setLoading(false);
 				return;
 			}
 			const data = await ForgotPassword(forgotCred.username);
 			if (!data || !data.success) {
-				setError(data.message || "Server Error. Please try again later");
+				setError(data.message || 'Server Error. Please try again later');
 				setTimeout(() => {
-					setError("");
+					setError('');
 				}, 3000);
 				setLoading(false);
 			} else {
 				setLoading(false);
-				setMessage("OTP sent.");
+				setMessage('OTP sent.');
 			}
-		} else if (e.target.name === "reset") {
+		} else if (e.target.name === 'reset') {
 			if (!forgotCred.username) {
-				setError("Fields cannot be empty");
+				setError('Fields cannot be empty');
 				setTimeout(() => {
-					setError("");
+					setError('');
 				}, 3000);
 				setLoading(false);
 				return;
 			}
 			const data = await ResetPassword(forgotCred);
 			if (!data || !data.success) {
-				setError(data.message || "Server Error. Please try again later");
+				setError(data.message || 'Server Error. Please try again later');
 				setTimeout(() => {
-					setError("");
+					setError('');
 				}, 3000);
 			} else {
-				setMessage("Password reset successful");
-				setforgotCred({ username: "", otp: "", password: "" });
+				setMessage('Password reset successful');
+				setforgotCred({ username: '', otp: '', password: '' });
 				setTimeout(() => {
-					setMessage("");
-					history.push("/login");
+					setMessage('');
+					history.push('/login');
 				}, 3000);
 				setLoading(false);
 			}
@@ -101,10 +101,10 @@ export default function Login({ setTitle, history }) {
 		}
 	};
 	const loginCredChange = (e) => {
-		setError("");
+		setError('');
 		const name = e.target.name;
 		const value = e.target.value;
-		if (name === "mobile" && !/[^a-zA-Z]/.test(value)) {
+		if (name === 'mobile' && !/[^a-zA-Z]/.test(value)) {
 			return;
 		}
 		setloginCred((prev) => {
@@ -115,10 +115,10 @@ export default function Login({ setTitle, history }) {
 		});
 	};
 	const forgotCredChange = (e) => {
-		setError("");
+		setError('');
 		const name = e.target.name;
 		const value = e.target.value;
-		if (name === "mobile" && !/[^a-zA-Z]/.test(value)) {
+		if (name === 'mobile' && !/[^a-zA-Z]/.test(value)) {
 			return;
 		}
 		setforgotCred((prev) => {
@@ -130,9 +130,9 @@ export default function Login({ setTitle, history }) {
 	};
 	return (
 		<>
-			{type === "login" && (
+			{type === 'login' && (
 				<div className='login-wrapper'>
-					<img src={logo} alt='logo' />
+					<LogoIcon />
 					<div className='row justify-content-center'>
 						<form className='col-lg-4 col-10 wrapper' onSubmit={loginSubmit}>
 							<span className='header'>Team Login</span>
@@ -160,7 +160,7 @@ export default function Login({ setTitle, history }) {
 							<span
 								className='link'
 								onClick={(e) => {
-									if (!loading) settype("forgot-password");
+									if (!loading) settype('forgot-password');
 								}}
 							>
 								Forgot Password ?
@@ -170,9 +170,9 @@ export default function Login({ setTitle, history }) {
 				</div>
 			)}
 
-			{type === "forgot-password" && (
+			{type === 'forgot-password' && (
 				<div className='login-wrapper'>
-					<img src={logo} alt='logo' />
+					<LogoIcon />
 					<div className='row justify-content-center'>
 						<form
 							className='col-lg-4 col-10 wrapper'
@@ -229,7 +229,7 @@ export default function Login({ setTitle, history }) {
 							{message && <p className='message'>{message}</p>}
 							<button
 								className='register'
-								style={{ display: `${message ? "none" : "block"}` }}
+								style={{ display: `${message ? 'none' : 'block'}` }}
 								name='proceed'
 								onClick={forgotSubmit}
 								disabled={loading}
@@ -240,7 +240,7 @@ export default function Login({ setTitle, history }) {
 							<span
 								className='link'
 								onClick={(e) => {
-									if (!loading) settype("login");
+									if (!loading) settype('login');
 								}}
 								disabled={loading}
 							>
