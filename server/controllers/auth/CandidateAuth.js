@@ -164,7 +164,7 @@ exports.request_verification = async (req, res) => {
 		);
 
 		const mobileOTP = user.generateMobileOTP();
-		await SendSMS(`${mobileOTP} is your otp for Learn n Earn.`, user.mobile);
+		await SendSMS(`${mobileOTP} is your otp for Factory Jobs.`, user.mobile);
 
 		await user.save();
 
@@ -270,7 +270,7 @@ exports.forgotPassword = async (req, res) => {
 			);
 		} else if (username === user.mobile) {
 			const mobileOTP = user.generateMobileOTP();
-			await SendSMS(`${mobileOTP} is your otp for Learn n Earn.`, user.mobile);
+			await SendSMS(`${mobileOTP} is your otp for Factory Jobs.`, user.mobile);
 		}
 
 		const link = user.generateResetLink();

@@ -267,11 +267,11 @@ exports.submitTest = async (req, res) => {
 
 		if (report) {
 			await SendSMS(
-				`Dear candidate, you have successfully passed the examination. Please wait for the further process of Interview, our team will contact you. Regards Learn n Earn Team`,
+				`Dear candidate, you have successfully passed the examination. Please wait for the further process of Interview, our team will contact you. Regards Factory Jobs Team`,
 				req.user.mobile
 			);
 
-			await SendEmail(req.user.email, 'Learn n Earn', ExamCompleted());
+			await SendEmail(req.user.email, 'Factory Jobs', ExamCompleted());
 
 			await Notice.create({
 				candidate: req.userDetails,

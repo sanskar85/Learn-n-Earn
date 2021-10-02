@@ -705,14 +705,14 @@ exports.NotifyCandidate = async (req, res) => {
 
 		if (methods.includes('sms')) {
 			await SendSMS(
-				`Dear candidate kindly attend online examination within 3 days. Regards Learn n Earn Team.`,
+				`Dear candidate kindly attend online examination within 3 days. Regards Factory Jobs Team.`,
 				candidate.mobile
 			);
 		}
 		if (methods.includes('email')) {
 			await SendEmail(
 				candidate.candidate.email,
-				'Examination Remainder - Learn n Earn',
+				'Examination Remainder - Factory Jobs',
 				ExamNotification()
 			);
 		}
@@ -849,12 +849,12 @@ exports.CreateMeeting = async (req, res) => {
 		await candidate.save();
 		await interview.save();
 		await SendSMS(
-			`Dear candidate kindly attend interview on schedule date. Regards Learn n Earn Team.`,
+			`Dear candidate kindly attend interview on schedule date. Regards Factory Jobs Team.`,
 			candidate.candidate.mobile
 		);
 		await SendEmail(
 			candidate.candidate.email,
-			'Interview Remainder - Learn n Earn',
+			'Interview Remainder - Factory Jobs',
 			InterviewNotification()
 		);
 		await Notice.create({
@@ -904,11 +904,11 @@ exports.CreateInterviewResponse = async (req, res) => {
 		await candidateDetails.save();
 		if (details.result === 'Pass') {
 			await SendSMS(
-				`Dear candidate, you have successfully passed the interview. Please wait for the further process of Admission, our team will contact you. Regards Learn n Earn Team`,
+				`Dear candidate, you have successfully passed the interview. Please wait for the further process of Admission, our team will contact you. Regards Factory Jobs Team`,
 				candidateDetails.candidate.mobile
 			);
 
-			await SendEmail(candidateDetails.candidate.email, 'Learn n Earn', InterviewCompleted());
+			await SendEmail(candidateDetails.candidate.email, 'Factory Jobs', InterviewCompleted());
 
 			await Notice.create({
 				candidate: candidateDetails,
@@ -1251,7 +1251,7 @@ exports.CreateOfferLetter = async (req, res) => {
 
 		await SendEmail(
 			candidate.email,
-			'Offer Letter - Learn n Earn',
+			'Offer Letter - Factory Jobs',
 			OfferTemplate(offer.candidate.name, company.company_name)
 		);
 		await SendSMS(

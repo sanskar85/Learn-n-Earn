@@ -47,7 +47,7 @@ export default function Dashboard({ setTitle, history }) {
 
 	useEffect(() => {
 		let isMounted = true;
-		setTitle('Home • Learn n Earn');
+		setTitle('Home • Factory Jobs');
 		async function fetchData() {
 			if (isMounted) {
 				const data = await MyDashboard();

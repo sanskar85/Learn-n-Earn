@@ -33,7 +33,7 @@ const InterviewResponse = ({ setTitle }) => {
 		remarks: '',
 	});
 	useEffect(() => {
-		setTitle('Interview Response • Learn n Earn');
+		setTitle('Interview Response • Factory Jobs');
 		async function fetchData() {
 			const data = await FetchIndustries();
 			if (data && data.success) {

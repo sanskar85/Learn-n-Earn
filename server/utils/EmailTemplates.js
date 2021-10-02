@@ -7,7 +7,7 @@ module.exports.PasswordResetTemplate = (resetOTP, name) => {
 
         <head>
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-            <title>Learn n Earn Account Recovery</title>
+            <title>Factory Jobs Account Recovery</title>
         </head>
 
         <body>
@@ -29,7 +29,7 @@ module.exports.PasswordResetTemplate = (resetOTP, name) => {
                 <tr>
                     <td style="text-align: center; height: 50px" align="center">
                         <p style="font-size: 18px; padding: 0 10%;">Hello ${name}, seems like you forgot the password for
-                            Learn n Earn. if it’s true, click below to reset it.</p>
+                            Factory Jobs. if it’s true, click below to reset it.</p>
                         <p>
                     </td>
                 </tr>
@@ -65,7 +65,7 @@ module.exports.EmailVerificationTemplate = (otp, name) => {
 
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Learn n Earn Account Recovery</title>
+        <title>Factory Jobs Account Recovery</title>
     </head>
 
     <body>
@@ -126,7 +126,7 @@ module.exports.OfferTemplate = (name, company) => {
         </head>
         <body >
             <p>Congratulation ${name} </p>
-            <p>Greeting from Learn n Earn!! The Offer letter for ${company} has been sent to your dashboard, Kindly download it</p>
+            <p>Greeting from Factory Jobs!! The Offer letter for ${company} has been sent to your dashboard, Kindly download it</p>
             
         </body>
     </html>
@@ -147,7 +147,7 @@ module.exports.ExamNotification = () => {
         </head>
         <body >
             <p>Dear candidate kindly attend online examination within 3 days. </p>
-            <footer>Regards Learn n Earn Team. </footer>
+            <footer>Regards Factory Jobs Team. </footer>
             
         </body>
     </html>
@@ -168,7 +168,7 @@ module.exports.InterviewNotification = () => {
         </head>
         <body >
             <p>Dear candidate kindly attend interview on scheduled date. </p>
-            <footer>Regards Learn n Earn Team. </footer>
+            <footer>Regards Factory Jobs Team. </footer>
             
         </body>
     </html>
@@ -189,7 +189,7 @@ module.exports.ExamCompleted = () => {
         </head>
         <body >
             <p>Dear candidate, you have successfully passed the examination. Please wait for the further process of Interview, our team will contact you. </p>
-            <footer>Regards Learn n Earn Team. </footer>
+            <footer>Regards Factory Jobs Team. </footer>
             
         </body>
     </html>
@@ -210,7 +210,7 @@ module.exports.InterviewCompleted = () => {
         </head>
         <body >
             <p>Dear candidate, you have successfully passed the interview. Please wait for the further process of Admission, our team will contact you. </p>
-            <footer>Regards Learn n Earn Team. </footer>
+            <footer>Regards Factory Jobs Team. </footer>
             
         </body>
     </html>

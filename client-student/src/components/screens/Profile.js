@@ -106,7 +106,7 @@ export default function Profile({ setTitle, history }) {
 	];
 	const gender = ['', 'Male', 'Female', 'Others'];
 	useEffect(() => {
-		setTitle('Profile • Learn n Earn');
+		setTitle('Profile • Factory Jobs');
 	}, [setTitle]);
 
 	const setRequired = (e) => {

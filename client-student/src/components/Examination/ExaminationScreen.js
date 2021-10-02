@@ -99,7 +99,7 @@ const ExaminationScreen = ({ history, setTitle }) => {
 		fetchData();
 	}, [history]);
 	useEffect(() => {
-		setTitle('Examination Portal • Learn n Earn');
+		setTitle('Examination Portal • Factory Jobs');
 		setTimeout(() => {
 			if (!inProcess) submitExam();
 		}, 75 * 60 * 1000);

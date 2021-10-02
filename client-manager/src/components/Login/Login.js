@@ -12,7 +12,7 @@ export default function Login({ setTitle, history }) {
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
-		setTitle('Login • Learn n Earn');
+		setTitle('Login • Factory Jobs');
 	}, [setTitle]);
 
 	const settype = (type) => {

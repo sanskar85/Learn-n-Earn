@@ -4,7 +4,7 @@ import camera from '../assets/camera.png';
 import signal from '../assets/signal.png';
 const ExaminationTerms = ({ history, setTitle }) => {
 	useEffect(() => {
-		setTitle('Terms and Conditions • Learn n Earn');
+		setTitle('Terms and Conditions • Factory Jobs');
 	}, [setTitle]);
 
 	const startHandler = (e) => {

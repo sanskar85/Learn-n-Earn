@@ -18,10 +18,10 @@ export default function Home({ setTitle, history }) {
 	const [loading, setLoading] = useState(false);
 	const setMenu = (text) => {
 		_setMenu(text);
-		setTitle(`${text} • Learn n Earn`);
+		setTitle(`${text} • Factory Jobs`);
 	};
 	useEffect(() => {
-		setTitle(`Dashboard • Learn n Earn`);
+		setTitle(`Dashboard • Factory Jobs`);
 	}, [setTitle]);
 	useEffect(() => {
 		window.scrollTo(0, 0);

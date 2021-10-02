@@ -15,7 +15,7 @@ const Verification = ({ setTitle, history }) => {
 	const [message, setMessage] = useState('');
 
 	useEffect(() => {
-		setTitle('Account Verification • Learn n Earn');
+		setTitle('Account Verification • Factory Jobs');
 		async function fetchData() {
 			const data = await VerificationAPI();
 			if (!data || !data.success) return history.push('/login');

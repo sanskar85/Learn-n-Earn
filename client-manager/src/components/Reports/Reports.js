@@ -12,25 +12,25 @@ const Reports = ({ setTitle }) => {
 	const { report } = useParams();
 	useEffect(() => {
 		if (report === 'exam-wise') {
-			setTitle(`Exam Wise • Learn n Earn`);
+			setTitle(`Exam Wise • Factory Jobs`);
 		}
 		if (report === 'interview-wise') {
-			setTitle(`Interview Wise • Learn n Earn`);
+			setTitle(`Interview Wise • Factory Jobs`);
 		}
 		if (report === 'admission-wise') {
-			setTitle(`Admission Wise • Learn n Earn`);
+			setTitle(`Admission Wise • Factory Jobs`);
 		}
 		if (report === 'state-wise') {
-			setTitle(`State Wise • Learn n Earn`);
+			setTitle(`State Wise • Factory Jobs`);
 		}
 		if (report === 'company-wise') {
-			setTitle(`Company Wise • Learn n Earn`);
+			setTitle(`Company Wise • Factory Jobs`);
 		}
 		if (report === 'source-wise') {
-			setTitle(`Source Wise • Learn n Earn`);
+			setTitle(`Source Wise • Factory Jobs`);
 		}
 		if (report === 'call-wise') {
-			setTitle(`Call Wise • Learn n Earn`);
+			setTitle(`Call Wise • Factory Jobs`);
 		}
 	});
 	return (
