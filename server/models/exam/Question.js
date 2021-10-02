@@ -19,54 +19,84 @@ const QuestionSchema = new mongoose.Schema({
 	},
 });
 QuestionSchema.statics.getQuestions = async function () {
-	const count = await this.countDocuments();
+	const subjects = await this.aggregate([{ $group: { _id: '$subject', count: { $sum: 1 } } }]);
+	const questionCount = {
+		'Science & Mathematics': 0,
+		English: 0,
+		'General Knowledge': 0,
+		'Coding and Aptitude': 0,
+		'Technical Reasoning': 0,
+	};
+	for (const subject of subjects) {
+		questionCount[subject._id] = subject.count;
+	}
 	const questions = [];
-	const arr = [];
+	const ids = [];
 	for (let i = 0; i < Number(process.env.MATHS_SCIENCE_QUESTION_COUNT); i++) {
-		const rand = Math.floor(Math.random() * count);
-		if (arr.includes(rand) && process.env.MODE !== 'development') {
+		const rand = Math.floor(Math.random() * questionCount['Science & Mathematics']);
+		if (ids.includes(rand) && process.env.MODE !== 'development') {
 			i--;
+		} else {
+			const randomDoc = await this.findOne({ subject: QuestionSubject.SCIENCE_MATHS }).skip(rand);
+			if (randomDoc) {
+				questions.push(randomDoc);
+				ids.push(rand);
+			} else i--;
 		}
-		const randomDoc = await this.findOne({ subject: QuestionSubject.SCIENCE_MATHS }).skip(rand);
-		if (randomDoc) questions.push(randomDoc);
 	}
-	arr.splice(0, arr.length);
+	ids.splice(0, ids.length);
 	for (let i = 0; i < Number(process.env.ENGLISH_QUESTION_COUNT); i++) {
-		const rand = Math.floor(Math.random() * count);
-		if (arr.includes(rand) && process.env.MODE !== 'development') {
+		const rand = Math.floor(Math.random() * questionCount['English']);
+		if (ids.includes(rand) && process.env.MODE !== 'development') {
 			i--;
+		} else {
+			const randomDoc = await this.findOne({ subject: QuestionSubject.ENGLISH }).skip(rand);
+			if (randomDoc) {
+				questions.push(randomDoc);
+				ids.push(rand);
+			} else i--;
 		}
-		const randomDoc = await this.findOne({ subject: QuestionSubject.ENGLISH }).skip(rand);
-		if (randomDoc) questions.push(randomDoc);
 	}
-	arr.splice(0, arr.length);
+	ids.splice(0, ids.length);
 	for (let i = 0; i < Number(process.env.GK_QUESTION_COUNT); i++) {
-		const rand = Math.floor(Math.random() * count);
-		if (arr.includes(rand) && process.env.MODE !== 'development') {
+		const rand = Math.floor(Math.random() * questionCount['General Knowledge']);
+		if (ids.includes(rand) && process.env.MODE !== 'development') {
 			i--;
+		} else {
+			const randomDoc = await this.findOne({ subject: QuestionSubject.GK }).skip(rand);
+			if (randomDoc) {
+				questions.push(randomDoc);
+				ids.push(rand);
+			} else i--;
 		}
-		const randomDoc = await this.findOne({ subject: QuestionSubject.GK }).skip(rand);
-		if (randomDoc) questions.push(randomDoc);
 	}
-	arr.splice(0, arr.length);
+	ids.splice(0, ids.length);
 	for (let i = 0; i < Number(process.env.TECHNICAL_REASONING_QUESTION_COUNT); i++) {
-		const rand = Math.floor(Math.random() * count);
-		if (arr.includes(rand) && process.env.MODE !== 'development') {
+		const rand = Math.floor(Math.random() * questionCount['Technical Reasoning']);
+		if (ids.includes(rand) && process.env.MODE !== 'development') {
 			i--;
+		} else {
+			const randomDoc = await this.findOne({ subject: QuestionSubject.TECHNICAL_REASONING }).skip(
+				rand
+			);
+			if (randomDoc) {
+				questions.push(randomDoc);
+				ids.push(rand);
+			} else i--;
 		}
-		const randomDoc = await this.findOne({ subject: QuestionSubject.TECHNICAL_REASONING }).skip(
-			rand
-		);
-		if (randomDoc) questions.push(randomDoc);
 	}
-	arr.splice(0, arr.length);
+	ids.splice(0, ids.length);
 	for (let i = 0; i < Number(process.env.CODING_APTITUDE_QUESTION_COUNT); i++) {
-		const rand = Math.floor(Math.random() * count);
-		if (arr.includes(rand) && process.env.MODE !== 'development') {
+		const rand = Math.floor(Math.random() * questionCount['Coding and Aptitude']);
+		if (ids.includes(rand) && process.env.MODE !== 'development') {
 			i--;
+		} else {
+			const randomDoc = await this.findOne({ subject: QuestionSubject.CODING_APTITUDE }).skip(rand);
+			if (randomDoc) {
+				questions.push(randomDoc);
+				ids.push(rand);
+			} else i--;
 		}
-		const randomDoc = await this.findOne({ subject: QuestionSubject.CODING_APTITUDE }).skip(rand);
-		if (randomDoc) questions.push(randomDoc);
 	}
 	return questions;
 };

@@ -315,7 +315,7 @@ exports.examResult = async (req, res) => {
 		const user = await CandidateDetails.findById(examination.candidate);
 		let _message;
 		if (user.status === CandidateStatus.ELIGIBLE) {
-			_message = 'You have 1 more attempt left.';
+			_message = `You have ${user.exam_attempt_remaining} more attempt left.`;
 		} else if (user.status === CandidateStatus.INTERVIEW) {
 			_message = 'Our team will contact you for futher process.';
 		} else if (user.status === CandidateStatus.FAILED) {
