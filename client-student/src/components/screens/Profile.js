@@ -218,7 +218,7 @@ export default function Profile({ setTitle, history }) {
 		if (!details.district) return setRequired('district');
 		if (!details.qualification) return setRequired('qualification');
 		if (!details.y_o_p || details.y_o_p.length !== 4) return setRequired('y_o_p');
-		if (!details.cgpa || Number(details.cgpa) > 10) return setRequired('cgpa');
+		if (!details.cgpa || Number(details.cgpa) > 100) return setRequired('cgpa');
 		if (!details.backlog) return setRequired('backlog');
 		if (!details.college) return setRequired('college');
 		if (!details.opportunity) return setRequired('opportunity');
@@ -227,12 +227,6 @@ export default function Profile({ setTitle, history }) {
 		if (!details.weight) return setRequired('weight');
 		if (!details.pwd) return setRequired('pwd');
 		if (!details.work_experience) return setRequired('work_experience');
-		if (!details.photo || !details.aadhaar_photo) {
-			setError('Document Required');
-			return setTimeout(() => {
-				setError('');
-			}, 5000);
-		}
 		setLoading(true);
 		setError('');
 		setMessage('Creating profile...');
@@ -361,22 +355,6 @@ export default function Profile({ setTitle, history }) {
 								textChangeHandler={textChangeHandler}
 								placeholder='Enter 12 digit Aadhaar Number'
 							/>
-							<div className='image-upload' style={{ display: 'inline-block', marginLeft: '15px' }}>
-								<label htmlFor='aadhaar_image' className='file-label'>
-									Upload Image
-									<UploadIcon style={{ height: '20px', marginLeft: '5px' }} />
-								</label>
-
-								<input
-									id='aadhaar_image'
-									style={{ display: 'none' }}
-									required={required}
-									disabled={loading}
-									onChange={uploadfile}
-									type='file'
-									accept='image/*'
-								/>
-							</div>
 						</div>
 					</div>
 					<div className='row  justify-content-center'>
@@ -424,27 +402,7 @@ export default function Profile({ setTitle, history }) {
 								placeholder='. . . . .'
 							/>
 						</div>
-						<div className='column col-lg-6 col-sm-8'>
-							<div
-								className='image-upload'
-								style={{ display: 'inline-block', marginLeft: '15px', marginTop: '30px' }}
-							>
-								<label htmlFor='photo' className='file-label'>
-									Passport size photo
-									<UploadIcon style={{ height: '20px', marginLeft: '5px' }} />
-								</label>
-
-								<input
-									id='photo'
-									style={{ display: 'none' }}
-									required={required}
-									disabled={loading}
-									onChange={uploadfile}
-									type='file'
-									accept='image/*'
-								/>
-							</div>
-						</div>
+						<div className='column col-lg-6 col-sm-8'></div>
 					</div>
 					<div className='row  justify-content-center'>
 						<div className='column col-lg-6 col-sm-8'>
@@ -496,7 +454,7 @@ export default function Profile({ setTitle, history }) {
 								labelClassName='label'
 								className='input'
 								name='cgpa'
-								labelText='CGPA'
+								labelText='Percentage or CGPA'
 								required={required}
 								disabled={loading}
 								type='number'

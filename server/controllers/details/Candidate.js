@@ -122,9 +122,7 @@ exports.createprofile = async (req, res) => {
 		!height ||
 		!weight ||
 		!pwd ||
-		!work_experience ||
-		!photo ||
-		!aadhaar_photo
+		!work_experience
 	) {
 		return res.status(400).json({
 			success: false,
@@ -171,8 +169,6 @@ exports.createprofile = async (req, res) => {
 		details.weight = weight;
 		details.pwd = pwd;
 		details.work_experience = work_experience;
-		details.photo = photo;
-		details.aadhaar_photo = aadhaar_photo;
 		if (team) {
 			details.referred_by = team;
 		}
