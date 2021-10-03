@@ -13,11 +13,7 @@ const allowlist = [
 	'http://localhost:3000',
 	'http://localhost:3001',
 	'http://localhost:3002',
-	'http://192.168.1.36:3000',
-	'http://192.168.1.36:3001',
-	'http://192.168.1.36:3002',
-	'https://factory-jobs.com',
-	'https://www.factory-jobs.com',
+	'https://candidate.factory-jobs.com',
 	'https://manager.factory-jobs.com',
 	'https://team.factory-jobs.com',
 ];

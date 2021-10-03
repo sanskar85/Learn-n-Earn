@@ -17,6 +17,7 @@ const {
 	StateWiseReport,
 	IndustryWiseReport,
 	CallWiseReport,
+	AssignedTargets,
 	SourceWiseReport,
 	CreateQuestion,
 	CreateTargetRecord,
@@ -52,6 +53,8 @@ router.route('/state-wise-report').all(verifyManager).get(StateWiseReport);
 router.route('/industry-wise-report').all(verifyManager).get(IndustryWiseReport);
 
 router.route('/call-wise-report').all(verifyManager).get(CallWiseReport);
+
+router.route('/assigned-targets').all(verifyManager).get(AssignedTargets);
 
 router.route('/source-wise-report').all(verifyManager).get(SourceWiseReport);
 

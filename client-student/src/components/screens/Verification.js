@@ -103,7 +103,7 @@ const Verification = ({ setTitle, history }) => {
 							Resend code <img src={refresh} alt='' />
 						</span>
 						{header === 'mobile' && <span onClick={switchHandler}>← Back</span>}
-						<span onClick={(e) => history.push('/logout')}>Wrong Email or Mobile Number</span>
+						<p onClick={(e) => history.push('/logout')}>Wrong Email or Mobile Number</p>
 					</div>
 				</div>
 				<div className='col-md-5  col-10'>

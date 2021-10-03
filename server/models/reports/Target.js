@@ -13,9 +13,15 @@ const TargetSchema = mongoose.Schema(
 		mobile2: { type: String }, //Responder mobile number
 		qualification: { type: String },
 		call_type: { type: String },
+		aadhaar: { type: String },
+		district: { type: String },
+		pincode: { type: String },
 		state: { type: String },
 		source: { type: String },
 		response: { type: String },
+		gender: { type: String },
+		dob: { type: String },
+		y_o_p: { type: String },
 	},
 	{ timestamps: true }
 );

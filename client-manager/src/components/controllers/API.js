@@ -238,6 +238,15 @@ export const SourceWiseReport = async () => {
 	}
 };
 
+export const AssignedTargets = async () => {
+	try {
+		const { data } = await axiosInstance.get(`/manager/assigned-targets`);
+		return data;
+	} catch (err) {
+		return { success: false };
+	}
+};
+
 export const CallWiseReport = async () => {
 	try {
 		const { data } = await axiosInstance.get(`/manager/call-wise-report`);

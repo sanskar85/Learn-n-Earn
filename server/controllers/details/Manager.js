@@ -502,10 +502,19 @@ exports.CreateTargetRecord = async (req, res) => {
 			const target = {
 				team: team_id,
 				name: e[0],
-				fname: e[1],
-				email: e[2],
-				mobile1: e[3],
-				mobile2: e[4],
+				gender: e[1],
+				fname: e[2],
+				dob: e[3],
+				mobile1: e[4],
+				mobile2: e[5],
+				aadhaar: e[6],
+				email: e[7],
+				district: e[8],
+				state: e[9],
+				qualification: e[10],
+				y_o_p: e[11],
+				pincode: e[12],
+				source: e[13],
 			};
 			data.push(target);
 		});
@@ -868,6 +877,44 @@ exports.IndustryWiseReport = async (req, res) => {
 		res.status(200).json({
 			success: true,
 			industry,
+		});
+	} catch (err) {
+		console.log(err);
+		return res.status(500).json({
+			success: false,
+			message: 'Server Error',
+		});
+	}
+};
+
+exports.AssignedTargets = async (req, res) => {
+	const project = {
+		_id: 0,
+		name: 1,
+		date: 1,
+		team: 1,
+		mobile1: 1,
+		qualification: 1,
+		state: 1,
+	};
+
+	try {
+		const target = await Target.aggregate([
+			{
+				$lookup: {
+					from: Team.collection.name,
+					localField: 'team',
+					foreignField: '_id',
+					as: 'team',
+				},
+			},
+			{ $addFields: { team: '$team.name' } },
+			{ $addFields: { date: '$createdAt' } },
+			{ $project: project },
+		]);
+		return res.status(200).json({
+			success: true,
+			targets: target,
 		});
 	} catch (err) {
 		console.log(err);

@@ -28,107 +28,6 @@ const response = [
 	'Wrong / Invalid Number',
 ];
 
-const states = [
-	'',
-	'Andhra Pradesh',
-	'Andaman and Nicobar Islands',
-	'Arunachal Pradesh',
-	'Assam',
-	'Bihar',
-	'Chandigarh',
-	'Chhattisgarh',
-	'Dadra and Nagar Haveli',
-	'Daman and Diu',
-	'Delhi',
-	'Goa',
-	'Gujarat',
-	'Haryana',
-	'Himachal Pradesh',
-	'Jammu and Kashmir',
-	'Jharkhand',
-	'Karnataka',
-	'Kerala',
-	'Lakshadweep',
-	'Madhya Pradesh',
-	'Maharashtra',
-	'Manipur',
-	'Meghalaya',
-	'Mizoram',
-	'Nagaland',
-	'Odisha',
-	'Puducherry',
-	'Punjab',
-	'Rajasthan',
-	'Sikkim',
-	'Tamil Nadu',
-	'Telangana',
-	'Tripura',
-	'Uttar Pradesh',
-	'Uttarakhand',
-	'West Bengal',
-];
-
-const Qualification = [
-	'',
-	'ITI - General Mechanic',
-	'ITI - Marine Fitter',
-	'Pursuing ITI-Fitter/Turner/Machinist',
-	'Pursuing Graduation',
-	'ITI - Mechanic Machine Tools maintenance',
-	'10th Pass',
-	'ITI - Mechanic (Refrigeration & Air Conditioning)',
-	'ITI - Technician Medical electronics',
-	'12th Pass ( Arts )',
-	'Pursuing Diploma in Mechanical Completed',
-	'Diploma in Mechatronics',
-	'Graduation Completed',
-	'Any Other ITI ( Which is not in above)',
-	'Diploma in Tool & Die Making',
-	'Pursuing ITI - Electronic Mechanic',
-	'ITI - Automotive Manufacturing',
-	'ITI - Mechanic Motor Vehicle',
-	'ITI-Fitter/Turner/Machinist Completed',
-	'ITI - Instrument Mechanic',
-	'ITI - Information & Communication Technology System Maintenance',
-	'ITI - Mechanic Radio & Television',
-	'ITI - Wiremen',
-	'12th Pass ( Science )',
-	'B.E./B.Tech',
-	'ITI - Draftsmen (Mechanical)',
-	'ITI - Tool & Die Maker (Press Tools, Jigs & Fixtures)',
-	'ITI - Painter General',
-	'12th Pass ( Commerce )',
-	'Diploma in Electronics',
-	'Pursuing ITI - Any Other Trade',
-	'ITI - Any Other Trade Completed',
-	'ITI - Maintenance Mechanic (Chemical Plant)',
-	'Any Other Diploma ( Which is not in above)',
-	'Pursuing 12th',
-	'ITI - Electronic Mechanic Completed',
-	'Diploma in Electrical',
-	'ITI - Certificate Course in Machinist Tools Room',
-	'ITI - Electrician Completed',
-	'Pursuing ITI - Electrician',
-	'Diploma in Mechanical Completed',
-	'ITI - Technician Mechatronics',
-	'ITI - Diesel Mechanic',
-];
-
-const source = [
-	'',
-	'E-mail/ SMS / Missed Call',
-	'Facebook',
-	'Friend & Relative',
-	'Job Fair Data',
-	'National Career Services',
-	'Newspaper Ad',
-	'NTTF Staff',
-	'NTTF Website',
-	'Partner Industry',
-	'YouTube',
-	'Walk In',
-];
-
 const CallForm = ({ showAlert, setLoading }) => {
 	const [callTarget, setCallTarget] = useState([]);
 
@@ -242,7 +141,10 @@ const Card = ({ details, showAlert, setLoading }) => {
 							/>
 							<h5>Response Form</h5>
 							<div className='row justify-content-between ' style={{ marginTop: '2.5rem' }}>
-								<div className='col-8 '>
+								<div
+									className='col-8 candidate-details'
+									style={{ border: 'none', paddingBottom: '1rem' }}
+								>
 									<form className='popup-from' onSubmit={submitHandler}>
 										<div>
 											<label for='name' style={STYLES_LABEL}>
@@ -313,16 +215,14 @@ const Card = ({ details, showAlert, setLoading }) => {
 											<label for='qualification' style={STYLES_LABEL}>
 												Qualification
 											</label>
-											<select
-												name='qualification'
+											<input
+												type='text'
 												style={STYLES}
+												id='qualification'
+												name='qualification'
 												value={credentials.qualification}
 												onChange={updateCred}
-											>
-												{Qualification.map((opt, index) => {
-													return <option key={index}>{opt}</option>;
-												})}
-											</select>
+											/>
 										</div>
 										<div>
 											<label for='call_type' style={STYLES_LABEL}>
@@ -344,31 +244,92 @@ const Card = ({ details, showAlert, setLoading }) => {
 											<label for='state' style={STYLES_LABEL}>
 												State
 											</label>
-											<select
-												name='state'
+											<input
+												type='text'
 												style={STYLES}
+												id='state'
+												name='state'
 												value={credentials.state}
 												onChange={updateCred}
-											>
-												{states.map((opt, index) => {
-													return <option key={index}>{opt}</option>;
-												})}
-											</select>
+											/>
+										</div>
+										<div>
+											<label for='district' style={STYLES_LABEL}>
+												District
+											</label>
+											<input
+												type='text'
+												style={STYLES}
+												id='district'
+												name='district'
+												value={credentials.district}
+												onChange={updateCred}
+											/>
+										</div>
+										<div>
+											<label for='pincode' style={STYLES_LABEL}>
+												Pincode
+											</label>
+											<input
+												type='text'
+												style={STYLES}
+												id='pincode'
+												name='pincode'
+												value={credentials.pincode}
+												onChange={updateCred}
+											/>
 										</div>
 										<div>
 											<label for='source' style={STYLES_LABEL}>
 												Source
 											</label>
-											<select
-												name='source'
+											<input
+												type='text'
 												style={STYLES}
+												id='source'
+												name='source'
 												value={credentials.source}
 												onChange={updateCred}
-											>
-												{source.map((opt, index) => {
-													return <option key={index}>{opt}</option>;
-												})}
-											</select>
+											/>
+										</div>
+										<div>
+											<label for='gender' style={STYLES_LABEL}>
+												Gender
+											</label>
+											<input
+												type='text'
+												style={STYLES}
+												id='gender'
+												name='gender'
+												value={credentials.gender}
+												onChange={updateCred}
+											/>
+										</div>
+										<div>
+											<label for='dob' style={STYLES_LABEL}>
+												DOB
+											</label>
+											<input
+												type='text'
+												style={STYLES}
+												id='dob'
+												name='dob'
+												value={credentials.dob}
+												onChange={updateCred}
+											/>
+										</div>
+										<div>
+											<label for='y_o_p' style={STYLES_LABEL}>
+												Year of Passing
+											</label>
+											<input
+												type='text'
+												style={STYLES}
+												id='y_o_p'
+												name='y_o_p'
+												value={credentials.y_o_p}
+												onChange={updateCred}
+											/>
 										</div>
 										<div>
 											<label for='response' style={STYLES_LABEL}>

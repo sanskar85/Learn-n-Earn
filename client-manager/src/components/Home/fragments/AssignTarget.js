@@ -176,10 +176,10 @@ const Card = ({ detail }) => {
 		<>
 			<div className='row details' style={{ cursor: 'default' }}>
 				<span className='col-3'>{detail[0]}</span>
-				<span className='col-2'>{detail[1]}</span>
-				<span className='col-3'>{detail[2]}</span>
-				<span className='col-2'>{detail[3]}</span>
+				<span className='col-2'>{detail[2]}</span>
+				<span className='col-3'>{detail[7]}</span>
 				<span className='col-2'>{detail[4]}</span>
+				<span className='col-2'>{detail[5]}</span>
 			</div>
 		</>
 	);
@@ -207,10 +207,19 @@ const VerifyFile = (element, Callback, Error) => {
 		const headers = lines[0].split(',');
 		if (
 			headers[0] === 'Name' &&
-			headers[1] === 'Father' &&
-			headers[2] === 'Email' &&
-			headers[3] === 'Mobile1' &&
-			headers[4] === 'Mobile2'
+			headers[1] === 'Gender' &&
+			headers[2] === 'Father' &&
+			headers[3] === 'DOB' &&
+			headers[4] === 'Mobile1' &&
+			headers[5] === 'Mobile2' &&
+			headers[6] === 'Aadhaar Number' &&
+			headers[7] === 'Email' &&
+			headers[8] === 'District' &&
+			headers[9] === 'State' &&
+			headers[10] === 'Qualification' &&
+			headers[11] === 'Year of Passing' &&
+			headers[12] === 'Pincode' &&
+			headers[13] === 'Source'
 		) {
 			data = lines.slice(1);
 			data = data.filter((e) => e.length !== 0);
@@ -219,8 +228,8 @@ const VerifyFile = (element, Callback, Error) => {
 			}
 			data = data.map((e, index) => {
 				let row = e.split(',');
-				if (row.length >= 5) {
-					row = row.slice(0, 5);
+				if (row.length >= 14) {
+					row = row.slice(0, 14);
 					return row;
 				} else {
 					return Error('Bad File Formatting. Row data missing at line ' + (index + 1));

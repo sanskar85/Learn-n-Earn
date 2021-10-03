@@ -42,7 +42,14 @@ const Reports = ({ setLoading }) => {
 					</div>
 				</div>
 				<div className='col-3' onClick={GenerateReport}>
-					{/* <ExportButton margin='0 auto' /> */}
+					<div
+						onClick={(e) => {
+							window.open('/reports/target-data', '_blank');
+						}}
+					>
+						<span style={{ display: 'block' }}>Assigned </span>
+						<span style={{ display: 'block' }}>Targets </span>
+					</div>
 				</div>
 			</div>
 			<div className='row justify-content-around'>

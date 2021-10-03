@@ -7,6 +7,7 @@ import InterviewWise from './InterviewWise';
 import StateWise from './StateWise';
 import SourceWise from './SourceWise';
 import CallWise from './CallWise';
+import TargetData from './TargetData';
 
 const Reports = ({ setTitle }) => {
 	const { report } = useParams();
@@ -32,6 +33,9 @@ const Reports = ({ setTitle }) => {
 		if (report === 'call-wise') {
 			setTitle(`Call Wise • Factory Jobs`);
 		}
+		if (report === 'target-data') {
+			setTitle(`Target Data • Factory Jobs`);
+		}
 	});
 	return (
 		<>
@@ -42,6 +46,7 @@ const Reports = ({ setTitle }) => {
 			{report === 'company-wise' && <IndustryWise />}
 			{report === 'source-wise' && <SourceWise />}
 			{report === 'call-wise' && <CallWise />}
+			{report === 'target-data' && <TargetData />}
 		</>
 	);
 };
