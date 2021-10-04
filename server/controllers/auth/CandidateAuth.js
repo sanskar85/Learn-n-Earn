@@ -147,7 +147,11 @@ exports.request_verification = async (req, res) => {
 				message: 'User Already Verified',
 			});
 		}
-		const emailOTP = user.generateEmailOTP();
+		let otp = user.otp;
+		if (!user.otpExpire || user.otpExpire <= new Date()) {
+			otp = user.generateOTP();
+			await user.save();
+		}
 
 		const attachments = [
 			{
@@ -159,14 +163,11 @@ exports.request_verification = async (req, res) => {
 		await SendEmail(
 			user.email,
 			'Account Verification Code',
-			EmailVerificationTemplate(emailOTP, user.email),
+			EmailVerificationTemplate(otp, user.email),
 			attachments
 		);
 
-		const mobileOTP = user.generateMobileOTP();
-		await SendSMS(`${mobileOTP} is your otp for Factory Jobs.`, user.mobile);
-
-		await user.save();
+		await SendSMS(`${otp} is your otp for Factory Jobs.`, user.mobile);
 
 		res.status(201).json({
 			success: true,
@@ -183,8 +184,8 @@ exports.request_verification = async (req, res) => {
 };
 
 exports.verify_user = async (req, res) => {
-	const { email_otp, mobile_otp } = req.body;
-	if (!email_otp || !mobile_otp) {
+	const { otp } = req.body;
+	if (!otp) {
 		return res.status(400).json({
 			success: false,
 			message: 'Missing Credentials',
@@ -194,11 +195,7 @@ exports.verify_user = async (req, res) => {
 	try {
 		const user = req.user;
 		const date = new Date();
-		const valid =
-			user.emailOTP === email_otp &&
-			user.mobileOTP === mobile_otp &&
-			user.emailOTPExpire >= date &&
-			user.mobileOTPExpire >= date;
+		const valid = user.otp === otp && user.otpExpire >= date;
 		if (!valid) {
 			return res.status(400).json({
 				success: false,
@@ -206,10 +203,8 @@ exports.verify_user = async (req, res) => {
 				details: 'Either the OTP is invalid or expired',
 			});
 		}
-		user.emailOTP = undefined;
-		user.mobileOTP = undefined;
-		user.emailOTPExpire = undefined;
-		user.mobileOTPExpire = undefined;
+		user.otp = undefined;
+		user.otpExpire = undefined;
 		user.userVerified = true;
 
 		await user.save();
@@ -248,13 +243,11 @@ exports.forgotPassword = async (req, res) => {
 			});
 		}
 
-		user.emailOTP = undefined;
-		user.mobileOTP = undefined;
-		user.emailOTPExpire = undefined;
-		user.mobileOTPExpire = undefined;
+		user.otp = undefined;
+		user.otpExpire = undefined;
 
+		const otp = user.generateOTP();
 		if (username === user.email) {
-			const emailOTP = user.generateEmailOTP();
 			const attachments = [
 				{
 					filename: 'b389e13e-1fa0-48df-b419-ae88efddea04.png',
@@ -265,12 +258,11 @@ exports.forgotPassword = async (req, res) => {
 			await SendEmail(
 				user.email,
 				'Password Reset Code',
-				PasswordResetTemplate(emailOTP, user.email),
+				PasswordResetTemplate(otp, user.email),
 				attachments
 			);
 		} else if (username === user.mobile) {
-			const mobileOTP = user.generateMobileOTP();
-			await SendSMS(`${mobileOTP} is your otp for Factory Jobs.`, user.mobile);
+			await SendSMS(`${otp} is your otp for Factory Jobs.`, user.mobile);
 		}
 
 		const link = user.generateResetLink();
@@ -321,33 +313,21 @@ exports.resetPassword = async (req, res) => {
 			});
 		}
 
-		if (user.emailOTP) {
-			if (user.emailOTP === otp && user.emailOTPExpire > new Date()) {
-				user.emailOTP = undefined;
-				user.emailOTPExpire = undefined;
-			} else {
-				return res.status(400).json({
-					success: false,
-					message: 'Invalid OTP',
-					details: 'Password reset failed',
-				});
-			}
-		} else if (user.mobileOTP) {
-			if (user.mobileOTP === otp && user.mobileOTPExpire > new Date()) {
-				user.mobileOTP = undefined;
-				user.mobileOTPExpire = undefined;
-			} else {
-				return res.status(400).json({
-					success: false,
-					message: 'Invalid OTP',
-					details: 'Password reset failed',
-				});
-			}
+		if (user.otp === otp && user.otpExpire > new Date()) {
+			user.otp = undefined;
+			user.otpExpire = undefined;
+		} else {
+			return res.status(400).json({
+				success: false,
+				message: 'Invalid OTP',
+				details: 'Password reset failed',
+			});
 		}
 
 		user.password = password;
 		await user.save();
 		res.clearCookie('reset_token');
+
 		res.status(201).json({
 			success: true,
 			message: `Password Reset Successful`,

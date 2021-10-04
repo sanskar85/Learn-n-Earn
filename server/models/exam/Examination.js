@@ -12,18 +12,12 @@ const ExaminationSchema = new mongoose.Schema(
 			unique: true,
 		},
 		marks_obtained: { type: Number },
-		duration: { type: Date },
 		status: {
 			type: String,
 			enum: Object.values(ExaminationStatus),
 			default: ExaminationStatus.STARTED,
 		},
-		questions: [
-			{
-				type: mongoose.Schema.ObjectId,
-				ref: 'Question',
-			},
-		],
+		duration: { type: String },
 	},
 	{ timestamps: true }
 );

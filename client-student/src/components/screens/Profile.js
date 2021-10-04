@@ -4,6 +4,76 @@ import '../comps/Profile.css';
 import { useState, useEffect } from 'react';
 import { FetchPinCode, UploadFile, CreateProfile } from '../Controller/API';
 
+const opportunity = [
+	'',
+	'News Paper',
+	'Pamphlet',
+	'School / College',
+	'Employment Exchange Office',
+	'E-Mail',
+	'Friends / Relatives',
+	'FaceBook',
+	'SMS',
+	'Tele Caller',
+	'NTTF Trainee Reference',
+	'www.nttftrg.com',
+	'YouTube',
+	'Any Other',
+];
+const qualifications = [
+	'',
+	'10th Pass',
+	'12th Pass(Arts)',
+	'12th Pass(Science)',
+	'12th Pass(Commerce)',
+	'Pursuing 12th',
+	'Graduation-Arts-Persuing',
+	'Graduation-Arts-Completed',
+	'Graduation-Commerce-Persuing',
+	'Graduation-Commerce-Completed',
+	'Graduation-Science-Pursuing',
+	'Graduation-Science-Completed',
+	'Any Other Graduation(Which od not in above)',
+	'ITI-Fitter/Tuner/Machinist Completed',
+	'Pursuing ITI-Fitter/Tuner/Machinist',
+	'ITI -Electronic Mechanic Completed',
+	' Pursuing ITI -Electronic Mechanic',
+	'ITI-Electrician Completed',
+	'Pursuing ITI-Electrician',
+	'ITI-Automotive Manufacturing',
+	'ITI-Certificate Cource in Machinist Teels Room',
+	'ITI-Diesel Mechanic',
+	'ITI-Draftsmen(Mechanic)',
+	'ITI-General Mechanic',
+	'ITI-Infirmation & Communication Techonology System Maintenance',
+	'ITI-Instument Mechanic',
+	'ITI-Maintenence Mechanic(Chamical Plant)',
+	'ITI-Marine Fitter',
+	'ITI-Mechanic Machine Tools maintenence',
+	'ITI-Mechanic Motor Vehical',
+	'ITI-Mechanic Radio & Television',
+	'ITI-Mechanic (Refrigeration & Air Conditioning',
+	'ITI-Painter General',
+	'ITI-Techinician Mechatronics',
+	'ITI-Medical Electronics',
+	'ITI-Tool & Die Maker (Press Tools, Jigs & Fixtures)',
+	'Any Other ITI(Which is not on above)',
+	'Pursuing ITI - Any Other Trade',
+	'Diploma in Mechatronics',
+	'Diploma in Tools & Die Making',
+	'Diploma in Mechanical completed',
+	'Any Other Diploma Pursuing(Which is not in above)',
+	'Any Other Diploma Completed (Which is not in above) ',
+	'B.E./B.Tech - Pursuing',
+	'B.E./B.Tech - Completed',
+];
+const plant_worked = [
+	'',
+	'Passenger Vehicle',
+	'Commercial Vehicle',
+	'Not Worked in Tata Motor',
+	'Worked Some Other Tata Motors Plant',
+];
 export default function Profile({ setTitle, history }) {
 	const [required, _setrequired] = useState('');
 	const [loading, setLoading] = useState(false);
@@ -31,79 +101,7 @@ export default function Profile({ setTitle, history }) {
 		pwd: '',
 		referral_mob: '',
 		work_experience: '',
-		photo: '',
-		aadhaar_photo: '',
 	});
-	const opportunity = [
-		'',
-		'News Paper',
-		'Pamphlet',
-		'School / College',
-		'Employment Exchange Office',
-		'E-Mail',
-		'Friends / Relatives',
-		'FaceBook',
-		'SMS',
-		'Tele Caller',
-		'NTTF Trainee Reference',
-		'www.nttftrg.com',
-		'YouTube',
-		'Any Other',
-	];
-	const qualifications = [
-		'',
-		'10th Pass',
-		'12th Pass(Arts)',
-		'12th Pass(Science)',
-		'12th Pass(Commerce)',
-		'Pursuing 12th',
-		'Graduation-Arts-Persuing',
-		'Graduation-Arts-Completed',
-		'Graduation-Commerce-Persuing',
-		'Graduation-Commerce-Completed',
-		'Graduation-Science-Pursuing',
-		'Graduation-Science-Completed',
-		'Any Other Graduation(Which od not in above)',
-		'ITI-Fitter/Tuner/Machinist Completed',
-		'Pursuing ITI-Fitter/Tuner/Machinist',
-		'ITI -Electronic Mechanic Completed',
-		' Pursuing ITI -Electronic Mechanic',
-		'ITI-Electrician Completed',
-		'Pursuing ITI-Electrician',
-		'ITI-Automotive Manufacturing',
-		'ITI-Certificate Cource in Machinist Teels Room',
-		'ITI-Diesel Mechanic',
-		'ITI-Draftsmen(Mechanic)',
-		'ITI-General Mechanic',
-		'ITI-Infirmation & Communication Techonology System Maintenance',
-		'ITI-Instument Mechanic',
-		'ITI-Maintenence Mechanic(Chamical Plant)',
-		'ITI-Marine Fitter',
-		'ITI-Mechanic Machine Tools maintenence',
-		'ITI-Mechanic Motor Vehical',
-		'ITI-Mechanic Radio & Television',
-		'ITI-Mechanic (Refrigeration & Air Conditioning',
-		'ITI-Painter General',
-		'ITI-Techinician Mechatronics',
-		'ITI-Medical Electronics',
-		'ITI-Tool & Die Maker (Press Tools, Jigs & Fixtures)',
-		'Any Other ITI(Which is not on above)',
-		'Pursuing ITI - Any Other Trade',
-		'Diploma in Mechatronics',
-		'Diploma in Tools & Die Making',
-		'Diploma in Mechanical completed',
-		'Any Other Diploma Pursuing(Which is not in above)',
-		'Any Other Diploma Completed (Which is not in above) ',
-		'B.E./B.Tech - Pursuing',
-		'B.E./B.Tech - Completed',
-	];
-	const plant_worked = [
-		'',
-		'Passenger Vehicle',
-		'Commercial Vehicle',
-		'Not Worked in Tata Motor',
-		'Worked Some Other Tata Motors Plant',
-	];
 	const gender = ['', 'Male', 'Female', 'Others'];
 	useEffect(() => {
 		setTitle('Profile • Factory Jobs');
@@ -150,10 +148,10 @@ export default function Profile({ setTitle, history }) {
 				});
 			}
 		}
-		if (name === 'referral_mob' && !/[^a-zA-Z]/.test(value)) {
+		if (name === 'referral_mob' && value && !/[^a-zA-Z]/.test(value)) {
 			return;
 		}
-		if (name === 'aadhaar' && !/[^a-zA-Z]/.test(value)) {
+		if (name === 'aadhaar' && value && !/[^a-zA-Z]/.test(value)) {
 			return;
 		}
 		setdetails((prev) => {
@@ -176,36 +174,6 @@ export default function Profile({ setTitle, history }) {
 			};
 		});
 	};
-	const uploadfile = async (e) => {
-		if (e.target.files[0].size > 204800) {
-			alert('File should be less than 200 kb');
-			return;
-		}
-
-		if (e.target.id === 'aadhaar_image') {
-			const data = await UploadFile(e.target.files[0]);
-			if (data) {
-				setdetails((prev) => {
-					return {
-						...prev,
-						aadhaar_photo: data,
-					};
-				});
-			}
-		}
-		if (e.target.id === 'photo') {
-			const data = await UploadFile(e.target.files[0]);
-			if (data) {
-				setdetails((prev) => {
-					return {
-						...prev,
-						photo: data,
-					};
-				});
-			}
-		}
-	};
-
 	const submit_handler = async (e) => {
 		e.preventDefault();
 		if (!details.name) return setRequired('name');
@@ -337,6 +305,7 @@ export default function Profile({ setTitle, history }) {
 								required={required}
 								disabled={loading}
 								type='tel'
+								maxLength='10'
 								value={details.referral_mob}
 								textChangeHandler={textChangeHandler}
 								placeholder='Mobile number of our refferal team.'

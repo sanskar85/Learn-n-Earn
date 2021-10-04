@@ -8,11 +8,9 @@ const CandidateDetailsSchema = new mongoose.Schema(
 		},
 		name: { type: String },
 		gender: { type: String },
-		DOB: { type: Date },
+		DOB: { type: String },
 		fname: { type: String },
 		aadhaar: { type: String },
-		aadhaar_photo: { type: String },
-		photo: { type: String },
 		state: { type: String },
 		district: { type: String },
 		pincode: { type: String },
@@ -44,6 +42,21 @@ const CandidateDetailsSchema = new mongoose.Schema(
 	{ timestamps: true }
 );
 
+CandidateDetailsSchema.pre('save', function (next) {
+	const options = {
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit',
+	};
+	if (this.isModified('DOB')) {
+		const date = new Date(this.DOB);
+		if (date) {
+			this.DOB = date.toLocaleDateString('en-GB', options);
+		}
+	}
+	return next();
+});
+
 CandidateDetailsSchema.methods.isProfileComplete = function () {
 	return (
 		this.name &&
@@ -51,8 +64,6 @@ CandidateDetailsSchema.methods.isProfileComplete = function () {
 		this.DOB &&
 		this.fname &&
 		this.aadhaar &&
-		this.aadhaar_photo &&
-		this.photo &&
 		this.state &&
 		this.district &&
 		this.pincode &&

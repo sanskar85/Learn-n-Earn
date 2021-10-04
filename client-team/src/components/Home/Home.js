@@ -61,7 +61,9 @@ export default function Home({ setTitle, history }) {
 				{menu === 'Call Response' && (
 					<CallResponse showAlert={setAlertMessage} setLoading={setLoading} />
 				)}
-				{menu === 'Profile' && <Profile showAlert={setAlertMessage} setLoading={setLoading} />}
+				{menu === 'Profile' && (
+					<Profile showAlert={setAlertMessage} setLoading={setLoading} history={history} />
+				)}
 				{menu === 'Exam' && <Examination showAlert={setAlertMessage} setLoading={setLoading} />}
 				{menu === 'Interview' && <Interview showAlert={setAlertMessage} setLoading={setLoading} />}
 				{menu === 'Offer-Letter' && (

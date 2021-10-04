@@ -4,6 +4,11 @@ import { Teams as MyTeams, UpdateTeamStatus, RegisterTeam } from '../../controll
 import { CloseIcon } from '../../assets/Images';
 import POPUP_IMAGE from '../../assets/ream_registration.svg';
 const Teams = ({ setLoading, showAlert }) => {
+	const [RELOAD, setReload] = useState(0);
+	const reload = () => {
+		setReload(Date.now());
+	};
+
 	const [teams, setTeams] = useState([]);
 	const [registrationFormVisible, showRegistration] = useState(false);
 	const [details, setDetails] = useState({
@@ -23,6 +28,20 @@ const Teams = ({ setLoading, showAlert }) => {
 		border: 'none',
 	};
 
+	useEffect(() => {
+		setLoading(true);
+		async function fetchData() {
+			const data = await MyTeams();
+			if (data && data.success) {
+				setTeams(data.teams);
+				setLoading(false);
+			} else {
+				setLoading(false);
+				showAlert('Unable to fetch data');
+			}
+		}
+		fetchData();
+	}, [setLoading, showAlert, RELOAD]);
 	const registerChangeHandler = (e) => {
 		setDetails((prev) => {
 			return {
@@ -37,6 +56,7 @@ const Teams = ({ setLoading, showAlert }) => {
 		const data = await RegisterTeam(details);
 		if (data && data.success) {
 			showAlert('Team Registered');
+			reload();
 		} else {
 			showAlert('Team Not Registered. Please try again later');
 		}
@@ -49,20 +69,6 @@ const Teams = ({ setLoading, showAlert }) => {
 		});
 		showRegistration(false);
 	};
-	useEffect(() => {
-		setLoading(true);
-		async function fetchData() {
-			const data = await MyTeams();
-			if (data && data.success) {
-				setTeams(data.teams);
-				setLoading(false);
-			} else {
-				setLoading(false);
-				showAlert('Unable to fetch data');
-			}
-		}
-		fetchData();
-	}, [setLoading, showAlert]);
 	return (
 		<>
 			<div className='student-wrapper'>

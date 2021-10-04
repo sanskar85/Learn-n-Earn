@@ -227,7 +227,7 @@ const VerifyFile = (element, Callback, Error) => {
 				return Error('File does not contain any target data');
 			}
 			data = data.map((e, index) => {
-				let row = e.split(',');
+				let row = splitCSV(e);
 				if (row.length >= 14) {
 					row = row.slice(0, 14);
 					return row;
@@ -240,6 +240,16 @@ const VerifyFile = (element, Callback, Error) => {
 			return Error('Bad Header Formatting');
 		}
 	});
+};
+const splitCSV = (row) => {
+	var matches = row.match(/(\s*"[^"]+"\s*|\s*[^,]+|,)(?=,|$)/g);
+	for (var n = 0; n < matches.length; ++n) {
+		matches[n] = matches[n].trim();
+		if (matches[n] === ',') matches[n] = '';
+		matches[n] = matches[n].replaceAll('"', '');
+	}
+	if (row[0] === ',') matches.unshift('');
+	return matches;
 };
 const ReadFile = function (element, callback) {
 	const reader = new FileReader();

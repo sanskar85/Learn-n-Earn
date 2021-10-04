@@ -77,6 +77,15 @@ export const MyProfile = async () => {
 	}
 };
 
+export const Logout = async () => {
+	try {
+		const { data } = await axiosInstance.post(`/auth/team/logout`);
+		return data.success;
+	} catch (err) {
+		return false;
+	}
+};
+
 export const Name = async () => {
 	try {
 		const { data } = await axiosInstance.get(`/team/profile`);

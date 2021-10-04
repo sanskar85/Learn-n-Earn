@@ -9,7 +9,7 @@ import {
 } from '../../controllers/API';
 import USER_IMAGE from '../../assets/user-image.jpg';
 
-const Profile = ({ showAlert, setLoading }) => {
+const Profile = ({ showAlert, setLoading, history }) => {
 	const [details, setDetails] = useState({
 		name: '',
 		mobile: '',
@@ -223,6 +223,15 @@ const Profile = ({ showAlert, setLoading }) => {
 					</div>
 				</div>
 				<button style={{ width: '150px' }}>SAVE</button>
+				<button
+					style={{ width: '150px', marginLeft: '5rem', backgroundColor: '#30475E' }}
+					onClick={(e) => {
+						e.preventDefault();
+						history.push('/logout');
+					}}
+				>
+					Logout
+				</button>
 			</div>
 		</form>
 	);

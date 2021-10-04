@@ -51,6 +51,11 @@ const states = [
 
 const Examination = ({ showAlert, setLoading }) => {
 	var today = currDate();
+	const [RELOAD, setReload] = useState(0);
+	const reload = () => {
+		setReload(Date.now());
+	};
+
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [attended, setAttended] = useState([]);
 	const [not_attended, setNotAttended] = useState([]);
@@ -93,7 +98,7 @@ const Examination = ({ showAlert, setLoading }) => {
 			}
 		}
 		fetchData();
-	}, [setLoading, showAlert]);
+	}, [setLoading, showAlert, RELOAD]);
 	return (
 		<>
 			<div className='student-wrapper'>
@@ -162,6 +167,7 @@ const Examination = ({ showAlert, setLoading }) => {
 						filter={filter}
 						showAlert={showAlert}
 						setLoading={setLoading}
+						reload={reload}
 					/>
 				)}
 				{header === 'not_responding' && <NotResponding data={not_responding} filter={filter} />}
@@ -255,7 +261,7 @@ const AttendedCard = ({ candidate }) => {
 	);
 };
 
-const Eligible = ({ data, filter, showAlert, setLoading }) => {
+const Eligible = ({ data, filter, showAlert, setLoading, reload }) => {
 	const [eligible, setEligible] = useState([]);
 	useEffect(() => {
 		const filtered = data.filter((candidate) => {
@@ -304,6 +310,7 @@ const Eligible = ({ data, filter, showAlert, setLoading }) => {
 							candidate={candidate}
 							showAlert={showAlert}
 							setLoading={setLoading}
+							reload={reload}
 						/>
 					);
 				})}
@@ -315,7 +322,7 @@ const Eligible = ({ data, filter, showAlert, setLoading }) => {
 	);
 };
 
-const EligibleCard = ({ candidate, showAlert, setLoading }) => {
+const EligibleCard = ({ candidate, showAlert, setLoading, reload }) => {
 	const [notifier, setnotifier] = useState([]);
 	const [visible, setVisible] = useState(true);
 	var options = {
@@ -384,6 +391,7 @@ const EligibleCard = ({ candidate, showAlert, setLoading }) => {
 						if (data) {
 							setLoading(false);
 							setVisible(false);
+							reload();
 						} else {
 							setLoading(false);
 							showAlert('Unable to set not responding...');

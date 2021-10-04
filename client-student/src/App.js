@@ -35,7 +35,7 @@ function App() {
 						setTitle={setTitle}
 					/>
 					<DashboardRoute exact path='/' setTitle={setTitle} />
-					<LogoutRoute exact path='/logout' />
+					<LogoutRoute exact path='/logout' setTitle={setTitle} />
 
 					<Route render={() => <Redirect to={`/`} />} />
 				</Switch>

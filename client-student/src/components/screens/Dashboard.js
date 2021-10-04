@@ -47,7 +47,7 @@ export default function Dashboard({ setTitle, history }) {
 
 	useEffect(() => {
 		let isMounted = true;
-		setTitle('Home • Factory Jobs');
+		setTitle('Home • Learn n Earn');
 		async function fetchData() {
 			if (isMounted) {
 				const data = await MyDashboard();
@@ -73,7 +73,7 @@ export default function Dashboard({ setTitle, history }) {
 			history.push('/start-exam/terms');
 		}
 		if (type === 'interview') {
-			if (interviewDetails.link) window.open(interviewDetails.link, '_blank');
+			if (interviewDetails.link) window.open(interviewDetails.link);
 			else alert('Interview is not scheduled yet. Wait for our team to schedule your Interview.');
 		}
 		if (type === 'offer_letter') {
@@ -167,19 +167,17 @@ export const Card = ({ notices }) => {
 				<span className='sup-text'>Notice !</span>
 				{notices.map((notice, index) => {
 					return (
-						<>
-							<p key={index}>
-								<lottie-player
-									src='https://assets1.lottiefiles.com/packages/lf20_WdbegN.json'
-									background='transparent'
-									speed='1'
-									style={{ width: '32px', height: '32px' }}
-									loop
-									autoplay
-								></lottie-player>
-								<span>{notice.message}</span>
-							</p>
-						</>
+						<p key={index}>
+							<lottie-player
+								src='https://assets1.lottiefiles.com/packages/lf20_WdbegN.json'
+								background='transparent'
+								speed='1'
+								style={{ width: '32px', height: '32px' }}
+								loop
+								autoplay
+							></lottie-player>
+							<span>{notice.message}</span>
+						</p>
 					);
 				})}
 			</div>

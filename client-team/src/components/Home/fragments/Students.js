@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react';
 import $ from 'jquery';
 import {
 	Students as MyStudents,
-	FetchImage,
 	UpdateStudentStatus,
 	SaveCandidateDetails,
 } from '../../controllers/API';
@@ -108,6 +107,11 @@ const plant_worked = [
 
 const Students = ({ setLoading, showAlert }) => {
 	var today = currDate();
+	const [RELOAD, setReload] = useState(0);
+	const reload = () => {
+		setReload(Date.now());
+	};
+
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [candidates, setCandidates] = useState([]);
 	const [interested, setInterested] = useState([]);
@@ -133,7 +137,6 @@ const Students = ({ setLoading, showAlert }) => {
 			};
 		});
 	};
-
 	const column_selector = (e) => {
 		$('.active').removeClass('active');
 		$(e.target).addClass('active');
@@ -155,7 +158,7 @@ const Students = ({ setLoading, showAlert }) => {
 			}
 		}
 		fetchData();
-	}, [setLoading, showAlert]);
+	}, [setLoading, showAlert, RELOAD]);
 	return (
 		<>
 			<div className='student-wrapper'>
@@ -282,6 +285,7 @@ const Students = ({ setLoading, showAlert }) => {
 						filter={filter}
 						setLoading={setLoading}
 						showAlert={showAlert}
+						reload={reload}
 					/>
 				)}
 			</div>
@@ -328,7 +332,7 @@ const Candidates = ({ data, filter, setLoading, showAlert }) => {
 		{ label: 'Year of Passing', key: 'y_o_p' },
 		{ label: 'Registration Date', key: 'registration_date' },
 		{ label: 'College', key: 'college' },
-		{ label: 'CGPA', key: 'cgpa' },
+		{ label: 'Percentage or CGPA', key: 'cgpa' },
 		{ label: 'Diploma', key: 'diploma' },
 		{ label: 'Any Backlog ?', key: 'backlog' },
 		{ label: 'Height', key: 'height' },
@@ -537,7 +541,7 @@ const Details = ({ candidate, setExpandedType }) => {
 								Year Of Passing : <span>{candidate.y_o_p}</span>
 							</div>
 							<div>
-								CGPA : <span>{candidate.cgpa}</span>
+								Percentage or CGPA : <span>{candidate.cgpa}</span>
 							</div>
 							<div>
 								Diploma : <span>{candidate.diploma}</span>
@@ -566,10 +570,9 @@ const Details = ({ candidate, setExpandedType }) => {
 							</div>
 						</div>
 						<div className='col-5 images'>
-							<img src={FetchImage(candidate.photo)} alt='' />
-							<img src={FetchImage(candidate.aadhaar_photo)} alt='' />
 							<button
 								className='btn btn-outline-primary'
+								style={{ width: '100%' }}
 								onClick={(e) => {
 									setExpandedType('edit');
 								}}
@@ -756,7 +759,7 @@ const EditDetails = ({ candidate, setCandidate, setExpandedType, setLoading, sho
 						/>
 					</div>
 					<div style={ROW}>
-						<span style={LABEL}>CGPA</span>
+						<span style={LABEL}>Percentage or CGPA</span>
 						<input
 							type='number'
 							style={{ ...INPUT, width: '30%' }}
@@ -988,7 +991,7 @@ const ProfileCard = ({ candidate }) => {
 	);
 };
 
-const NotVerified = ({ data, filter, setLoading, showAlert }) => {
+const NotVerified = ({ data, filter, setLoading, showAlert, reload }) => {
 	const [candidates, setCandidates] = useState([]);
 	useEffect(() => {
 		const filtered = data.filter((candidate) => {
@@ -1025,7 +1028,7 @@ const NotVerified = ({ data, filter, setLoading, showAlert }) => {
 		{ label: 'Pincode', key: 'pincode' },
 		{ label: 'Qualification', key: 'qualification' },
 		{ label: 'College', key: 'college' },
-		{ label: 'CGPA', key: 'cgpa' },
+		{ label: 'Percentage or CGPA', key: 'cgpa' },
 		{ label: 'Diploma', key: 'diploma' },
 		{ label: 'Year of Passing', key: 'y_o_p' },
 		{ label: 'Any Backlog ?', key: 'backlog' },
@@ -1050,9 +1053,10 @@ const NotVerified = ({ data, filter, setLoading, showAlert }) => {
 					return (
 						<NotVerifiedCard
 							key={candidate}
-							candidate={candidate}
+							details={candidate}
 							setLoading={setLoading}
 							showAlert={showAlert}
+							reload={reload}
 						/>
 					);
 				})}
@@ -1064,8 +1068,9 @@ const NotVerified = ({ data, filter, setLoading, showAlert }) => {
 	);
 };
 
-const NotVerifiedCard = ({ candidate, setLoading, showAlert }) => {
-	const [expanded, setExpanded] = useState(false);
+const NotVerifiedCard = ({ details, setLoading, showAlert, reload }) => {
+	const [candidate, setCandidate] = useState(details);
+	const [expandedType, setExpandedType] = useState(false);
 	const [status, setStatus] = useState('Eligible');
 	var options = {
 		year: 'numeric',
@@ -1089,10 +1094,11 @@ const NotVerifiedCard = ({ candidate, setLoading, showAlert }) => {
 	const submitHandler = async (e) => {
 		e.preventDefault();
 		setLoading(true);
-		setExpanded(false);
+		setExpandedType(null);
 		const data = await UpdateStudentStatus(candidate._id, status);
 		if (data) {
 			showAlert('Candidate Status Updated');
+			reload();
 		} else {
 			showAlert('Status Updation Failed');
 		}
@@ -1106,7 +1112,7 @@ const NotVerifiedCard = ({ candidate, setLoading, showAlert }) => {
 				style={{ display: status === 'Updated' ? 'none' : 'flex' }}
 				className='row details'
 				onClick={(e) => {
-					setExpanded(true);
+					setExpandedType('details');
 				}}
 			>
 				<span className='col-3'>{candidate.name}</span>
@@ -1117,13 +1123,13 @@ const NotVerifiedCard = ({ candidate, setLoading, showAlert }) => {
 				</span>
 			</div>
 
-			{expanded && (
+			{expandedType === 'details' && (
 				<>
 					<div className='popup-wrapper'>
 						<div className='extra-details'>
 							<CloseIcon
 								onClick={(e) => {
-									setExpanded(false);
+									setExpandedType(null);
 								}}
 							/>
 							<div className='row justify-content-between ' style={{ marginTop: '2.5rem' }}>
@@ -1177,7 +1183,7 @@ const NotVerifiedCard = ({ candidate, setLoading, showAlert }) => {
 										Year Of Passing : <span>{candidate.y_o_p}</span>
 									</div>
 									<div>
-										CGPA : <span>{candidate.cgpa}</span>
+										Percentage or CGPA : <span>{candidate.cgpa}</span>
 									</div>
 									<div>
 										Diploma : <span>{candidate.diploma}</span>
@@ -1198,9 +1204,16 @@ const NotVerifiedCard = ({ candidate, setLoading, showAlert }) => {
 									</div>
 								</div>
 								<div className='col-5 images'>
-									<img src={FetchImage(candidate.photo)} alt='' />
-									<img src={FetchImage(candidate.aadhaar_photo)} alt='' />
 									<form onSubmit={submitHandler}>
+										<button
+											className='btn btn-outline-primary'
+											style={{ width: '100%' }}
+											onClick={(e) => {
+												setExpandedType('edit');
+											}}
+										>
+											EDIT
+										</button>
 										<select
 											style={STYLE}
 											value={status}
@@ -1220,6 +1233,15 @@ const NotVerifiedCard = ({ candidate, setLoading, showAlert }) => {
 						</div>
 					</div>
 				</>
+			)}
+			{expandedType === 'edit' && (
+				<EditDetails
+					candidate={candidate}
+					setExpandedType={setExpandedType}
+					setLoading={setLoading}
+					showAlert={showAlert}
+					setCandidate={setCandidate}
+				/>
 			)}
 		</>
 	);

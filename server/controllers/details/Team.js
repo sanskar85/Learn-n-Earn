@@ -206,7 +206,6 @@ exports.Student = async (req, res) => {
 	const project = {
 		_id: 1,
 		aadhaar: 1,
-		aadhaar_photo: 1,
 		backlog: 1,
 		cgpa: 1,
 		college: 1,
@@ -217,7 +216,6 @@ exports.Student = async (req, res) => {
 		height: 1,
 		name: 1,
 		opportunity: 1,
-		photo: 1,
 		pincode: 1,
 		plant_worked: 1,
 		pwd: 1,
@@ -1316,7 +1314,6 @@ exports.AdmissionDetails = async (req, res) => {
 		candidate_id: 1,
 		offer_id: 1,
 		aadhaar: 1,
-		aadhaar_photo: 1,
 		backlog: 1,
 		cgpa: 1,
 		college: 1,
@@ -1328,7 +1325,6 @@ exports.AdmissionDetails = async (req, res) => {
 		name: 1,
 		team_name: 1,
 		opportunity: 1,
-		photo: 1,
 		pincode: 1,
 		plant_worked: 1,
 		pwd: 1,
@@ -1378,8 +1374,6 @@ exports.AdmissionDetails = async (req, res) => {
 			{ $addFields: { cgpa: '$details.cgpa' } },
 			{ $addFields: { diploma: '$details.diploma' } },
 			{ $addFields: { work_experience: '$details.work_experience' } },
-			{ $addFields: { aadhaar_photo: '$details.aadhaar_photo' } },
-			{ $addFields: { photo: '$details.photo' } },
 			{ $addFields: { user: '$details.candidate' } },
 			{
 				$lookup: {

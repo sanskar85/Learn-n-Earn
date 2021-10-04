@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
-import { AssignedTargets } from '../controllers/API';
+import { AssignedTargets as assigned_targets } from '../controllers/API';
 import './Styles.css';
+import { CSVLink } from 'react-csv';
+import ExportButton from '../Home/fragments/ExportButton';
 
 const options = {
 	year: 'numeric',
@@ -8,11 +10,11 @@ const options = {
 	day: '2-digit',
 };
 
-const TargetData = () => {
+const AssignedTargets = () => {
 	const [data, setData] = useState([]);
 	useEffect(() => {
 		async function fetchData() {
-			const data = await AssignedTargets();
+			const data = await assigned_targets();
 			if (data && data.success) {
 				setData(data.targets);
 			} else {
@@ -21,6 +23,23 @@ const TargetData = () => {
 		}
 		fetchData();
 	}, []);
+	const csv_header = [
+		{ label: 'Name', key: 'name' },
+		{ label: 'Gender', key: 'gender' },
+		{ label: 'Father', key: 'fname' },
+		{ label: 'DOB', key: 'dob' },
+		{ label: 'Mobile1', key: 'mobile1' },
+		{ label: 'Mobile2', key: 'mobile2' },
+		{ label: 'Aadhaar Number', key: 'aadhaar' },
+		{ label: 'Email', key: 'email' },
+		{ label: 'District', key: 'district' },
+		{ label: 'State', key: 'state' },
+		{ label: 'Qualification', key: 'qualification' },
+		{ label: 'Year of Passing', key: 'y_o_p' },
+		{ label: 'Pincode', key: 'pincode' },
+		{ label: 'Source', key: 'source' },
+	];
+
 	return (
 		<>
 			<div className='report-wrapper'>
@@ -51,9 +70,12 @@ const TargetData = () => {
 						);
 					})}
 				</div>
+				<CSVLink data={data} headers={csv_header} filename={'assigned_targets.csv'}>
+					<ExportButton />
+				</CSVLink>
 			</div>
 		</>
 	);
 };
 
-export default TargetData;
+export default AssignedTargets;

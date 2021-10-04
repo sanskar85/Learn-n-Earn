@@ -50,6 +50,11 @@ const states = [
 const interview_status = ['Status', 'Not Scheduled', 'Scheduled', 'Pass', 'Fail'];
 const Interview = ({ showAlert, setLoading }) => {
 	var today = getMaxDate();
+	const [RELOAD, setReload] = useState(0);
+	const reload = () => {
+		setReload(Date.now());
+	};
+
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [header, setHeader] = useState('eligible');
 	const [interview_details, setInterviewData] = useState([]);
@@ -90,7 +95,7 @@ const Interview = ({ showAlert, setLoading }) => {
 			}
 		}
 		fetchData();
-	}, [setLoading, showAlert]);
+	}, [setLoading, showAlert, RELOAD]);
 
 	return (
 		<>
@@ -166,6 +171,7 @@ const Interview = ({ showAlert, setLoading }) => {
 						filter={filter}
 						showAlert={showAlert}
 						setLoading={setLoading}
+						reload={reload}
 					/>
 				)}
 				{header === 'not_responding' && (
@@ -181,7 +187,7 @@ const Interview = ({ showAlert, setLoading }) => {
 	);
 };
 
-const Eligible = ({ data, filter, showAlert, setLoading }) => {
+const Eligible = ({ data, filter, showAlert, setLoading, reload }) => {
 	const [candidates, setCandidates] = useState([]);
 
 	useEffect(() => {
@@ -236,6 +242,7 @@ const Eligible = ({ data, filter, showAlert, setLoading }) => {
 							details={details}
 							showAlert={showAlert}
 							setLoading={setLoading}
+							reload={reload}
 						/>
 					);
 				})}
@@ -247,7 +254,7 @@ const Eligible = ({ data, filter, showAlert, setLoading }) => {
 	);
 };
 
-const EligibleCard = ({ details, showAlert, setLoading }) => {
+const EligibleCard = ({ details, showAlert, setLoading, reload }) => {
 	const [popup, showPopup] = useState(false);
 	const [visible, setVisible] = useState(true);
 	const [candidate, setCandidate] = useState(details);
@@ -320,7 +327,7 @@ const EligibleCard = ({ details, showAlert, setLoading }) => {
 	const linkClickHandler = (e) => {
 		if (candidate.status === 'Scheduled') {
 			if (new Date().toDateString() === new Date(candidate.scheduled_time).toDateString()) {
-				window.open(candidate.meeting_link, '_blank');
+				window.open(candidate.meeting_link);
 				showInterviewFormPopup(true);
 			} else showAlert('Meeting is not scheduled for today');
 		} else if (candidate.status === 'Not Scheduled') {
@@ -328,7 +335,7 @@ const EligibleCard = ({ details, showAlert, setLoading }) => {
 		}
 	};
 	const openInterviewResponse = (e) => {
-		window.open('/interview-response/' + candidate.meeting_id, '_blank');
+		window.open('/interview-response/' + candidate.meeting_id);
 		showInterviewFormPopup(false);
 	};
 	const changeHandler = (e) => {
@@ -398,6 +405,7 @@ const EligibleCard = ({ details, showAlert, setLoading }) => {
 						if (data) {
 							setLoading(false);
 							setVisible(false);
+							reload();
 						} else {
 							setLoading(false);
 							showAlert('Unable to set not responding...');

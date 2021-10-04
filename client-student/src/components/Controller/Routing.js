@@ -122,6 +122,7 @@ export const LogoutRoute = ({ component: Component, setTitle, ...rest }) => {
 	const [loading, setLoading] = useState(true);
 	useEffect(() => {
 		let isMounted = true;
+		setTitle('Logging Out');
 		async function fetchData() {
 			const data = await Logout();
 			if (isMounted) {
@@ -133,7 +134,7 @@ export const LogoutRoute = ({ component: Component, setTitle, ...rest }) => {
 		return () => {
 			isMounted = false;
 		};
-	}, []);
+	}, [setTitle]);
 	if (loading) {
 		return <></>;
 	}

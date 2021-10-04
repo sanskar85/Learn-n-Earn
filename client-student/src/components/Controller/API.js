@@ -89,11 +89,10 @@ export const VerificationAPI = async () => {
 	}
 };
 
-export const VerifyUserAPI = async (email_otp, mobile_otp) => {
+export const VerifyUserAPI = async (otp) => {
 	try {
 		const { data } = await axiosInstance.post(`/auth/candidate/verify-user`, {
-			email_otp,
-			mobile_otp,
+			otp,
 		});
 		return data;
 	} catch (err) {

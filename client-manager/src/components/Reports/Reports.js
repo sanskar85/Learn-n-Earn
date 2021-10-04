@@ -7,7 +7,7 @@ import InterviewWise from './InterviewWise';
 import StateWise from './StateWise';
 import SourceWise from './SourceWise';
 import CallWise from './CallWise';
-import TargetData from './TargetData';
+import AssignedTargets from './AssignedTargets';
 
 const Reports = ({ setTitle }) => {
 	const { report } = useParams();
@@ -46,7 +46,7 @@ const Reports = ({ setTitle }) => {
 			{report === 'company-wise' && <IndustryWise />}
 			{report === 'source-wise' && <SourceWise />}
 			{report === 'call-wise' && <CallWise />}
-			{report === 'target-data' && <TargetData />}
+			{report === 'target-data' && <AssignedTargets />}
 		</>
 	);
 };

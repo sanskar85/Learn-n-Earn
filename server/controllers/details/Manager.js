@@ -8,6 +8,7 @@ const Examination = require('../../models/exam/Examination');
 const Interview = require('../../models/exam/Interview');
 const Question = require('../../models/exam/Question');
 const OfferLetter = require('../../models/exam/OfferLetter');
+const fs = require('fs');
 const {
 	CandidateStatus,
 	InterviewStatus,
@@ -194,7 +195,6 @@ exports.Students = async (req, res) => {
 	const project = {
 		_id: 1,
 		aadhaar: 1,
-		aadhaar_photo: 1,
 		backlog: 1,
 		cgpa: 1,
 		college: 1,
@@ -205,7 +205,6 @@ exports.Students = async (req, res) => {
 		height: 1,
 		name: 1,
 		opportunity: 1,
-		photo: 1,
 		pincode: 1,
 		plant_worked: 1,
 		pwd: 1,
@@ -279,6 +278,7 @@ exports.Students = async (req, res) => {
 				},
 			},
 			{ $addFields: { team: { $arrayElemAt: ['$team', 0] } } },
+			{ $match: { name: { $exists: true, $ne: null } } },
 			{ $sort: { createdAt: -1 } },
 			{ $project: project },
 		]);
@@ -333,6 +333,7 @@ exports.UpdateCandidatesDetail = async (req, res) => {
 			message: 'Candidate details updated',
 		});
 	} catch (err) {
+		console.log(err);
 		return res.status(500).json({
 			success: false,
 			message: 'Server Error',
@@ -449,23 +450,30 @@ exports.UpdateProfileImage = async (req, res) => {
 };
 
 exports.CreateQuestion = async (req, res) => {
-	const { section, type, imagePath, question, options, answer } = req.body;
+	const { id, section, type, imagePath, question, options, answer } = req.body;
 
 	const option = [options.a, options.b, options.c, options.d];
 	try {
-		let c;
-		if (type === 'Text') {
-			c = await Question.create({
-				type: type,
-				text: question,
-				subject: section,
-				options: option,
-				answer: answer,
-			});
+		if (id) {
+			const _question = await Question.findById(id);
+			if (!_question) {
+				return res.status(404).json({
+					success: false,
+					message: 'Invalid Question ID',
+				});
+			}
+			_question.type = type;
+			_question.image = imagePath;
+			_question.text = question;
+			_question.subject = section;
+			_question.options = option;
+			_question.answer = answer;
+			await _question.save();
 		} else {
-			c = await Question.create({
+			await Question.create({
 				type: type,
 				image: imagePath,
+				text: question,
 				subject: section,
 				options: option,
 				answer: answer,
@@ -475,6 +483,92 @@ exports.CreateQuestion = async (req, res) => {
 		res.status(201).json({
 			success: true,
 			message: 'Question Created',
+		});
+	} catch (err) {
+		console.log(err);
+		return res.status(500).json({
+			success: false,
+			message: 'Server Error',
+		});
+	}
+};
+
+exports.FetchQuestion = async (req, res) => {
+	try {
+		const _question = await Question.findById(req.params.id).select(
+			'_id subject type image text answer options'
+		);
+		if (!_question) {
+			return res.status(404).json({
+				success: false,
+				message: 'Invalid Question ID',
+			});
+		}
+		const question = {
+			id: _question._id,
+			section: _question.subject,
+			type: _question.type,
+			imagePath: _question.image,
+			question: _question.text,
+			options: {
+				a: _question.options[0],
+				b: _question.options[1],
+				c: _question.options[2],
+				d: _question.options[3],
+			},
+			answer: _question.answer,
+		};
+		res.status(201).json({
+			success: true,
+			question,
+		});
+	} catch (err) {
+		console.log(err);
+		return res.status(500).json({
+			success: false,
+			message: 'Server Error',
+		});
+	}
+};
+
+exports.ExportQuestion = async (req, res) => {
+	try {
+		const _question = await Question.find().select('_id subject type image text answer options');
+
+		const path = __basedir + '/static/assets/questions.csv';
+		let data = 'ID,Type,Subject,Text,Image,Option1,Option2,Option3,Option4,Answer';
+		for (const q of _question) {
+			data += '\n';
+			data += `"${q._id}",`;
+			data += `"${q.type}",`;
+			data += `"${q.subject}",`;
+			data += `"${q.text}",`;
+			data += `"http://localhost:9000/images/${q.image}",`;
+			data += `"${q.options[0]}",`;
+			data += `"${q.options[1]}",`;
+			data += `"${q.options[2]}",`;
+			data += `"${q.options[3]}",`;
+			data += `"${q.answer}"`;
+		}
+		const writeToFile = (path, data, callback) => {
+			fs.writeFile(path, data, 'utf8', (err) => {
+				// JSON.stringify(data, null, 2) help you to write the data line by line
+				if (!err) {
+					callback('success');
+					// successfull
+				} else {
+					callback('error');
+					// some error (catch this error)
+				}
+			});
+		};
+		writeToFile(path, data, (result) => {
+			// get the result from callback and process
+			console.log(result); // success or error
+		});
+		res.status(201).json({
+			success: true,
+			// question,
 		});
 	} catch (err) {
 		console.log(err);
@@ -896,6 +990,19 @@ exports.AssignedTargets = async (req, res) => {
 		mobile1: 1,
 		qualification: 1,
 		state: 1,
+		fname: 1,
+		email: 1,
+		mobile1: 1,
+		mobile2: 1,
+		qualification: 1,
+		aadhaar: 1,
+		district: 1,
+		pincode: 1,
+		state: 1,
+		source: 1,
+		gender: 1,
+		dob: 1,
+		y_o_p: 1,
 	};
 
 	try {

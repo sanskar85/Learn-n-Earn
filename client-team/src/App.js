@@ -2,7 +2,12 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import Login from './components/Login/Login';
 import Home from './components/Home/Home';
 import InterviewResponse from './components/Home/InterviewResponse';
-import { LoginRoute, DashboardRoute, InterviewRoute } from './components/controllers/Routing';
+import {
+	LoginRoute,
+	DashboardRoute,
+	InterviewRoute,
+	LogoutRoute,
+} from './components/controllers/Routing';
 
 function App() {
 	const setTitle = (title) => {
@@ -21,6 +26,7 @@ function App() {
 				/>
 				<DashboardRoute exact path='/' component={Home} setTitle={setTitle} />
 
+				<LogoutRoute exact path='/logout' setTitle={setTitle} />
 				<Route render={() => <Redirect to={`/`} />} />
 			</Switch>
 		</Router>

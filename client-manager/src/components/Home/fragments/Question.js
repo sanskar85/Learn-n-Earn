@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
 import './Question.css';
-import { UploadFile, UploadQuestion, FetchImage } from '../../controllers/API';
+import {
+	UploadFile,
+	UploadQuestion,
+	FetchImage,
+	FetchQuestion,
+	ExportQuestions,
+} from '../../controllers/API';
 
 const Question = ({ showAlert, setLoading }) => {
+	const [questionId, setQuestionId] = useState('');
 	const [data, setData] = useState({
+		id: '',
 		section: 'Science & Mathematics',
 		type: 'Text',
 		imagePath: '',
@@ -78,6 +86,7 @@ const Question = ({ showAlert, setLoading }) => {
 				answer: 'A',
 			};
 		});
+		setQuestionId('');
 		const imageDOM = document.getElementById('image_upload');
 		if (imageDOM) imageDOM.value = '';
 	};
@@ -86,6 +95,63 @@ const Question = ({ showAlert, setLoading }) => {
 		<>
 			<h4>Question Panel</h4>
 			<div className='question-wrapper'>
+				<div style={{ display: 'flex', justifyContent: 'center' }}>
+					<input
+						type='text'
+						placeholder='🔍 Search Question'
+						style={{ margin: '1rem', display: 'inline-block', width: '400px', height: '40px' }}
+						name='mobile'
+						value={questionId}
+						onChange={(e) => setQuestionId(e.target.value)}
+					/>
+					<button
+						style={{
+							margin: '1rem',
+							display: 'inline-block',
+							padding: ' 0.125rem 1rem',
+							borderRadius: '8px',
+							height: '40px',
+						}}
+						className='btn btn-outline-primary'
+						onClick={async (e) => {
+							if (!questionId) {
+								return showAlert('Empty Question Id');
+							}
+							setLoading(true);
+							const data = await FetchQuestion(questionId);
+							setLoading(false);
+							if (data && data.success) {
+								setData(data.question);
+							} else {
+								showAlert('Wrong question ID');
+								setQuestionId('');
+							}
+						}}
+					>
+						Fetch
+					</button>
+					<button
+						style={{
+							margin: '1rem',
+							width: ' 250px',
+							height: '40px',
+							display: 'inline-block',
+							border: 'none',
+							outline: 'none',
+							padding: ' 0.125rem 1rem',
+							borderRadius: '8px',
+						}}
+						className='btn btn-primary'
+						onClick={async (e) => {
+							setLoading(true);
+							const data = await ExportQuestions();
+							setLoading(false);
+						}}
+					>
+						Export Questions
+					</button>
+				</div>
+
 				<form onSubmit={submitandler}>
 					<div>
 						<div className='details-wrapper'>

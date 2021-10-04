@@ -75,6 +75,15 @@ export const MyProfile = async () => {
 	}
 };
 
+export const Logout = async () => {
+	try {
+		const { data } = await axiosInstance.post(`/auth/manager/logout`);
+		return data.success;
+	} catch (err) {
+		return false;
+	}
+};
+
 export const Name = async () => {
 	try {
 		const { data } = await axiosInstance.get(`/manager/profile`);
@@ -259,6 +268,22 @@ export const CallWiseReport = async () => {
 export const UploadQuestion = async (details) => {
 	try {
 		const { data } = await axiosInstance.post(`/manager/create-question`, details);
+		return data;
+	} catch (err) {
+		return { success: false };
+	}
+};
+export const FetchQuestion = async (id) => {
+	try {
+		const { data } = await axiosInstance.get(`/manager/fetch-question/` + id);
+		return data;
+	} catch (err) {
+		return { success: false };
+	}
+};
+export const ExportQuestions = async () => {
+	try {
+		const { data } = await axiosInstance.get(`/manager/export-question/`);
 		return data;
 	} catch (err) {
 		return { success: false };

@@ -99,8 +99,6 @@ exports.createprofile = async (req, res) => {
 		pwd,
 		referral_mob,
 		work_experience,
-		photo,
-		aadhaar_photo,
 	} = req.body;
 	if (
 		!name ||
@@ -198,28 +196,21 @@ exports.startTest = async (req, res) => {
 		}
 
 		const exam = await Examination.findOne({ candidate: _user._id });
-
 		const questions = await Question.getQuestions();
 		const question = JSON.stringify(questions);
 		if (exam) {
-			exam.questions = questions;
 			exam.status = ExaminationStatus.STARTED;
+			exam.duration = undefined;
 			await exam.save();
 		} else {
 			await Examination.create({
 				candidate: _user,
-				questions,
 				status: ExaminationStatus.STARTED,
 			});
 		}
-
 		res.status(200).json({
 			success: true,
 			questions: question,
-			user: {
-				name: _user.name,
-				dp: _user.photo,
-			},
 		});
 	} catch (err) {
 		console.log(err);
@@ -232,9 +223,7 @@ exports.startTest = async (req, res) => {
 exports.submitTest = async (req, res) => {
 	let { answers } = req.body;
 	try {
-		const examination = await Examination.findOne({ candidate: req.userDetails._id }).populate(
-			'questions'
-		);
+		const examination = await Examination.findOne({ candidate: req.userDetails._id });
 
 		if (!examination) {
 			return res.status(400).json({
@@ -244,14 +233,9 @@ exports.submitTest = async (req, res) => {
 		}
 
 		let marks = process.env.MODE !== 'development' ? 0 : 40;
-		answers = JSON.parse(answers);
-		for (const answer of answers) {
-			const question = await Question.findById(answer.id).select('answer');
-			if (
-				question &&
-				examination.questions.includes(question) &&
-				question.answer === answer.answer
-			) {
+		for (const [id, answer] of Object.entries(answers)) {
+			const question = await Question.findById(id).select('answer');
+			if (question && question.verifyAnswer(answer)) {
 				marks++;
 			}
 		}
@@ -259,6 +243,15 @@ exports.submitTest = async (req, res) => {
 		examination.marks_obtained = marks;
 		const report = marks >= Number(process.env.PASSING_MARKS);
 		examination.status = report ? ExaminationStatus.PASS : ExaminationStatus.FAIL;
+
+		let distance = Math.abs(new Date() - new Date(examination.updatedAt));
+		const hours = Math.floor(distance / 3600000);
+		distance -= hours * 3600000;
+		const minutes = Math.floor(distance / 60000);
+		distance -= minutes * 60000;
+		const seconds = Math.floor(distance / 1000);
+		examination.duration = `${hours}:${('0' + minutes).slice(-2)}:${('0' + seconds).slice(-2)}`;
+
 		await examination.save();
 
 		if (report) {

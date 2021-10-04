@@ -299,7 +299,7 @@ exports.logout = async (req, res) => {
 		});
 	}
 	try {
-		const user = await Candidate.findOne({ refreshToken });
+		const user = await Manager.findOne({ refreshToken });
 		if (!user) {
 			return res.status(400).json({
 				success: false,

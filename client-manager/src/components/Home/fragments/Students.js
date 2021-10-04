@@ -126,6 +126,11 @@ const options = {
 
 const Students = ({ setLoading, showAlert }) => {
 	var today = currDate();
+	const [RELOAD, setReload] = useState(0);
+	const reload = () => {
+		setReload(Date.now());
+	};
+
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [students, setStudents] = useState([]);
 	const [selected, updateSelected] = useState([]);
@@ -170,7 +175,7 @@ const Students = ({ setLoading, showAlert }) => {
 		setLoading(true);
 		const data = await UpdateCandidatesTeam(selectedTeam, selected);
 		if (data) {
-			window.location.reload();
+			reload();
 		} else {
 			setLoading(false);
 			showAlert('Unable to assign team.');
@@ -191,7 +196,7 @@ const Students = ({ setLoading, showAlert }) => {
 			}
 		}
 		fetchData();
-	}, [setLoading, showAlert]);
+	}, [setLoading, showAlert, RELOAD]);
 	return (
 		<>
 			<div className='student-wrapper'>
@@ -402,6 +407,7 @@ const StudentsTable = ({ data, filter, selected, updateSelected, setLoading, sho
 	}, [data, filter]);
 
 	const csv_header = [
+		{ label: 'Team', key: 'team.name' },
 		{ label: 'Name', key: 'name' },
 		{ label: 'Email ID', key: 'email' },
 		{ label: 'Mobile Number', key: 'mobile' },
@@ -415,7 +421,7 @@ const StudentsTable = ({ data, filter, selected, updateSelected, setLoading, sho
 		{ label: 'Pincode', key: 'pincode' },
 		{ label: 'Qualification', key: 'qualification' },
 		{ label: 'College', key: 'college' },
-		{ label: 'CGPA', key: 'cgpa' },
+		{ label: 'Percentage or CGPA', key: 'cgpa' },
 		{ label: 'Diploma', key: 'diploma' },
 		{ label: 'Year of Passing', key: 'y_o_p' },
 		{ label: 'Any Backlog ?', key: 'backlog' },
@@ -620,7 +626,7 @@ const Details = ({ candidate, setExpandedType }) => {
 								Year Of Passing : <span>{candidate.y_o_p}</span>
 							</div>
 							<div>
-								CGPA : <span>{candidate.cgpa}</span>
+								Percentage or CGPA : <span>{candidate.cgpa}</span>
 							</div>
 							<div>
 								Diploma : <span>{candidate.diploma}</span>
@@ -649,10 +655,9 @@ const Details = ({ candidate, setExpandedType }) => {
 							</div>
 						</div>
 						<div className='col-5 images'>
-							<img src={FetchImage(candidate.photo)} alt='' />
-							<img src={FetchImage(candidate.aadhaar_photo)} alt='' />
 							<button
 								className='btn btn-outline-primary'
+								style={{ width: '100%' }}
 								onClick={(e) => {
 									setExpandedType('edit');
 								}}
@@ -736,7 +741,6 @@ const EditDetails = ({ candidate, setCandidate, setExpandedType, setLoading, sho
 	};
 
 	const onChangeListener = (e) => {
-		console.log(details);
 		setDetails((prev) => {
 			return {
 				...prev,
@@ -841,7 +845,7 @@ const EditDetails = ({ candidate, setCandidate, setExpandedType, setLoading, sho
 						/>
 					</div>
 					<div style={ROW}>
-						<span style={LABEL}>CGPA</span>
+						<span style={LABEL}>Percentage or CGPA</span>
 						<input
 							type='number'
 							style={{ ...INPUT, width: '30%' }}

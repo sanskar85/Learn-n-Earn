@@ -5,7 +5,6 @@ import { CloseIcon } from '../../assets/Images';
 import { useState, useEffect } from 'react';
 import {
 	Admission_Details,
-	FetchImage,
 	Save_Admission_Details,
 	DownloadOfferLetter,
 } from '../../controllers/API';
@@ -133,7 +132,7 @@ const Admission = ({ setLoading, showAlert }) => {
 		{ label: 'Pincode', key: 'pincode' },
 		{ label: 'Qualification', key: 'qualification' },
 		{ label: 'College', key: 'college' },
-		{ label: 'CGPA', key: 'cgpa' },
+		{ label: 'Percentage or CGPA', key: 'cgpa' },
 		{ label: 'Diploma', key: 'diploma' },
 		{ label: 'Year of Passing', key: 'y_o_p' },
 		{ label: 'Any Backlog ?', key: 'backlog' },
@@ -382,7 +381,7 @@ const AdmissionCard = ({ candidate, showAlert, setLoading }) => {
 										Year Of Passing : <span>{candidate.y_o_p}</span>
 									</div>
 									<div>
-										CGPA : <span>{candidate.cgpa}</span>
+										Percentage or CGPA : <span>{candidate.cgpa}</span>
 									</div>
 									<div>
 										Diploma : <span>{candidate.diploma}</span>
@@ -392,8 +391,6 @@ const AdmissionCard = ({ candidate, showAlert, setLoading }) => {
 									</div>
 								</div>
 								<div className='col-5 images'>
-									<img src={FetchImage(candidate.photo)} style={{ width: '35%' }} alt='' />
-									<img src={FetchImage(candidate.aadhaar_photo)} style={{ width: '75%' }} alt='' />
 									<button
 										className='btn btn-outline-primary mb-3'
 										onClick={(e) => {

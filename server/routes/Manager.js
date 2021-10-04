@@ -20,6 +20,8 @@ const {
 	AssignedTargets,
 	SourceWiseReport,
 	CreateQuestion,
+	FetchQuestion,
+	ExportQuestion,
 	CreateTargetRecord,
 	CompanyDetails,
 	CreateCompany,
@@ -59,6 +61,10 @@ router.route('/assigned-targets').all(verifyManager).get(AssignedTargets);
 router.route('/source-wise-report').all(verifyManager).get(SourceWiseReport);
 
 router.route('/create-question').all(verifyManager).post(CreateQuestion);
+
+router.route('/fetch-question/:id').all(verifyManager).get(FetchQuestion);
+
+router.route('/export-question').all(verifyManager).get(ExportQuestion);
 
 router.route('/create-target-record').all(verifyManager).post(CreateTargetRecord);
 

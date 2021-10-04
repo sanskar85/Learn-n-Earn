@@ -17,7 +17,6 @@ const InterviewSchema = new mongoose.Schema(
 			enum: Object.values(InterviewStatus),
 			default: InterviewStatus.NOT_SCHEDULED,
 		},
-		source: { type: String },
 		interview_mode: { type: String },
 		documents_verified: { type: String },
 		candidate_need: { type: String },
@@ -35,7 +34,7 @@ const InterviewSchema = new mongoose.Schema(
 
 InterviewSchema.pre('save', async function (next) {
 	if (!this.result) {
-		next();
+		return next();
 	}
 	const candidate = await CandidateDetails.findById(this.candidate);
 	if (this.result === 'Pass') {
@@ -57,6 +56,7 @@ InterviewSchema.pre('save', async function (next) {
 	}
 
 	candidate.save();
+	next();
 });
 
 InterviewSchema.post('save', async function (doc) {

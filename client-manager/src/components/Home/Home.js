@@ -69,7 +69,9 @@ export default function Home({ setTitle, history }) {
 					<CompanyDetails showAlert={setAlertMessage} setLoading={setLoading} />
 				)}
 				{menu === 'Candidates' && <Students showAlert={setAlertMessage} setLoading={setLoading} />}
-				{menu === 'Profile' && <Profile showAlert={setAlertMessage} setLoading={setLoading} />}
+				{menu === 'Profile' && (
+					<Profile showAlert={setAlertMessage} setLoading={setLoading} history={history} />
+				)}
 			</div>
 			<BootomAlertBar alertMessage={alertMessage} />
 		</>
