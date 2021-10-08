@@ -187,7 +187,7 @@ const ExaminationScreen = ({ setTitle }) => {
 								className='btn btn-warning w3-col l2 s5'
 								style={{ color: '#FFFFFF' }}
 								onClick={(e) => {
-									updateAnswer(questions[questionNo - 1]._id, undefined);
+									updateAnswer(questions[questionNo - 1]._id, null);
 									var ele = document.getElementsByName('options');
 									for (var i = 0; i < ele.length; i++) ele[i].checked = false;
 								}}
