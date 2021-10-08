@@ -144,7 +144,7 @@ const Question = ({ showAlert, setLoading }) => {
 						className='btn btn-primary'
 						onClick={async (e) => {
 							setLoading(true);
-							const data = await ExportQuestions();
+							await ExportQuestions();
 							setLoading(false);
 						}}
 					>

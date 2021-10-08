@@ -74,7 +74,12 @@ const Verification = ({ setTitle, history }) => {
 						<span className='resend orange' onClick={resendOTP}>
 							Resend code <img src={refresh} alt='' />
 						</span>
-						<p onClick={(e) => history.push('/logout')}>Wrong Email or Mobile Number</p>
+						<p
+							style={{ color: 'blue', cursor: 'pointer' }}
+							onClick={(e) => history.push('/logout')}
+						>
+							Back to Login
+						</p>
 					</div>
 				</div>
 				<div className='col-md-5  col-10'>

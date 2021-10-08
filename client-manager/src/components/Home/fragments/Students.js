@@ -8,7 +8,6 @@ import ExportButton from './ExportButton';
 import {
 	Students as MyStudents,
 	Teams as MyTeams,
-	FetchImage,
 	UpdateCandidatesTeam,
 	SaveCandidateDetails,
 } from '../../controllers/API';
@@ -187,6 +186,7 @@ const Students = ({ setLoading, showAlert }) => {
 			const studentsRes = await MyStudents();
 			const teamsRes = await MyTeams();
 			if (studentsRes && teamsRes && studentsRes.success && teamsRes.success) {
+				setStudents([]);
 				setStudents(studentsRes.students);
 				setTeams(['', ...teamsRes.teams]);
 				setLoading(false);
@@ -827,8 +827,8 @@ const EditDetails = ({ candidate, setCandidate, setExpandedType, setLoading, sho
 							value={details.qualification}
 							onChange={onChangeListener}
 						>
-							{qualifications.map((q) => (
-								<option key={q}>{q}</option>
+							{qualifications.map((q, index) => (
+								<option key={index}>{q}</option>
 							))}
 						</select>
 					</div>
@@ -903,8 +903,8 @@ const EditDetails = ({ candidate, setCandidate, setExpandedType, setLoading, sho
 							placeholder=''
 							autoComplete='off'
 						>
-							{plant_worked.map((plant) => (
-								<option key={plant}>{plant}</option>
+							{plant_worked.map((plant, index) => (
+								<option key={index}>{plant}</option>
 							))}
 						</select>
 					</div>

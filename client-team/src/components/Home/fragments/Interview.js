@@ -270,7 +270,7 @@ const EligibleCard = ({ details, showAlert, setLoading, reload }) => {
 	};
 
 	const statusStyle = (status) => {
-		if (status === 'Not Scheduled' || status === 'Scheduled') {
+		if (!status || status === 'Not Scheduled' || status === 'Scheduled') {
 			return {
 				color: '#00B3FF',
 			};
@@ -294,7 +294,7 @@ const EligibleCard = ({ details, showAlert, setLoading, reload }) => {
 		textAlign: 'center',
 	};
 	const style = (status) => {
-		if (status === 'Not Scheduled' || status === 'Scheduled') {
+		if (!status || status === 'Not Scheduled' || status === 'Scheduled') {
 			return {
 				backgroundColor: '#5CA1F1',
 				borderRadius: '5px',
@@ -308,7 +308,7 @@ const EligibleCard = ({ details, showAlert, setLoading, reload }) => {
 	};
 	const getMeetingText = () => {
 		const status = candidate.status;
-		if (status === 'Not Scheduled') {
+		if (!status || status === 'Not Scheduled') {
 			return 'Click to Schedule';
 		} else if (status === 'Scheduled') {
 			return 'Start Meeting';
@@ -318,7 +318,7 @@ const EligibleCard = ({ details, showAlert, setLoading, reload }) => {
 	};
 	const getScheduledTime = () => {
 		const status = candidate.status;
-		if (status === 'Not Scheduled') {
+		if (!status || status === 'Not Scheduled') {
 			return '--/--/----';
 		} else {
 			return new Date(candidate.scheduled_time).toLocaleDateString('en-GB', options);
@@ -331,6 +331,8 @@ const EligibleCard = ({ details, showAlert, setLoading, reload }) => {
 				showInterviewFormPopup(true);
 			} else showAlert('Meeting is not scheduled for today');
 		} else if (candidate.status === 'Not Scheduled') {
+			showPopup(true);
+		} else if (!candidate.status) {
 			showPopup(true);
 		}
 	};
@@ -350,9 +352,11 @@ const EligibleCard = ({ details, showAlert, setLoading, reload }) => {
 	};
 	const submitHandler = async (e) => {
 		e.preventDefault();
+		showPopup(false);
+		setLoading(true);
 		const data = await ScheduleMeeting(candidate.meeting_id, meetingDetails);
+		setLoading(false);
 		if (data) {
-			showPopup(false);
 			setCandidate((prev) => {
 				return {
 					...prev,

@@ -41,7 +41,7 @@ QuestionSchema.statics.getQuestions = async function () {
 			if (randomDoc) {
 				questions.push(randomDoc);
 				ids.push(rand);
-			} else i--;
+			} else if (process.env.MODE !== 'development') i--;
 		}
 	}
 	ids.splice(0, ids.length);
@@ -54,7 +54,7 @@ QuestionSchema.statics.getQuestions = async function () {
 			if (randomDoc) {
 				questions.push(randomDoc);
 				ids.push(rand);
-			} else i--;
+			} else if (process.env.MODE !== 'development') i--;
 		}
 	}
 	ids.splice(0, ids.length);
@@ -67,7 +67,7 @@ QuestionSchema.statics.getQuestions = async function () {
 			if (randomDoc) {
 				questions.push(randomDoc);
 				ids.push(rand);
-			} else i--;
+			} else if (process.env.MODE !== 'development') i--;
 		}
 	}
 	ids.splice(0, ids.length);
@@ -82,7 +82,7 @@ QuestionSchema.statics.getQuestions = async function () {
 			if (randomDoc) {
 				questions.push(randomDoc);
 				ids.push(rand);
-			} else i--;
+			} else if (process.env.MODE !== 'development') i--;
 		}
 	}
 	ids.splice(0, ids.length);
@@ -95,7 +95,7 @@ QuestionSchema.statics.getQuestions = async function () {
 			if (randomDoc) {
 				questions.push(randomDoc);
 				ids.push(rand);
-			} else i--;
+			} else if (process.env.MODE !== 'development') i--;
 		}
 	}
 	return questions;

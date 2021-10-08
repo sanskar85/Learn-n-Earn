@@ -283,10 +283,21 @@ export const FetchQuestion = async (id) => {
 };
 export const ExportQuestions = async () => {
 	try {
-		const { data } = await axiosInstance.get(`/manager/export-question/`);
-		return data;
+		const response = await axiosInstance.get(`/manager/export-question`, {
+			responseType: 'blob',
+		});
+
+		const fileURL = window.URL.createObjectURL(new Blob([response.data]));
+		const fileLink = document.createElement('a');
+		fileLink.href = fileURL;
+		fileLink.setAttribute('download', `Questions.${response.data.type.split('/')[1]}`);
+		document.body.appendChild(fileLink);
+		fileLink.click();
+		fileLink.remove();
+		return true;
 	} catch (err) {
-		return { success: false };
+		console.log(err);
+		return false;
 	}
 };
 
@@ -327,6 +338,29 @@ export const SaveCompanyDetails = async (details) => {
 	try {
 		const { data } = await axiosInstance.post(`/manager/company-details`, { details });
 		return data;
+	} catch (err) {
+		return false;
+	}
+};
+
+export const DownloadMIS = async () => {
+	try {
+		// const { data } = await axiosInstance.get(`/manager/mis-report`);
+		// console.log(data);
+		// return;
+
+		const response = await axiosInstance.get(`/manager/mis-report`, {
+			responseType: 'blob',
+		});
+
+		const fileURL = window.URL.createObjectURL(new Blob([response.data]));
+		const fileLink = document.createElement('a');
+		fileLink.href = fileURL;
+		fileLink.setAttribute('download', `MIS-Report.${response.data.type.split('/')[1]}`);
+		document.body.appendChild(fileLink);
+		fileLink.click();
+		fileLink.remove();
+		return true;
 	} catch (err) {
 		return false;
 	}

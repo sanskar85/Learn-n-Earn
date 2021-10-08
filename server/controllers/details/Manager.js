@@ -543,7 +543,7 @@ exports.ExportQuestion = async (req, res) => {
 			data += `"${q.type}",`;
 			data += `"${q.subject}",`;
 			data += `"${q.text}",`;
-			data += `"http://localhost:9000/images/${q.image}",`;
+			data += `${q.image ? 'https://api.factory-jobs.com/images/' + q.image : ''},`;
 			data += `"${q.options[0]}",`;
 			data += `"${q.options[1]}",`;
 			data += `"${q.options[2]}",`;
@@ -554,21 +554,36 @@ exports.ExportQuestion = async (req, res) => {
 			fs.writeFile(path, data, 'utf8', (err) => {
 				// JSON.stringify(data, null, 2) help you to write the data line by line
 				if (!err) {
-					callback('success');
+					callback(true);
 					// successfull
 				} else {
-					callback('error');
+					callback(false);
 					// some error (catch this error)
 				}
 			});
 		};
 		writeToFile(path, data, (result) => {
-			// get the result from callback and process
-			console.log(result); // success or error
-		});
-		res.status(201).json({
-			success: true,
-			// question,
+			if (result) {
+				try {
+					const fileName = 'questions.csv';
+					const path = __basedir + '/static/assets/questions.csv';
+
+					const stream = fs.createReadStream(path);
+					res.set({
+						'Content-Disposition': `attachment; filename='${fileName}'`,
+						'Content-Type': 'text/csv',
+					});
+					stream.pipe(res);
+				} catch (e) {
+					console.error(e);
+					res.status(500).end();
+				}
+			} else {
+				res.status(500).json({
+					success: false,
+					message: 'Unable to export Question',
+				});
+			}
 		});
 	} catch (err) {
 		console.log(err);
@@ -1155,36 +1170,208 @@ exports.SourceWiseReport = async (req, res) => {
 	}
 };
 
-exports.ExcelExport = async (req, res) => {
+exports.MIS_Report = async (req, res) => {
+	const project = {
+		_id: 0,
+		name: 1,
+		'candidates.status': 1,
+		'examinations.status': 1,
+		'interviews.status': 1,
+		'interviews.ignou': 1,
+		'offerletters.status': 1,
+	};
+
 	try {
-		const offer = await OfferLetter.findOne({ candidate: req.userDetails });
-		if (!offer || !offer.application_id) {
-			return res.status(404).json({
-				success: false,
-				message: 'Offer letter not generated yet',
-			});
+		const report = await Team.aggregate([
+			{
+				$lookup: {
+					from: CandidateDetails.collection.name,
+					localField: '_id',
+					foreignField: 'referred_by',
+					as: 'candidates',
+				},
+			},
+			{
+				$lookup: {
+					from: Examination.collection.name,
+					localField: 'candidates._id',
+					foreignField: 'candidate',
+					as: 'examinations',
+				},
+			},
+			{
+				$lookup: {
+					from: Interview.collection.name,
+					localField: 'candidates._id',
+					foreignField: 'candidate',
+					as: 'interviews',
+				},
+			},
+			{
+				$lookup: {
+					from: OfferLetter.collection.name,
+					localField: 'candidates._id',
+					foreignField: 'candidate',
+					as: 'offerletters',
+				},
+			},
+			{ $project: project },
+		]);
+
+		for (const team of report) {
+			const candidates = team.candidates;
+			const examinations = team.examinations;
+			const interviews = team.interviews;
+			const offerletters = team.offerletters;
+			team.candidates = undefined;
+			team.examinations = undefined;
+			team.interviews = undefined;
+			team.offerletters = undefined;
+			let exam_attended = 0;
+			let exam_not_responding = 0;
+			let exam_pass = 0;
+			let exam_fail = 0;
+			let exam_due = 0;
+			let interview_pass = 0;
+			let interview_fail = 0;
+			let interview_due = 0;
+			let interview_not_responding = 0;
+			let admission_joined = 0;
+			let admission_joining_soon = 0;
+			let admission_not_responding = 0;
+			let ignou_completed = 0;
+			let ignou_due = 0;
+			for (const candidate of candidates) {
+				if (candidate.status === CandidateStatus.NOT_RESPONDING_EXAM) {
+					exam_not_responding++;
+				}
+				if (candidate.status === CandidateStatus.ELIGIBLE) {
+					exam_due++;
+				}
+				if (candidate.status === CandidateStatus.NOT_RESPONDING_INTERVIEW) {
+					interview_not_responding++;
+				}
+				if (candidate.status === CandidateStatus.NOT_RESPONDING_ADMISSION) {
+					admission_not_responding++;
+				}
+			}
+			for (const exam of examinations) {
+				if (exam.status === ExaminationStatus.PASS) {
+					exam_pass++;
+				}
+				if (exam.status === ExaminationStatus.FAIL) {
+					exam_fail++;
+				}
+				exam_attended++;
+			}
+			for (const interview of interviews) {
+				if (interview.status === InterviewStatus.PASS) {
+					interview_pass++;
+				} else if (interview.status === InterviewStatus.FAIL) {
+					interview_fail++;
+				} else if (
+					interview.status === InterviewStatus.NOT_SCHEDULED ||
+					interview.status === InterviewStatus.SCHEDULED
+				) {
+					interview_due++;
+				} else if (!interview.status) {
+					interview_due++;
+				}
+				if (interview.ignou) {
+					if (interview.ignou === 'Accepted' || interview.ignou === 'Already Student') {
+						ignou_completed++;
+					} else if (interview.ignou === 'Not Accepted') {
+						ignou_due++;
+					}
+				}
+			}
+			for (const offerletter of offerletters) {
+				if (offerletter.status === OfferLetterStatus.JOINED) {
+					admission_joined++;
+				} else if (
+					offerletter.status === OfferLetterStatus.ISSUED ||
+					offerletter.status === OfferLetterStatus.NOT_ISSUED
+				) {
+					admission_joining_soon++;
+				}
+			}
+
+			team.exam_attended = exam_attended;
+			team.exam_not_responding = exam_not_responding;
+			team.exam_pass = exam_pass;
+			team.exam_fail = exam_fail;
+			team.exam_due = exam_due;
+			team.interview_pass = interview_pass;
+			team.interview_fail = interview_fail;
+			team.interview_due = interview_due;
+			team.interview_not_responding = interview_not_responding;
+			team.admission_joined = admission_joined;
+			team.admission_joining_soon = admission_joining_soon;
+			team.admission_not_responding = admission_not_responding;
+			team.ignou_completed = ignou_completed;
+			team.ignou_due = ignou_due;
 		}
-		try {
-			const fileName = 'MIS_Report.pdf';
-			const fileURL = __basedir + '/static/offer-letters/' + offer.application_id + '.pdf';
-			const stream = fs.createReadStream(fileURL);
-			res.set({
-				'Content-Disposition': `attachment; filename='${fileName}'`,
-				'Content-Type': 'application/pdf',
-			});
-			stream.pipe(res);
-		} catch (e) {
-			console.error(e);
-			res.status(500).end();
+		let data =
+			'Name,Online Test Attended,Not Responding for Online Test,Online Test Pass,Online Test Fail,Online Test Due,Interview Pass,Interview Fail,Interview Due,Interview Not Responding,Joined,Joining Soon,Not Responding for Admission,IGNOU Completed,IGNOU reg Due';
+		for (const team of report) {
+			data += '\n';
+			data += `"${team.name}",`;
+			data += `"${team.exam_attended}",`;
+			data += `"${team.exam_not_responding}",`;
+			data += `"${team.exam_pass}",`;
+			data += `"${team.exam_fail}",`;
+			data += `"${team.exam_due}",`;
+			data += `"${team.interview_pass}",`;
+			data += `"${team.interview_fail}",`;
+			data += `"${team.interview_due}",`;
+			data += `"${team.interview_not_responding}",`;
+			data += `"${team.admission_joined}",`;
+			data += `"${team.admission_joining_soon}",`;
+			data += `"${team.admission_not_responding}",`;
+			data += `"${team.ignou_completed}",`;
+			data += `"${team.ignou_due}"`;
 		}
-	} catch (err) {
-		return res.status(500).json({
-			success: false,
-			message: 'Server Error',
+
+		const path = __basedir + '/static/assets/mis_report.csv';
+		const writeToFile = (path, data, callback) => {
+			fs.writeFile(path, data, 'utf8', (err) => {
+				// JSON.stringify(data, null, 2) help you to write the data line by line
+				if (!err) {
+					callback(true);
+					// successfull
+				} else {
+					callback(false);
+					// some error (catch this error)
+				}
+			});
+		};
+
+		writeToFile(path, data, (result) => {
+			if (result) {
+				try {
+					const fileName = 'MIS_Report.csv';
+					const stream = fs.createReadStream(path);
+					res.set({
+						'Content-Disposition': `attachment; filename='${fileName}'`,
+						'Content-Type': 'text/csv',
+					});
+					stream.pipe(res);
+				} catch (e) {
+					console.error(e);
+					res.status(500).end();
+				}
+			} else {
+				res.status(500).json({
+					success: false,
+					message: 'Unable to export MIS report',
+				});
+			}
 		});
+	} catch (e) {
+		console.error(e);
+		res.status(500).end();
 	}
 };
-
 //---------------------------------------Company Detail---------------------------------------------------------
 exports.CompanyDetails = async (req, res) => {
 	try {

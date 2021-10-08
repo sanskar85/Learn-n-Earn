@@ -25,6 +25,7 @@ const {
 	CreateTargetRecord,
 	CompanyDetails,
 	CreateCompany,
+	MIS_Report,
 } = require('../controllers/details/Manager');
 const { verifyManager } = require('../middleware/verifyJWT');
 
@@ -73,5 +74,7 @@ router.route('/profile').all(verifyManager).get(FetchProfile);
 router.route('/profile').all(verifyManager).put(UpdateProfile);
 
 router.route('/update-profile-image').all(verifyManager).put(UpdateProfileImage);
+
+router.route('/mis-report').all(verifyManager).get(MIS_Report);
 
 module.exports = router;

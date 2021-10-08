@@ -1,5 +1,5 @@
 import './Reports.css';
-import ExportButton from './ExportButton';
+import { DownloadMIS } from '../../controllers/API';
 
 const Reports = ({ setLoading }) => {
 	const GenerateReport = (e) => {
@@ -91,6 +91,18 @@ const Reports = ({ setLoading }) => {
 					>
 						<span style={{ display: 'block' }}>Call Wise</span>
 						<span style={{ display: 'block' }}>&nbsp;</span>
+					</div>
+				</div>
+			</div>
+			<div className='row justify-content-around'>
+				<div className='col-3'>
+					<div
+						onClick={(e) => {
+							DownloadMIS();
+						}}
+					>
+						<span style={{ display: 'block' }}>Download</span>
+						<span style={{ display: 'block' }}>MIS Report</span>
 					</div>
 				</div>
 			</div>
