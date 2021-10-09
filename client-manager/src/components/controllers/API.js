@@ -140,6 +140,26 @@ export const SaveCandidateDetails = async (details) => {
 	}
 };
 
+export const DownloadOfferLetter = async (id) => {
+	try {
+		const response = await axiosInstance.get(`/manager/download-offer-letter/${id}`, {
+			responseType: 'blob',
+		});
+
+		const fileURL = window.URL.createObjectURL(new Blob([response.data]));
+		const fileLink = document.createElement('a');
+		fileLink.href = fileURL;
+		fileLink.setAttribute('download', `Offer-Letter.${response.data.type.split('/')[1]}`);
+		document.body.appendChild(fileLink);
+		fileLink.click();
+		fileLink.remove();
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};
+
 export const Teams = async () => {
 	try {
 		const { data } = await axiosInstance.get(`/manager/teams`);
@@ -356,7 +376,8 @@ export const DownloadMIS = async () => {
 		const fileURL = window.URL.createObjectURL(new Blob([response.data]));
 		const fileLink = document.createElement('a');
 		fileLink.href = fileURL;
-		fileLink.setAttribute('download', `MIS-Report.${response.data.type.split('/')[1]}`);
+		console.log(response.data.type);
+		fileLink.setAttribute('download', `MIS-Report.csv`);
 		document.body.appendChild(fileLink);
 		fileLink.click();
 		fileLink.remove();

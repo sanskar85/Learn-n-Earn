@@ -388,6 +388,12 @@ exports.UpdateCandidatesDetail = async (req, res) => {
 				message: 'Invalid Candidate Id',
 			});
 		}
+
+		const user = await Candidate.findById(candidate.candidate);
+		user.email = details.email;
+		user.mobile = details.mobile;
+		await user.save();
+
 		candidate.name = details.name;
 		candidate.fname = details.fname;
 		candidate.gender = details.gender;
@@ -1271,7 +1277,6 @@ exports.CreateOfferLetter = async (req, res) => {
 
 exports.DownloadOfferLetter = async (req, res) => {
 	const id = req.params.id;
-	console.log(id);
 	try {
 		const offer = await OfferLetter.findOne({ candidate: id });
 		if (!offer || !offer.application_id) {

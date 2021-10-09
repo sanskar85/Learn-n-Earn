@@ -10,6 +10,7 @@ import {
 	Teams as MyTeams,
 	UpdateCandidatesTeam,
 	SaveCandidateDetails,
+	DownloadOfferLetter,
 } from '../../controllers/API';
 
 const states = [
@@ -522,7 +523,11 @@ const StudentCard = ({ details, selected, updateSelected, setLoading, showAlert 
 			</div>
 
 			{expandedType === 'details' && (
-				<Details candidate={candidate} setExpandedType={setExpandedType} />
+				<Details
+					candidate={candidate}
+					setExpandedType={setExpandedType}
+					downloadOfferLetter={true}
+				/>
 			)}
 			{expandedType === 'edit' && (
 				<EditDetails
@@ -537,7 +542,7 @@ const StudentCard = ({ details, selected, updateSelected, setLoading, showAlert 
 	);
 };
 
-const Details = ({ candidate, setExpandedType }) => {
+const Details = ({ candidate, setExpandedType, downloadOfferLetter }) => {
 	const processExam = () => {
 		if (candidate.examination) {
 			if (candidate.examination.includes('Pass')) return 'Pass';
@@ -664,6 +669,17 @@ const Details = ({ candidate, setExpandedType }) => {
 							>
 								EDIT
 							</button>
+							{downloadOfferLetter && processOfferLetter() === 'Offer Letter Issued' && (
+								<button
+									className='btn btn-primary'
+									style={{ width: '100%', marginTop: '2rem' }}
+									onClick={(e) => {
+										DownloadOfferLetter(candidate._id);
+									}}
+								>
+									Download Offer Letter
+								</button>
+							)}
 						</div>
 					</div>
 				</div>
@@ -675,6 +691,8 @@ const Details = ({ candidate, setExpandedType }) => {
 const EditDetails = ({ candidate, setCandidate, setExpandedType, setLoading, showAlert }) => {
 	const [details, setDetails] = useState({
 		name: '',
+		mobile: '',
+		email: '',
 		fname: '',
 		gender: '',
 		aadhaar: '',
@@ -777,6 +795,30 @@ const EditDetails = ({ candidate, setCandidate, setExpandedType, setLoading, sho
 							style={INPUT}
 							name='name'
 							value={details.name}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Mobile</span>
+						<input
+							type='tel'
+							style={INPUT}
+							name='mobile'
+							value={details.mobile}
+							onChange={onChangeListener}
+							placeholder=''
+							autoComplete='off'
+						/>
+					</div>
+					<div style={ROW}>
+						<span style={LABEL}>Email</span>
+						<input
+							type='text'
+							style={INPUT}
+							name='email'
+							value={details.email}
 							onChange={onChangeListener}
 							placeholder=''
 							autoComplete='off'

@@ -310,6 +310,12 @@ exports.UpdateCandidatesDetail = async (req, res) => {
 				message: 'Invalid Candidate Id',
 			});
 		}
+
+		const user = await Candidate.findById(candidate.candidate);
+		user.email = details.email;
+		user.mobile = details.mobile;
+		await user.save();
+
 		candidate.name = details.name;
 		candidate.fname = details.fname;
 		candidate.gender = details.gender;
@@ -355,6 +361,37 @@ exports.UpdateCandidatesTeam = async (req, res) => {
 			success: false,
 			message: 'Team id is invalid',
 		});
+	} catch (err) {
+		return res.status(500).json({
+			success: false,
+			message: 'Server Error',
+		});
+	}
+};
+
+exports.DownloadOfferLetter = async (req, res) => {
+	const id = req.params.id;
+	try {
+		const offer = await OfferLetter.findOne({ candidate: id });
+		if (!offer || !offer.application_id) {
+			return res.status(404).json({
+				success: false,
+				message: 'Offer letter not generated yet',
+			});
+		}
+		try {
+			const fileName = 'Offer-Letter.pdf';
+			const fileURL = __basedir + '/static/offer-letters/' + offer.application_id + '.pdf';
+			const stream = fs.createReadStream(fileURL);
+			res.set({
+				'Content-Disposition': `attachment; filename='${fileName}'`,
+				'Content-Type': 'application/pdf',
+			});
+			stream.pipe(res);
+		} catch (e) {
+			console.error(e);
+			res.status(500).end();
+		}
 	} catch (err) {
 		return res.status(500).json({
 			success: false,

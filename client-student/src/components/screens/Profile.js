@@ -483,7 +483,7 @@ export default function Profile({ setTitle, history }) {
 								labelClassName='label'
 								className='input'
 								name='plant_worked'
-								labelText='Which Plant you have worked in TATA MOTORS-PUNE'
+								labelText='Which Plant you have worked in TATA MOTORS'
 								required={required}
 								disabled={loading}
 								type='text'

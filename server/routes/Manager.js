@@ -7,6 +7,7 @@ const {
 	UpdateTeam,
 	Students,
 	UpdateCandidatesDetail,
+	DownloadOfferLetter,
 	UpdateCandidatesTeam,
 	FetchProfile,
 	UpdateProfile,
@@ -40,6 +41,8 @@ router.route('/students').all(verifyManager).get(Students);
 router.route('/update-student-details').all(verifyManager).put(UpdateCandidatesDetail);
 
 router.route('/update-candidates-team').all(verifyManager).put(UpdateCandidatesTeam);
+
+router.route('/download-offer-letter/:id').all(verifyManager).get(DownloadOfferLetter);
 
 router.route('/company-details').all(verifyManager).get(CompanyDetails);
 
