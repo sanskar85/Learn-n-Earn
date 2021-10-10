@@ -601,6 +601,9 @@ const Details = ({ candidate, setExpandedType, downloadOfferLetter }) => {
 								DOB :<span>{candidate.DOB}</span>
 							</div>
 							<div>
+								Age (as on date) :<span>{calculateAge(candidate.DOB)}</span>
+							</div>
+							<div>
 								Aadhaar no. : <span>{candidate.aadhaar}</span>
 							</div>
 							<div>
@@ -1008,6 +1011,71 @@ const EditDetails = ({ candidate, setCandidate, setExpandedType, setLoading, sho
 			</form>
 		</div>
 	);
+};
+
+const calculateAge = (date) => {
+	var dateParts = date.split('/');
+	let dob = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+	let dobYear = dob.getYear();
+	let dobMonth = dob.getMonth();
+	let dobDate = dob.getDate();
+	let now = new Date();
+	let currentYear = now.getYear();
+	let currentMonth = now.getMonth();
+	let currentDate = now.getDate();
+	let age = {
+		years: 0,
+		months: 0,
+		days: 0,
+	};
+	let ageString = '';
+	let monthAge = '';
+	let dateAge = '';
+	let yearAge = currentYear - dobYear;
+
+	if (currentMonth >= dobMonth) monthAge = currentMonth - dobMonth;
+	else {
+		yearAge--;
+		monthAge = 12 + currentMonth - dobMonth;
+	}
+
+	//get days
+	if (currentDate >= dobDate)
+		//get days when the current date is greater
+		dateAge = currentDate - dobDate;
+	else {
+		monthAge--;
+		dateAge = 31 + currentDate - dobDate;
+
+		if (monthAge < 0) {
+			monthAge = 11;
+			yearAge--;
+		}
+	}
+	//group the age in a single variable
+	age = {
+		years: yearAge,
+		months: monthAge,
+		days: dateAge,
+	};
+	if (age.years > 0 && age.months > 0 && age.days > 0)
+		ageString = age.years + ' years, ' + age.months + ' months, and ' + age.days + ' days old.';
+	else if (age.years === 0 && age.months === 0 && age.days > 0)
+		ageString = 'Only ' + age.days + ' days old!';
+	//when current month and date is same as birth date and month
+	else if (age.years > 0 && age.months === 0 && age.days === 0)
+		ageString = age.years + ' years old. Happy Birthday!!';
+	else if (age.years > 0 && age.months > 0 && age.days === 0)
+		ageString = age.years + ' years and ' + age.months + ' months old.';
+	else if (age.years === 0 && age.months > 0 && age.days > 0)
+		ageString = age.months + ' months and ' + age.days + ' days old.';
+	else if (age.years > 0 && age.months === 0 && age.days > 0)
+		ageString = age.years + ' years, and' + age.days + ' days old.';
+	else if (age.years === 0 && age.months > 0 && age.days === 0)
+		ageString = age.months + ' months old.';
+	//when current date is same as dob(date of birth)
+	else ageString = '';
+	return ageString;
 };
 
 function currDate() {
