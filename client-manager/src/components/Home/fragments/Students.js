@@ -387,7 +387,7 @@ const StudentsTable = ({ data, filter, selected, updateSelected, setLoading, sho
 			}
 			if (
 				filter.interview_status !== 'Interview Status' &&
-				candidate.interview &7
+				candidate.interview &&
 				candidate.interview !== filter.interview_status
 			) {
 				return false;
