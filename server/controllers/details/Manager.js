@@ -76,18 +76,9 @@ exports.MyDashboard = async (req, res) => {
 		};
 		exam_report.total = registration.registered;
 		exam_report.attended = await Examination.countDocuments();
-		exam_report.pending = await CandidateDetails.aggregate([
-			{
-				$lookup: {
-					from: CandidateDetails.collection.name,
-					localField: 'candidate',
-					foreignField: '_id',
-					as: 'details',
-				},
-			},
-			{ $match: { 'details.status': { $eq: CandidateStatus.ELIGIBLE } } },
-		]);
-		exam_report.pending = exam_report.pending.length;
+		exam_report.pending = await CandidateDetails.countDocuments({
+			status: CandidateStatus.ELIGIBLE,
+		});
 		exam_report.pass = await Examination.countDocuments({
 			status: { $eq: ExaminationStatus.PASS },
 		});

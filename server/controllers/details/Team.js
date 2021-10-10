@@ -1479,8 +1479,9 @@ exports.Targets = async (req, res) => {
 exports.UpdateTarget = async (req, res) => {
 	const { target_id, details } = req.body;
 	try {
-		if (target_id) {
-			const target = await Target.findById(target_id);
+		const target = await Target.findById(target_id);
+
+		if (target) {
 			target.name = details.name;
 			target.fname = details.fname;
 			target.email = details.email;
@@ -1492,26 +1493,30 @@ exports.UpdateTarget = async (req, res) => {
 			target.source = details.source;
 			target.response = details.response;
 			await target.save();
+
+			if (response === 'Interested') {
+				if (details.mobile1)
+					await SendSMS(
+						`To proceed register on the given link. https://candidate.factory-jobs.com`,
+						details.mobile1
+					);
+				if (details.mobile2)
+					await SendSMS(
+						`To proceed register on the given link. https://candidate.factory-jobs.com`,
+						details.mobile2
+					);
+			}
+
+			res.status(200).json({
+				success: true,
+				message: 'Response Added',
+			});
 		} else {
-			await Target.create({
-				team: req.user,
-				name: details.name,
-				fname: details.fname,
-				email: details.email,
-				mobile1: details.mobile1,
-				mobile2: details.mobile2,
-				qualification: details.qualification,
-				call_type: details.call_type,
-				state: details.state,
-				source: details.source,
-				response: details.response,
+			return res.status(400).json({
+				success: false,
+				message: 'Invalid Target ID',
 			});
 		}
-
-		res.status(200).json({
-			success: true,
-			message: 'Response Added',
-		});
 	} catch (err) {
 		console.log(err);
 		return res.status(500).json({

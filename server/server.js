@@ -9,7 +9,7 @@ const { QuestionType, QuestionSubject, Answer } = require('./utils/Enums');
 
 global.__basedir = __dirname;
 //middleware............................................
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 const allowlist = [
 	'http://localhost:3000',
 	'http://localhost:3001',
