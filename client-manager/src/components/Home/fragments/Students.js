@@ -378,7 +378,7 @@ const StudentsTable = ({ data, filter, selected, updateSelected, setLoading, sho
 			if (filter.state !== '🌐 All States' && candidate.state !== filter.state) {
 				return false;
 			}
-			if (filter.exam_status !== 'Exam Status' && !candidate.examination !== filter.exam_status) {
+			if (filter.exam_status !== 'Exam Status' && candidate.examination !== filter.exam_status) {
 				return false;
 			}
 			if (
