@@ -42,21 +42,6 @@ const CandidateDetailsSchema = new mongoose.Schema(
 	{ timestamps: true }
 );
 
-CandidateDetailsSchema.pre('save', function (next) {
-	const options = {
-		year: 'numeric',
-		month: '2-digit',
-		day: '2-digit',
-	};
-	if (this.isModified('DOB')) {
-		const date = new Date(this.DOB);
-		if (date) {
-			this.DOB = date.toLocaleDateString('en-GB', options);
-		}
-	}
-	return next();
-});
-
 CandidateDetailsSchema.methods.isProfileComplete = function () {
 	return (
 		this.name &&

@@ -1349,7 +1349,7 @@ const calculateAge = (date) => {
 	else if (age.years === 0 && age.months > 0 && age.days === 0)
 		ageString = age.months + ' months old.';
 	//when current date is same as dob(date of birth)
-	else ageString = "Welcome to Earth! <br> It's first day on Earth!";
+	else ageString = '';
 	return ageString;
 };
 

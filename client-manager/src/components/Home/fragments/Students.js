@@ -598,7 +598,7 @@ const Details = ({ candidate, setExpandedType, downloadOfferLetter }) => {
 								Gender : <span>{candidate.gender}</span>
 							</div>
 							<div>
-								DOB :<span>{new Date(candidate.DOB).toLocaleDateString('en-GB', options)}</span>
+								DOB :<span>{candidate.DOB}</span>
 							</div>
 							<div>
 								Aadhaar no. : <span>{candidate.aadhaar}</span>

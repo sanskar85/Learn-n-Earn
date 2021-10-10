@@ -128,6 +128,22 @@ exports.createprofile = async (req, res) => {
 		});
 	}
 
+	function currDate(date) {
+		var today = new Date(date);
+		var dd = today.getDate();
+		var mm = today.getMonth() + 1; //January is 0!
+		var yyyy = today.getFullYear();
+
+		if (dd < 10) {
+			dd = '0' + dd;
+		}
+		if (mm < 10) {
+			mm = '0' + mm;
+		}
+
+		today = dd + '-' + mm + '-' + yyyy;
+		return today;
+	}
 	try {
 		const team = await Team.findOne({
 			mobile: referral_mob,
@@ -145,11 +161,11 @@ exports.createprofile = async (req, res) => {
 				message: 'Aadhaar Already registered to another account',
 			});
 		}
-
 		const details = await CandidateDetails.findOne({ candidate: req.user._id });
+
 		details.name = name;
 		details.fname = fname;
-		details.DOB = DOB;
+		details.DOB = currDate(DOB);
 		details.gender = gender;
 		details.aadhaar = aadhaar;
 		details.pincode = pincode;
