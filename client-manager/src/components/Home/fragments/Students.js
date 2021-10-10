@@ -378,23 +378,17 @@ const StudentsTable = ({ data, filter, selected, updateSelected, setLoading, sho
 			if (filter.state !== '🌐 All States' && candidate.state !== filter.state) {
 				return false;
 			}
-			if (
-				filter.exam_status !== 'Exam Status' &&
-				candidate.examination &&
-				!candidate.examination.includes(filter.exam_status)
-			) {
+			if (filter.exam_status !== 'Exam Status' && !candidate.examination !== filter.exam_status) {
 				return false;
 			}
 			if (
 				filter.interview_status !== 'Interview Status' &&
-				candidate.interview &&
 				candidate.interview !== filter.interview_status
 			) {
 				return false;
 			}
 			if (
 				filter.offer_letter_status !== 'Offer Letter' &&
-				candidate.offer_letter &&
 				candidate.offer_letter !== filter.offer_letter_status
 			) {
 				return false;
