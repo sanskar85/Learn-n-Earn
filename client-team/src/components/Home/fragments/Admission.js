@@ -431,7 +431,8 @@ const AdmissionCard = ({ candidate, showAlert, setLoading }) => {
 };
 
 const calculateAge = (date) => {
-	let dob = new Date(date);
+	var dateParts = date.split('/');
+	let dob = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
 	let dobYear = dob.getYear();
 	let dobMonth = dob.getMonth();
 	let dobDate = dob.getDate();
