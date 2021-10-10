@@ -34,10 +34,10 @@ const ExamWise = () => {
 							<div className='row details'>
 								<span className='col-2'>{team.name}</span>
 								<span className='col-2'></span>
+								<span className='col-2'>{team.attended}</span>
 								<span className='col-2'>{team.eligible}</span>
 								<span className='col-2'>{team.pass}</span>
 								<span className='col-2'>{team.fail}</span>
-								<span className='col-2'>{team.attended}</span>
 							</div>
 						);
 					})}
