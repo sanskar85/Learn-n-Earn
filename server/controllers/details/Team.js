@@ -1494,7 +1494,7 @@ exports.UpdateTarget = async (req, res) => {
 			target.response = details.response;
 			await target.save();
 
-			if (response === 'Interested') {
+			if (details.response === 'Interested') {
 				if (details.mobile1)
 					await SendSMS(
 						`To proceed register on the given link. https://candidate.factory-jobs.com`,
